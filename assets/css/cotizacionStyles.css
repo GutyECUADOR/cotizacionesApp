@@ -1,0 +1,468 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: Roboto, arial, sans-serif;
+}
+
+.wrap {
+    margin-top: 10px;
+    box-shadow: 0px 0px 10px grey;
+    margin-bottom: 20px;
+}
+
+.formextra {
+    margin-top: 10px;
+}
+
+.extraButton {
+    margin-bottom: 25px !important;
+}
+
+.border1 {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.headerTablaProducto {
+    font-size: 12px;
+}
+
+.centertext {
+    text-align: center !important;
+}
+
+#responsibetable {
+    overflow: scroll;
+    width: 100%;
+}
+
+.tableExtras {
+    max-width: 0;
+    min-width: 1280px !important;
+}
+
+.bordederecho {
+    border-right: 1px solid #c1bdbd !important;
+}
+
+.icoremove {
+    margin-right: 0px !important;
+    padding-top: 10px;
+}
+
+.logo {
+    position: relative;
+    text-align: center;
+    max-width: 170px;
+    max-height: 80px;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+.contenedor-formulario {
+    padding-top: 10px;
+}
+
+.contenedor-formulario .formulario {
+    width: 100%;
+    margin: auto;
+}
+
+.contenedor-formulario .formulario .logo {
+    position: relative;
+    text-align: center;
+    max-width: 170px;
+    max-height: 80px;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+.wellextra {
+    font-size: 20pt;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.alertExtra {
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.txtcentro {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 20px;
+    margin: auto;
+    text-align: center;
+    color: #D32F2F;
+    font-size: 12px;
+}
+
+.derechasub {
+    position: relative;
+    padding-left: 76%;
+}
+
+.inputnoinline {
+    display: inherit !important;
+    width: 90%;
+}
+
+.tablaedocs {
+    margin-top: 5px;
+    width: 100%;
+    min-width: 800px;
+}
+
+.tablaedocs_modal {
+    margin-top: 5px;
+    width: 100%;
+}
+
+.textheadertable {
+    font-family: Roboto, arial, sans-serif;
+    font-size: 12px;
+}
+
+.trcabecera {
+    font-size: 12px;
+    text-align: center;
+    color: #FFFFFF;
+    background: #5F637A;
+}
+
+.tdcabecera {
+    height: 25px;
+    border: 1px solid #b2b2b2;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.tdcontenido {
+    text-align: center;
+    font-size: 12px;
+    border-bottom: 1px solid #b2b2b2;
+    height: 20px;
+}
+
+.celdagrid {
+    text-align: center;
+    font-size: 12px;
+}
+
+.tdcontenido:hover {
+    background-color: #b2b2b2;
+}
+
+.contenedor-formulario .formulario .txtseccion {
+    position: relative;
+    padding: 5px;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    background: #303766;
+    color: #fff;
+    box-shadow: 0px 0px 1px grey;
+    margin-bottom: 18px;
+}
+
+.txtseccion {
+    position: relative;
+    padding: 5px;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    background: #303766;
+    color: #fff;
+    box-shadow: 0px 0px 1px grey;
+    margin-bottom: 18px;
+}
+
+#cajacod {
+    font-family: "Roboto";
+    font-size: 12px;
+    text-align: center;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    background: #DDDDDD;
+    border: none;
+    height: 28px;
+}
+
+.cajaarea {
+    font-family: "Roboto";
+    font-size: 12px;
+    text-align: center;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    background: #DDDDDD;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.contenedor-formulario .formulario .txtseccion .etique {
+    position: relative;
+    margin: auto;
+    font-size: 12px;
+}
+
+
+/*CALLOUTS*/
+
+.bs-callout {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+
+.bs-callout code {
+    border-radius: 3px;
+}
+
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+
+.bs-callout-default {
+    border-left-color: #777;
+}
+
+.bs-callout-default h4 {
+    color: #777;
+}
+
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+
+.bs-callout-primary h4 {
+    color: #428bca;
+}
+
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+
+.bs-callout-success h4 {
+    color: #5cb85c;
+}
+
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+
+.bs-callout-danger h4 {
+    color: #d9534f;
+}
+
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+
+.bs-callout-warning h4 {
+    color: #f0ad4e;
+}
+
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+
+.bs-callout-info h4 {
+    color: #5bc0de;
+}
+
+
+/* DIMENSIONES  */
+
+.anchototal {
+    width: 100%;
+}
+
+.anchovaloraciones {
+    width: 20%;
+}
+
+#indice_coach {
+    width: 100%;
+}
+
+#item_evaluacion {
+    width: 79%;
+}
+
+#valor_evaluacion {
+    width: 20%;
+}
+
+
+/* TALLERES CURSOS Y SEMINARIOS */
+
+.nombredelcurso {
+    width: 100%;
+}
+
+.dictadopor {
+    width: 40%;
+}
+
+.duracionhoras {
+    width: 25%;
+}
+
+.fechacurso {
+    width: 34%;
+}
+
+
+/* TALLERES CURSOS Y SEMINARIOS ANCHOS DE LINEA*/
+
+.nombreempresa {
+    width: 100%;
+}
+
+.fechatrain {
+    width: 25%;
+}
+
+.fechatraout {
+    width: 25%;
+}
+
+.cargotrabajo {
+    width: 49%;
+}
+
+.funcionestrabajo {
+    width: 100%;
+}
+
+.jefeintrabajo {
+    width: 35%;
+}
+
+.telfjefeconv {
+    width: 20%;
+}
+
+.motivosalidatrab {
+    width: 44%;
+}
+
+
+/* REFERENCIAS LABORALES Y PERSONALES ANCHOS DE LINEA*/
+
+.nombrereferenciaper {
+    width: 35%;
+}
+
+.empresalaboraref {
+    width: 64%;
+}
+
+.cargoref {
+    width: 49%;
+}
+
+.telfconref {
+    width: 25%;
+}
+
+.telfcelref {
+    width: 25%;
+}
+
+.bloquederecha {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.pointerico_ico {
+    cursor: pointer;
+}
+
+#trabextra {
+    font-size: 12px;
+    font-family: "Roboto";
+    text-align: right;
+    cursor: pointer;
+}
+
+.textoSize-14 {
+    font-size: 14px;
+}
+
+.textoSize-12 {
+    font-size: 11px;
+}
+
+#titulosoptionb {
+    left: 10px;
+    width: 100%;
+    color: #303766;
+}
+
+.em {
+    left: 10px;
+    width: 100%;
+    color: #D32F2F;
+}
+
+.input-solicitud {
+    font-family: "Roboto";
+    font-size: 12px;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    background: #DDDDDD;
+    border: none;
+    text-align: center;
+}
+
+.footer {
+    border-top: solid 1px #A8A8A8;
+    text-align: center;
+    padding-top: 5px;
+    color: #616161;
+    padding-bottom: 5px;
+    font-size: 10px;
+    margin-top: 1%;
+}
+
+
+/* INICIO RESPONSIVE DESING
+
+@media screen and (max-width:800px) {
+    .wrap {
+        width: 100%;
+        max-width: 100%;
+        padding: 5px;
+        padding-top: 10px;
+        background: #fff;
+        box-shadow: 0px 0px 0px;
+        position: relative;
+        margin: 0 auto;
+    }
+}
+
+*/

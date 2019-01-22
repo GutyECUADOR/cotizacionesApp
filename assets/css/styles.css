@@ -1,0 +1,731 @@
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-family: Roboto, arial, sans-serif;
+}
+
+body {
+    background: #FFFFFF;
+}
+
+.wrap {
+    margin-top: 10px;
+    box-shadow: 0px 0px 10px grey;
+    margin-bottom: 20px;
+}
+
+.centertext {
+    text-align: center;
+}
+
+.icoremove {
+    margin-right: 0px !important;
+    padding-top: 10px;
+}
+
+.table td {
+    text-align: left;
+}
+
+.textsize15 {
+    font-size: 13px;
+}
+
+.contenedor-formulario {
+    width: 100%;
+    padding: 10px;
+}
+
+.logo {
+    position: relative;
+    text-align: center;
+    max-width: 170px;
+    max-height: 80px;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+.contenedor-formulario .formulario {
+    width: 100%;
+    margin: auto;
+}
+
+.contenedor-formulario .formulario .logo {
+    position: relative;
+    text-align: center;
+    max-width: 170px;
+    max-height: 80px;
+    margin: auto;
+    padding-bottom: 10px;
+}
+
+.txtcentro {
+    position: relative;
+    padding-top: 5px;
+    padding-bottom: 20px;
+    margin: auto;
+    text-align: center;
+    color: #D32F2F;
+    font-size: 12px;
+}
+
+.centrado {
+    text-align: center;
+}
+
+.derechasub {
+    position: relative;
+    padding-left: 76%;
+}
+
+.inputnoinline {
+    display: inherit !important;
+    width: 90%;
+}
+
+.tablaedocs {
+    margin-top: 5px;
+    width: 100%;
+    min-width: 800px;
+}
+
+.tablaedocs_modal {
+    margin-top: 5px;
+    width: 100%;
+}
+
+.textheadertable {
+    font-family: Roboto, arial, sans-serif;
+    font-size: 12px;
+}
+
+.trcabecera {
+    font-size: 12px;
+    text-align: center;
+    color: #FFFFFF;
+    background: #5F637A;
+}
+
+.tdcabecera {
+    height: 25px;
+    border: 1px solid #b2b2b2;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.tdcontenido {
+    text-align: center;
+    font-size: 12px;
+    border-bottom: 1px solid #b2b2b2;
+    height: 20px;
+}
+
+.celdagrid {
+    text-align: center;
+    font-size: 12px;
+}
+
+.tdcontenido:hover {
+    background-color: #b2b2b2;
+}
+
+.contenedor-formulario .formulario .txtseccion {
+    position: relative;
+    padding: 5px;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    background: #303766;
+    color: #fff;
+    box-shadow: 0px 0px 1px grey;
+    margin-bottom: 18px;
+}
+
+.txtseccion {
+    position: relative;
+    padding: 5px;
+    margin: auto;
+    text-align: center;
+    font-weight: bold;
+    background: #303766;
+    color: #fff;
+    box-shadow: 0px 0px 1px grey;
+    margin-bottom: 18px;
+}
+
+#cajacod {
+    font-size: 12px;
+    text-align: center;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    background: #DDDDDD;
+    border: none;
+    height: 28px;
+}
+
+.cajaarea {
+    font-size: 12px;
+    text-align: center;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    background: #DDDDDD;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.contenedor-formulario .formulario .txtseccion .etique {
+    position: relative;
+    margin: auto;
+    font-size: 12px;
+}
+
+
+/*CALLOUTS*/
+
+.bs-callout {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+.bs-callout h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+
+.bs-callout p:last-child {
+    margin-bottom: 0;
+}
+
+.bs-callout code {
+    border-radius: 3px;
+}
+
+.bs-callout+.bs-callout {
+    margin-top: -5px;
+}
+
+.bs-callout-default {
+    border-left-color: #777;
+}
+
+.bs-callout-default h4 {
+    color: #777;
+}
+
+.bs-callout-primary {
+    border-left-color: #428bca;
+}
+
+.bs-callout-primary h4 {
+    color: #428bca;
+}
+
+.bs-callout-success {
+    border-left-color: #5cb85c;
+}
+
+.bs-callout-success h4 {
+    color: #5cb85c;
+}
+
+.bs-callout-danger {
+    border-left-color: #d9534f;
+}
+
+.bs-callout-danger h4 {
+    color: #d9534f;
+}
+
+.bs-callout-warning {
+    border-left-color: #f0ad4e;
+}
+
+.bs-callout-warning h4 {
+    color: #f0ad4e;
+}
+
+.bs-callout-info {
+    border-left-color: #5bc0de;
+}
+
+.bs-callout-info h4 {
+    color: #5bc0de;
+}
+
+
+/* DIMENSIONES  */
+
+.anchototal {
+    width: 100%;
+}
+
+.anchovaloraciones {
+    width: 20%;
+}
+
+#indice_coach {
+    width: 100%;
+}
+
+#item_evaluacion {
+    width: 79%;
+}
+
+#valor_evaluacion {
+    width: 20%;
+}
+
+
+/* TALLERES CURSOS Y SEMINARIOS */
+
+.nombredelcurso {
+    width: 100%;
+}
+
+.dictadopor {
+    width: 40%;
+}
+
+.duracionhoras {
+    width: 25%;
+}
+
+.fechacurso {
+    width: 34%;
+}
+
+
+/* TALLERES CURSOS Y SEMINARIOS ANCHOS DE LINEA*/
+
+.nombreempresa {
+    width: 100%;
+}
+
+.fechatrain {
+    width: 25%;
+}
+
+.fechatraout {
+    width: 25%;
+}
+
+.cargotrabajo {
+    width: 49%;
+}
+
+.funcionestrabajo {
+    width: 100%;
+}
+
+.jefeintrabajo {
+    width: 35%;
+}
+
+.telfjefeconv {
+    width: 20%;
+}
+
+.motivosalidatrab {
+    width: 44%;
+}
+
+
+/* REFERENCIAS LABORALES Y PERSONALES ANCHOS DE LINEA*/
+
+.nombrereferenciaper {
+    width: 35%;
+}
+
+.empresalaboraref {
+    width: 64%;
+}
+
+.cargoref {
+    width: 49%;
+}
+
+.telfconref {
+    width: 25%;
+}
+
+.telfcelref {
+    width: 25%;
+}
+
+.bloquederecha {
+    width: 100%;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.pointerico_ico {
+    cursor: pointer;
+}
+
+#trabextra {
+    font-size: 12px;
+    text-align: right;
+    cursor: pointer;
+}
+
+.textoSize-14 {
+    font-size: 14px;
+}
+
+.textoSize-12 {
+    font-size: 11px;
+}
+
+#titulosoptionb {
+    left: 10px;
+    width: 100%;
+    color: #303766;
+}
+
+.em {
+    left: 10px;
+    width: 100%;
+    color: #D32F2F;
+}
+
+#puestotrab {
+    width: 100%;
+    margin-left: 25px;
+    margin-bottom: 17px;
+}
+
+#bloque {
+    /*padre*/
+    width: 100%;
+}
+
+#bloque .input-group {
+    /*hijos*/
+    display: inline-block;
+}
+
+#bloquede2-1 {
+    width: 30%;
+}
+
+#local {
+    width: 69%;
+}
+
+#semana {
+    width: 30%;
+}
+
+#evaluador {
+    width: 49%;
+}
+
+#empleado_ev {
+    width: 50%;
+}
+
+#nombresyapellidos {
+    width: 35%;
+}
+
+#cidentidad {
+    width: 17%;
+}
+
+#fechanacimiento {
+    width: 21%;
+}
+
+#lugarnacimiento {
+    width: 26%;
+}
+
+#estadocivil {
+    width: 15%;
+}
+
+#direcciondomicilio {
+    width: 64%;
+}
+
+#sector {
+    width: 20%;
+}
+
+#telefonoconv {
+    width: 20%;
+}
+
+#celular {
+    width: 20%;
+}
+
+#correoelectronico {
+    width: 29%;
+}
+
+#correoelectronicoalt {
+    width: 30%;
+}
+
+#bloquede2-2 {
+    width: 50%;
+}
+
+#bloquede3-1 {
+    width: 30%;
+}
+
+#bloquede3-2 {
+    width: 20%;
+}
+
+#bloquede3-2 {
+    width: 34%;
+}
+
+.bloquede2-1 {
+    width: 45%;
+}
+
+.bloquede2-2 {
+    width: 54%;
+}
+
+.bloquede3-1 {
+    width: 30%;
+}
+
+.bloquede3-2 {
+    width: 35%;
+}
+
+.bloquede3-3 {
+    width: 34%;
+}
+
+.cod_p {
+    width: 15%;
+}
+
+.cod_detalle {
+    width: 40%;
+}
+
+.cod_cantidad {
+    width: 10%;
+}
+
+.cod_precio {
+    width: 15%;
+}
+
+.cod_descuento {
+    width: 15%;
+}
+
+.icon_remove {
+    width: 1%;
+}
+
+.recargo_ci {
+    width: 20%;
+}
+
+.recargo_empleado {
+    width: 45%;
+}
+
+.recargo_porcent {
+    width: 10%;
+}
+
+.recargo_valor {
+    width: 22%;
+}
+
+.contenedor-formulario .formulario .input-group {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.contenedor-formulario .formulario .label {
+    font-size: 12px;
+    color: #4A4A4A;
+}
+
+.label {
+    font-size: 12px;
+    color: #4A4A4A;
+}
+
+.contenedor-formulario .formulario .input-group input[type="text"],
+.contenedor-formulario .formulario .input-group input[type="email"],
+.contenedor-formulario .formulario .input-group input[type="date"],
+.contenedor-formulario .formulario .input-group input[type="password"],
+.contenedor-formulario .formulario .input-group input[type="number"] {
+    font-size: 12px;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    background: #DDDDDD;
+    border: none;
+    height: 24px;
+}
+
+.contenedor-formulario .formulario .input-group input[type="text"],
+.contenedor-formulario .formulario .input-group input[type="email"],
+.contenedor-formulario .formulario .input-group input[type="date"],
+.contenedor-formulario .formulario .input-group input[type="password"],
+.contenedor-formulario .formulario .input-group input[type="number"] {
+    font-size: 12px;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    padding: 5px;
+    background: #DDDDDD;
+    border: none;
+    height: 24px;
+}
+
+.input-solicitud {
+    font-size: 12px;
+    color: #303766;
+    width: 100%;
+    outline: none;
+    background: #DDDDDD;
+    border: none;
+    text-align: center;
+}
+
+.contenedor-formulario .formulario input[type="submit"] {
+    background: #303766;
+    border-radius: 1px;
+    border: 2px solid #f2f2f2;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    padding: 15px;
+    width: 100%;
+    -webkit-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.contenedor-formulario .formulario input[type="submit"]:hover {
+    background: #1976D2;
+}
+
+
+/*  .footer {
+    border-top: solid 1px #A8A8A8;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #616161;
+    font-size: 10px;
+    } */
+
+
+/* INICIO RESPONSIVE DESING*/
+
+@media screen and (max-width:800px) {
+    .contenedor-formulario {
+        padding: 5px;
+        width: 100%;
+    }
+    .formulario {
+        width: 100%;
+    }
+    .wrap {
+        width: 100%;
+        max-width: 100%;
+        padding: 0px;
+        padding-top: 10px;
+        background: #fff;
+        box-shadow: 0px 0px 0px;
+        position: relative;
+        top: 0px;
+        margin: 0 auto;
+    }
+    #bloque .input-group {
+        display: block;
+    }
+    /*Seteo a ancho 100% a elementos input*/
+    #nombresyapellidos,
+    #cidentidad,
+    #fechanacimiento,
+    #lugarnacimiento,
+    #estadocivil,
+    #direcciondomicilio,
+    #telefonoconv,
+    #celular,
+    #correoelectronico,
+    #correoelectronicoalt,
+    .nombredelcurso,
+    .dictadopor,
+    .duracionhoras,
+    .fechacurso,
+    #sector,
+    .nombreempresa,
+    .fechatrain,
+    .fechatraout,
+    .cargotrabajo,
+    .funcionestrabajo,
+    .jefeintrabajo,
+    .telfjefeconv,
+    .motivosalidatrab,
+    .nombrereferenciaper,
+    .nombrereferenciaper,
+    .empresalaboraref,
+    .cargoref,
+    .telfconref,
+    .telfcelref,
+    .bloquede2-1,
+    .bloquede2-2 {
+        width: 100%;
+    }
+    /*Estilos evaluacion form*/
+    #local,
+    #semana,
+    #evaluador,
+    #empleado_ev,
+    #valor_evaluacion,
+    .bloquede3-1,
+    .bloquede3-2,
+    .bloquede3-3 {
+        width: 100%;
+    }
+    /*Estilos valep form*/
+    .cod_p,
+    .cod_detalle,
+    .cod_cantidad,
+    .cod_precio,
+    .cod_descuento,
+    .recargo_ci,
+    .recargo_empleado,
+    .recargo_porcent,
+    .recargo_valor,
+    .icon_remove {
+        width: 100%;
+    }
+    .icon_remove {}
+    .derechasub {
+        padding-left: 0;
+    }
+    .inputnoinline {
+        width: 100%;
+    }
+}
