@@ -125,30 +125,21 @@ $vendedores = $cotizacion->getVendedores();
                             </div>
 
                             <div class="input-group input-group-sm">
-                                <span class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Telf.</span>
-                                <input type="text" class="form-control centertext" placeholder="Telefono" id="inputTelefono" readonly>
-                                <span class="input-group-addon">Cupo</span>
-                                <input type="text" class="form-control" placeholder="Cupo" id="inputCupo" readonly>
+                                <span class="input-group-addon" id="sizing-addon3">Correo</span>
+                                <input type="mail" class="form-control" placeholder="Correo" id="inputCorreo" readonly>
                             </div>
 
-                           
-                                
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-earphone" aria-hidden="true"></span> Telf.</span>
+                                <input type="text" class="form-control centertext" placeholder="Telefono" id="inputTelefono" readonly>
+                                <span class="input-group-addon">Dias Pago</span>
+                                <input type="text" class="form-control" placeholder="DiasPago" id="inputDiasPago" readonly>
+                            </div>
 
                             <div class="input-group input-group-sm">
                                 <span class="input-group-addon" id="sizing-addon3">Vendedor</span>
-                                <select class="form-control input-sm">
-                                    <?php
-                                        foreach ($vendedores as $vendedor => $row) {
-
-                                            $codigo = $row['CODIGO'];
-                                            $texto= $row['NOMBRE'];  
-            
-                                            echo "<option value='$codigo'>$texto</option>";
-                                           }
-                                        
-                                        ?>
-                                    ?>
-                                </select>
+                                <input type="text" class="form-control" placeholder="inputVendedor" id="inputVendedor" readonly>
+                            
                             </div>
 
                         </div>
@@ -233,7 +224,7 @@ $vendedores = $cotizacion->getVendedores();
                 
         </div>
         
-        <!-- fila de agregar productos-->
+        <!-- agregar productos-->
         
         <div class="row">
             <div class="col-md-12">
@@ -241,9 +232,62 @@ $vendedores = $cotizacion->getVendedores();
                 <!-- Default panel contents -->
             
                 <div class="panel-heading clearfix">
-                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Articulos</h4>
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Nuevo Item</h4>
                 <div class="btn-group pull-right">
-                    <button type="button" class="btn btn-primary btn-sm" id="btnAgregaFilaProducto"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar Fila</button>
+                    <button type="button" class="btn btn-primary btn-sm" id="btnAgregarProdToList"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Agregar item</button>
+                </div>
+                </div>
+
+                <div class="panel-body">
+                    <div id="responsibetable">        
+                    <table id="tablaAgregaNuevo" class="table table-bordered tableExtras">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Codigo</th>
+                            <th style="width: 25%" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                            <th style="width: 5%"  class="text-center headerTablaProducto">Cantidad</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Precio</th>
+                            <th style="width: 5%" class="text-center headerTablaProducto">Descuento</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" id="inputNuevoCodProducto" class="form-control text-center"></td>
+                                <td><input type="text" id="inputNuevoProductoNombre" class="form-control text-center" readonly></td>
+                                <td><input type="number" id="inputNuevoProductoCantidad" class="form-control text-center" value="0"></td>
+                                <td>
+                                    <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center" readonly>
+                                    <input type="hidden">
+                                </td>
+                                <td><input type="text"  id="inputNuevoProductoDescuento" class="form-control text-center" placeholder="%"></td>
+                                <td><input type="text"  id="inputNuevoProductoSubtotal" class="form-control text-center importe_linea" readonly></td>
+                               
+                                </td>
+                            </tr>
+
+                            
+                               
+                        </tbody>
+                    </table>
+
+                    </div>
+                </div>
+
+            </div>
+            </div>
+        </div>
+
+        <!-- items en lista-->
+
+        <div class="row">
+            <div class="col-md-12">
+            <div class="panel panel-default">
+                <!-- Default panel contents -->
+            
+                <div class="panel-heading clearfix">
+                <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Items en lista</h4>
+                <div class="btn-group pull-right">
                 </div>
                 </div>
 
@@ -253,9 +297,9 @@ $vendedores = $cotizacion->getVendedores();
                         <thead>
                         <tr>
                             <th style="width: 10%" class="text-center headerTablaProducto">Codigo</th>
-                            <th style="width: 25%" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                            <th style="width: 5%"  class="text-center headerTablaProducto">Cantidad</th>
-                            <th style="width: 10%" class="text-center headerTablaProducto">Precio</th>
+                            <th style="width: 20%" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                            <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
+                            <th style="width: 5%" class="text-center headerTablaProducto">Precio</th>
                             <th style="width: 5%" class="text-center headerTablaProducto">Descuento</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
                             <th style="width: 5%" class="text-center headerTablaProducto">IVA</th>
@@ -263,23 +307,6 @@ $vendedores = $cotizacion->getVendedores();
                         </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><input type="text" class="form-control text-center rowproducto"></td>
-                                <td><input type="text" class="form-control text-center row_deproducto" readonly></td>
-                                <td><input type="number" class="form-control text-center rowcantidad" value="0"></td>
-                                <td>
-                                    <input type="text" class="form-control text-center precio_linea" readonly>
-                                    <input type="hidden" class="hidden_precioUnitario" name="hidden_precio_product[]">
-                                </td>
-                                <td><input type="text" class="form-control text-center" placeholder="%"></td>
-                                <td><input type="text" class="form-control text-center importe_linea" readonly></td>
-                                <td><input type="text" class="form-control text-center" readonly></td>
-                                <td><button type="button" class="btn btn-danger btn-sm btn-block btnEliminaRow"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
-                                </td>
-                            </tr>
-
-                            
-                               
                         </tbody>
                     </table>
 
@@ -307,7 +334,7 @@ $vendedores = $cotizacion->getVendedores();
                     <div id="responsibetable">        
                         <table class="table table-bordered tableExtras">
                         <thead>
-                        <tr>
+                        <th>
                             <th style="width: 5%" class="text-center headerTablaProducto">Unidades</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">IVA Bienes</th>
                             <th style="width: 5%" class="text-center headerTablaProducto">% ICE</th>
@@ -318,7 +345,7 @@ $vendedores = $cotizacion->getVendedores();
                             <th style="width: 10%" class="text-center headerTablaProducto">Impuesto</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Gastos</th>
                             <th style="width: 20%" class="text-center headerTablaProducto">Total</th>
-                        </tr>
+                        </th>
                         </thead>
                         <tbody>
                         <tr>

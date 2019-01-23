@@ -17,8 +17,8 @@ class ajaxController  {
     }
 
     /* Retorna la respuesta del modelo ajax*/
-    public function getInfoProductoController($codigoProducto){
-        $response = $this->ajaxModel->getInfoProductoModel($codigoProducto);
+    public function getInfoProductoController($codigoProducto, $tipoPrecio){
+        $response = $this->ajaxModel->getInfoProductoModel($codigoProducto, $tipoPrecio);
         return $response;
     }
     

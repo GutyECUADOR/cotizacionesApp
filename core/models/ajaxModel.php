@@ -1,6 +1,4 @@
 <?php namespace models;
-require_once 'conexion.php';
-
 
 /* LOS MODELOS del MVC retornaran unicamente arrays PHP sin serializar*/
 
@@ -18,7 +16,28 @@ class ajaxModel  {
     public function getInfoClienteModel($RUC) {
 
         //Query de consulta con parametros para bindear si es necesario.
-        $query = " SELECT CODIGO, RTRIM(NOMBRE) as NombreN, RTRIM(EMPRESA) as EmpresaN,RUC, FECHAALTA, RTRIM(DIRECCION1) as DireccionN, TELEFONO1, LIMITECRED FROM dbo.COB_CLIENTES WHERE RUC='$RUC'";  // Final del Query SQL 
+        $query = " 
+            
+        SELECT 
+            CLIENTE.CODIGO, 
+            RTRIM(CLIENTE.NOMBRE) as NOMBRE, 
+            RTRIM(CLIENTE.EMPRESA) as EMPRESA, 
+            RTRIM(CLIENTE.RUC) as RUC, 
+            RTRIM(CLIENTE.EMAIL) as EMAIL, 
+            RTRIM(CLIENTE.FECHAALTA) as FECHAALTA, 
+            RTRIM(CLIENTE.DIRECCION1) as DIRECCION, 
+            RTRIM(CLIENTE.TELEFONO1) as TELEFONO, 
+            RTRIM(VENDEDOR.CODIGO) as VENDEDOR,
+            RTRIM(VENDEDOR.NOMBRE) as VENDEDORNAME,
+            RTRIM(CLIENTE.LIMITECRED) as LIMITECRED, 
+            RTRIM(CLIENTE.FPAGO) as FPAGO, 
+            RTRIM(CLIENTE.DIASPAGO) as DIASPAGO, 
+            RTRIM(CLIENTE.TIPOPRECIO) as TIPOPRECIO 
+        FROM 
+            dbo.COB_CLIENTES as CLIENTE INNER JOIN
+            dbo.COB_VENDEDORES as VENDEDOR ON VENDEDOR.CODIGO = CLIENTE.VENDEDOR
+        WHERE 
+            RUC='$RUC'";  // Final del Query SQL 
 
         try{
             $stmt = $this->db->prepare($query); 
@@ -37,10 +56,19 @@ class ajaxModel  {
    
     }
 
-    public function getInfoProductoModel($codigoProducto) {
+    public function getInfoProductoModel($codigoProducto, $tipoPrecio='A') {
 
+        $tipoPrec = 'Prec'.$tipoPrecio; // Determina el tipo de precio que se devolvera segun el cliente
         //Query de consulta con parametros para bindear si es necesario.
-        $query = " SELECT Codigo, Nombre, PrecA FROM dbo.INV_ARTICULOS WHERE Codigo='$codigoProducto' ";  // Final del Query SQL 
+        $query = " 
+            SELECT 
+                RTRIM(CODIGO) as CODIGO, 
+                RTRIM(NOMBRE) as NOMBRE, 
+                RTRIM($tipoPrec) as PRECIO 
+            FROM 
+                dbo.INV_ARTICULOS
+            
+            WHERE Codigo='$codigoProducto'";  // Final del Query SQL 
 
         try{
             $stmt = $this->db->prepare($query); 

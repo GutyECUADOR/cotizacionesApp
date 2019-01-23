@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima');
 session_start();
+require_once '../../../core/models/conexion.php';
 require_once '../../../core/controllers/ajaxController.php';
 require_once '../../../core/models/ajaxModel.php';
 
@@ -18,8 +19,8 @@ class ajax{
         return $this->ajaxController->getInfoClienteController($RUC);
     }
 
-    public function getInfoProducto($codigoProducto) {
-        return $this->ajaxController->getInfoProductoController($codigoProducto);
+    public function getInfoProducto($codigoProducto, $tipoPrecio) {
+        return $this->ajaxController->getInfoProductoController($codigoProducto, $tipoPrecio);
     }
 
     public function saveCotizacion($formCotizacion){
@@ -54,9 +55,10 @@ class ajax{
         /* Obtiene array de informacion del producto*/ 
         case 'getInfoProducto':
 
-          if (isset($_GET['codigo'])) {
+          if (isset($_GET['codigo']) && isset($_GET['tipoPrecio'])) {
             $codigoProducto = $_GET['codigo'];
-            $respuesta = $ajax->getInfoProducto($codigoProducto);
+            $tipoPrecio =  $_GET['tipoPrecio'];
+            $respuesta = $ajax->getInfoProducto($codigoProducto, $tipoPrecio);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
