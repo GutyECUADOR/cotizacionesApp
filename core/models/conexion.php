@@ -24,11 +24,11 @@ class conexion {
         
         /*CONEXION PARA DESAROLLO*/
         $this->driver = 'sqlsrv';
-        $this->host = "S1-W202";
-        $this->dbname = "LICEO-RES";
+        $this->host = "ASUS-GUTYECUADO";
+        $this->dbname = "SCKINSMAN_V7";
         $this->port = "1433";
-        $this->user = "sfb";
-        $this->pass = "Sud2017$";
+        $this->user = "sa";
+        $this->pass = "adminguty";
         $this->charset = "utf8";
 
         

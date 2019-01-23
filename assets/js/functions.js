@@ -1,17 +1,15 @@
-// Documento listo
-PNotify.prototype.options.styling = "bootstrap3";
-PNotify.prototype.options.styling = "fontawesome";
-var limite_productos = 0;
 
 $(document).ready(function() {
+    // Documento listo
+    PNotify.prototype.options.styling = "bootstrap3";
+    PNotify.prototype.options.styling = "fontawesome";
+    var limite_productos = 0;
+
     let iva = getiva();
     disableEnter();
     startJSBoostrap();
 
-    console.log('Doc ready');
-
-
-
+   
 });
 
 // Boton de registro
@@ -41,10 +39,10 @@ $("#btnAgregaFilaProducto").on("click", function(event) {
 //Ajax a informacion del producto
 $("#tablaProductos").on('blur', '.rowproducto', function(event) {
 
-    let clickedelement = $(this); // Obtenemos el item clickeado
+    let clickedelement = $(this)[0]; // Obtenemos el item clickeado
     let grupoElements = $(".rowproducto"); // Array de text codigo
     let indice = grupoElements.index(clickedelement); // Obtenemos el indice del item dentro del grupo
-    let codProducto = clickedelement.context.value; // Obtenemos el valor del elemento clieckedo
+    let codProducto = clickedelement.value; // Obtenemos el valor del elemento clieckedo
     let grupoElementsDetalle = $(".row_deproducto"); //Array de text del detalle
     let grupoElementsPrecio = $(".precio_linea"); //Array de text del precio
     let grupoElementsTotal = $(".importe_linea"); //Array de text del precio
@@ -53,17 +51,18 @@ $("#tablaProductos").on('blur', '.rowproducto', function(event) {
 
     $.ajax({
         type: 'get',
-        url: 'ajax/ajax_infoProducto.php', // API retorna objeto JSON de producto, false caso contrario.
+        url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
         dataType: "json",
 
-        data: { codProducto: codProducto },
+        data: { codigo: codProducto },
 
         success: function(response) {
+        console.log(response);
+            let producto = response.data;
+            if (producto) {
 
-            if (response) {
-
-                let valorUnitario = response.PrecA.trim();
-                grupoElementsDetalle[indice].value = response.Nombre.trim();
+                let valorUnitario = producto.PrecA.trim();
+                grupoElementsDetalle[indice].value = producto.Nombre.trim();
                 grupoElementsPrecio[indice].value = (Math.round(valorUnitario * 100) / 100).toFixed(2);
                 grupoElementsHiddenPrecio[indice].value = (Math.round(valorUnitario * 100) / 100).toFixed(2);
                 grupoElementsTotal[indice].value = (Math.round(valorUnitario * 100) / 100).toFixed(2);
@@ -119,17 +118,17 @@ $("#tablaProductos").on('click', '.btnEliminaRow', function(event) {
 // Evento de calculo de productos extra
 $("#tablaProductos").on('keyup blur click', '.rowcantidad', function(event) {
 
-    let clickedelement = $(this); // Obtenemos el item clickeado
+    let clickedelement = $(this)[0]; // Obtenemos el item clickeado
     let grupoElementsPrecio = $(".importe_linea"); //Array de text del precio
-    let grupoElementsHiddenPrecio = $(".hidden_precioUnitario") // Array de objetos de precio unitario de productos
+    let grupoElementsHiddenPrecio = $(".hidden_precioUnitario"); // Array de objetos de precio unitario de productos
+    
     let grupoElements = $(".rowcantidad"); // Array de text codigo
     let indice = grupoElements.index(clickedelement); // Obtenemos el indice del item dentro del grupo
-    let codProducto = clickedelement.context.value; // Obtenemos el valor del elemento clieckedo
+    let codProducto = clickedelement.value; // Obtenemos el valor del elemento clieckedo
 
-    if (Number(clickedelement[0].value) > 0) {
-
+    if (Number(clickedelement.value) > 0) {
         if (Number(grupoElementsHiddenPrecio[indice].value) > 0) {
-            let calculo = Number(grupoElementsHiddenPrecio[indice].value) * Number(clickedelement[0].value);
+            let calculo = Number(grupoElementsHiddenPrecio[indice].value) * Number(clickedelement.value);
             grupoElementsPrecio[indice].value = (Math.round(calculo * 100) / 100).toFixed(2);
 
         } else {
@@ -140,7 +139,7 @@ $("#tablaProductos").on('keyup blur click', '.rowcantidad', function(event) {
                 type: 'warn',
                 styling: 'bootstrap3'
             });
-            console.log("La cantidad es nula o no vàlida");
+            console.log("La cantidad es nula o no válida");
         }
 
     } else {
@@ -225,19 +224,20 @@ function ajaxvalidacod_json() {
 
     $.ajax({
         type: 'get',
-        url: 'ajax/ajax_infoCliente.php',
+        url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoCliente',
         dataType: "json",
 
         data: { ruc: CI_RUC },
-
+        
         success: function(response) {
-
-            if (response) {
-                $('#inputCodigo').val(response[0].CODIGO.trim());
-                $('#inputNombre').val(response[0].NOMBRE.trim());
-                $('#inputRSocial').val(response[0].EMPRESA.trim());
-                $('#inputTelefono').val(response[0].TELEFONO1.trim());
-                $('#inputCupo').val(response[0].LIMITECRED.trim());
+            console.log(response);
+            let cliente = response.data;
+            if (response.data) {
+                $('#inputCodigo').val(cliente.CODIGO.trim());
+                $('#inputNombre').val(cliente.NombreN.trim());
+                $('#inputRSocial').val(cliente.EmpresaN.trim());
+                $('#inputTelefono').val(cliente.TELEFONO1.trim());
+                $('#inputCupo').val(cliente.LIMITECRED.trim());
                 console.log(response);
             } else {
 
@@ -340,19 +340,8 @@ function calcular_total() {
 };
 
 function getiva() {
-    let iva_activo = 'T12';
+    
     let iva = 12;
-    $.ajax({
-        type: 'get',
-        url: 'ajax/ajax_valida_iva.php',
-        dataType: "json",
-
-        data: { activo: iva_activo },
-
-        success: function(response) {
-            iva = response;
-        }
-    });
-
+   
     return iva;
 }
