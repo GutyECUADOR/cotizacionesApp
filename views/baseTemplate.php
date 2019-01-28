@@ -27,6 +27,7 @@
       <!-- Librerias-->
       <link href="<?php echo ROOT_PATH; ?>assets\bootstrap-datepicker-1.6.4\css\bootstrap-datepicker3.css" rel="stylesheet">
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\sweetalert2\dist\sweetalert2.min.css">
+      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\uikit\css\uikit.min.css">
     
      
       <!-- CSS Propios -->
@@ -56,6 +57,8 @@
     <script href="<?php echo ROOT_PATH; ?>assets\bootstrap-datepicker-1.6.4\js\bootstrap-datepicker.js"></script>
     <script href="<?php echo ROOT_PATH; ?>assets\bootstrap-datepicker-1.6.4\locales\bootstrap-datepicker.es.min.js"></script>
     <script src="<?php echo ROOT_PATH; ?>assets\sweetalert2\dist\sweetalert2.min.js"></script>
+    <script src="<?php echo ROOT_PATH; ?>assets\uikit\js\uikit.min.js"></script>
+  
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>

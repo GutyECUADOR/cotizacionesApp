@@ -1,6 +1,6 @@
 <?php
 /* Configurar aqui todas las variables globales a utilizar*/
-define("APP_NAME", "Liceo Internacional Web");
+define("APP_NAME", "WSSP - WebForms");
 define("EMPRESA_NAME", "Liceo Internacional");
 define("APP_VERSION", "2.6");
 define("ROOT_PATH","");   //Root del proyecto

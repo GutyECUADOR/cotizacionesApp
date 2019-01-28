@@ -4,6 +4,8 @@ session_start();
 require_once '../../../core/models/conexion.php';
 require_once '../../../core/controllers/ajaxController.php';
 require_once '../../../core/models/ajaxModel.php';
+require_once '../../../core/models/venCabClass.php';
+require_once '../../../core/models/venMovClass.php';
 
 class ajax{
   private $ajaxController;
@@ -19,8 +21,8 @@ class ajax{
         return $this->ajaxController->getInfoClienteController($RUC);
     }
 
-    public function getInfoProducto($codigoProducto, $tipoPrecio) {
-        return $this->ajaxController->getInfoProductoController($codigoProducto, $tipoPrecio);
+    public function getInfoProducto($codigoProducto, $clienteRUC) {
+        return $this->ajaxController->getInfoProductoController($codigoProducto, $clienteRUC);
     }
 
     public function saveCotizacion($formCotizacion){
@@ -37,6 +39,20 @@ class ajax{
 
     switch ($HTTPaction) {
 
+       /* Obtiene array de informacion del cliente*/ 
+        case 'saveCotizacion':
+          if (isset($_GET['formData'])) {
+            $formData = json_decode($_GET['formData']);
+            $respuesta = $ajax->saveCotizacion($formData);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'Realizado', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
         /* Obtiene array de informacion del cliente*/ 
         case 'getInfoCliente':
           if (isset($_GET['ruc'])) {
@@ -47,7 +63,6 @@ class ajax{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
           }
           
-        
           echo json_encode($rawdata);
 
         break;
@@ -55,10 +70,10 @@ class ajax{
         /* Obtiene array de informacion del producto*/ 
         case 'getInfoProducto':
 
-          if (isset($_GET['codigo']) && isset($_GET['tipoPrecio'])) {
+          if (isset($_GET['codigo']) && isset($_GET['clienteRUC'])) {
             $codigoProducto = $_GET['codigo'];
-            $tipoPrecio =  $_GET['tipoPrecio'];
-            $respuesta = $ajax->getInfoProducto($codigoProducto, $tipoPrecio);
+            $clienteRUC =  $_GET['clienteRUC'];
+            $respuesta = $ajax->getInfoProducto($codigoProducto, $clienteRUC);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');

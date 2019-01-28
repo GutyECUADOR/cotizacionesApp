@@ -32,8 +32,16 @@ class Producto {
       this.descuento = descuento;
     }
 
+    getIVA(IVA = 12){
+        return (this.getSubtotal() * IVA) / 100;
+    }
+
+    getDescuento(porcentajeDescuento){
+        return ((this.cantidad * this.precio)*porcentajeDescuento)/100;
+    }
+
     getSubtotal(){
-        return this.cantidad * this.precio;
+        return (this.cantidad * this.precio) - this.getDescuento(this.descuento);
     }
   }
 
@@ -43,17 +51,31 @@ $(document).ready(function() {
     // Documento listo
     disableEnter();
     startJSBoostrap();
+    
 
     var limite_productos = 0;
     var cotizacion = new Cotizacion();
     var newProducto = null;
     
-    let iva = getiva();
-    
-
     /* Eventos y Acciones */
     $("#inputRUC").on("keyup", function(event) {
         validaCliente();
+    });
+
+    // Boton de envio de datos
+    $("#btnGuardar").on('click', function(event) {
+        event.preventDefault();
+        console.log('enviar data');
+
+        let cotizacionJSON = JSON.stringify((cotizacion));
+        if (cotizacion.cliente != null && cotizacion.productos.length > 0) {
+            $(this).prop("disabled", true);
+            saveData(cotizacionJSON);
+        }else{
+            alert('El formulario esta incompleto');
+        }
+        
+        
     });
 
     // Boton remover fila de tabla productos
@@ -73,14 +95,14 @@ $(document).ready(function() {
         }
 
         let codProducto = $(this).val(); // Obtenemos el item 
-        let tipoPrecio = 'A';
+        let clienteRUC = $('#inputRUC').val();
 
         $.ajax({
             type: 'get',
             url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
             dataType: "json",
 
-            data: { codigo: codProducto, tipoPrecio: tipoPrecio },
+            data: { codigo: codProducto, clienteRUC: clienteRUC },
 
             success: function(response) {
             console.log(response);
@@ -117,12 +139,27 @@ $(document).ready(function() {
 
     });
 
+    /* Multiplica la cantidad del producto a añadir a la lista*/
     $("#inputNuevoProductoCantidad").on('change', function(event) {
         let nuevacantidad = $(this).val();
         console.log(nuevacantidad);
         if (newProducto != null) {
             newProducto.cantidad = nuevacantidad;
+            printSubtotalNewProd();
         }
+ 
+     });
+
+    /* Establece el valor del descuento del producto a agregar*/
+    $("#inputNuevoProductoDescuento").on('change', function(event) {
+        let nuevodescuento = $(this).val();
+        console.log(nuevodescuento);
+        if (newProducto != null) {
+            newProducto.descuento = nuevodescuento;
+            console.log(newProducto.getDescuento(nuevodescuento));
+            printSubtotalNewProd();
+        }
+        
  
      });
     
@@ -130,48 +167,30 @@ $(document).ready(function() {
     // Evento de calculo de productos extra
     $("#tablaProductos").on('keyup blur click', '.rowcantidad', function(event) {
 
-        let clickedelement = $(this)[0]; // Obtenemos el item clickeado
-        let grupoElementsPrecio = $(".importe_linea"); //Array de text del precio
-        let grupoElementsHiddenPrecio = $(".hidden_precioUnitario"); // Array de objetos de precio unitario de productos
-        
-        let grupoElements = $(".rowcantidad"); // Array de text codigo
-        let indice = grupoElements.index(clickedelement); // Obtenemos el indice del item dentro del grupo
-        let codProducto = clickedelement.value; // Obtenemos el valor del elemento clieckedo
-
-        if (Number(clickedelement.value) > 0) {
-            if (Number(grupoElementsHiddenPrecio[indice].value) > 0) {
-                let calculo = Number(grupoElementsHiddenPrecio[indice].value) * Number(clickedelement.value);
-                grupoElementsPrecio[indice].value = (Math.round(calculo * 100) / 100).toFixed(2);
-
-            } else {
-                new PNotify({
-                    title: 'Dato incorrecto',
-                    text: 'La cantidad es nula o no vàlida',
-                    delay: 3000,
-                    type: 'warn',
-                    styling: 'bootstrap3'
-                });
-                console.log("La cantidad es nula o no válida");
-            }
-
-        } else {
-
-
-            grupoElementsPrecio[indice].value = 0;
-            console.warn("Cantidad no permitida");
-            new PNotify({
-                title: 'Dato incorrecto',
-                text: 'Cantidad no permitida',
-                delay: 3000,
-                type: 'warn',
-                styling: 'bootstrap3'
-            });
-        }
-
-        calcular_total()
+       
     });
 
     /* Funciones */
+
+    function saveData(formData){
+       
+        console.log(formData);
+        $.ajax({
+            type: 'get',
+            url: 'views/modulos/ajax/API_cotizaciones.php?action=saveCotizacion',
+            dataType: "json",
+    
+            data: { formData: formData },
+            
+            success: function(response) {
+                console.log(response);
+                mySwal(response.data.mensaje + 'ID de documento generado: ' + response.data.new_cod_VENCAB, "success");
+            }
+        });
+
+       
+
+    }
 
     function addProductToList(newProducto){
 
@@ -202,6 +221,15 @@ $(document).ready(function() {
         printProductos(cotizacion.productos);
     }
 
+    function multiProdCant(codProducto){
+
+        let index = cotizacion.productos.findIndex(function(productoEnArray) {
+            return productoEnArray.codigo === codProducto;
+        });
+            
+        
+    }
+
     function resetnewProducto() {
         newProducto = null;
         document.getElementById("inputNuevoCodProducto").value = "";
@@ -226,16 +254,15 @@ $(document).ready(function() {
         arrayProductos.forEach(producto => {
             let row = `
                 <tr>
-                    <td><input type="text" class="form-control text-center" value="${producto.codigo}"></td>
+                    <td><input type="text" class="form-control text-center" value="${producto.codigo}" disabled></td>
                     <td><input type="text" class="form-control text-center"  value="${producto.nombre}" readonly></td>
-                    <td><input type="number" class="form-control text-center rowcantidad" value="${producto.cantidad}"></td>
+                    <td><input type="number" class="form-control text-center rowcantidad data-codigo="${producto.codigo}"" value="${producto.cantidad}"></td>
                     <td>
-                        <input type="text" class="form-control text-center precio_linea" value="${producto.precio}"  readonly>
-                        <input type="hidden" class="hidden_precioUnitario" name="hidden_precio_product[]">
+                        <input type="text" class="form-control text-center precio_linea" value="${producto.precio}" readonly>
                     </td>
-                    <td><input type="text" class="form-control text-center" placeholder="%" value="${producto.descuento}" ></td>
-                    <td><input type="text" class="form-control text-center importe_linea" readonly></td>
-                    <td><input type="text" class="form-control text-center" readonly></td>
+                    <td><input type="text" class="form-control text-center" placeholder="%" data-codigo="${producto.codigo}" value="${producto.descuento}" ></td>
+                    <td><input type="text" class="form-control text-center" value="${producto.getSubtotal()}" readonly></td>
+                    <td><input type="text" class="form-control text-center" value="${producto.getIVA().toFixed(2)}" readonly></td>
                     <td><button type="button" class="btn btn-danger btn-sm btn-block btnEliminaRow" data-codigo="${producto.codigo}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                     </td>
                 </tr>
@@ -273,10 +300,11 @@ $(document).ready(function() {
                     $('#inputTelefono').val(cliente.TELEFONO.trim());
                     $('#inputDiasPago').val(cliente.DIASPAGO.trim() + ' ('+cliente.FPAGO.trim() + ')');
                     $('#inputVendedor').val(cliente.VENDEDOR.trim() + ' ('+cliente.VENDEDORNAME.trim() + ')');
-                    
+                    $('#inputTipoPrecioCli').val(cliente.TIPOPRECIO.trim());
     
                 } else {
                     myCliente = null;
+                    cotizacion.cliente = null;
                     $('#inputCodigo').val('');
                     $('#inputNombre').val('(Sin identificar)');
                     $('#inputRSocial').val('');
@@ -291,6 +319,11 @@ $(document).ready(function() {
             }
         });
     }
+
+    function printSubtotalNewProd (){
+        $("#inputNuevoProductoSubtotal").val(newProducto.getSubtotal().toFixed(2));
+    }
+   
    
    
 });
@@ -304,8 +337,6 @@ $("#formulario_registro").on("submit", function(event) {
     console.log(form);
 
 });
-
-
 
 
 function mySwal(mensajem, tipoAlerta = 'warning') {
@@ -332,63 +363,6 @@ function startJSBoostrap() {
     PNotify.prototype.options.styling = "bootstrap3";
     PNotify.prototype.options.styling = "fontawesome";
     $('[data-toggle="tooltip"]').tooltip();
-}
 
-
-
-
-
-function calculaIVA(IVA) {
-    let totalIVA = 0;
-    $(".importe_linea").each(
-        function(index, value) {
-            let itemIVA = eval(value.value) * IVA / 100;
-            totalIVA += itemIVA;
-        }
-    );
-    return totalIVA;
-}
-
-function calcular_total() {
-    //Suma de columna de valores
-    var importe_total = 0;
-    $(".importe_linea").each(
-        function(index, value) {
-            importe_total = importe_total + eval($(this).val());
-        }
-    );
-
-    //Despliege de resultados
-    $("#txt_subtotal").val(importe_total.toFixed(2));
-    $("#txt_ivaBienes").val(calculaIVA(getiva()).toFixed(2));
-
-
-
-    var total_unidades = 0;
-    $(".rowcantidad").each(
-        function(index, value) {
-            total_unidades = total_unidades + eval($(this).val());
-        }
-    );
-
-    $("#txt_unidadesProd").val(total_unidades);
-
-    let iva_db = getiva();
-    let iva_total = calculaIVA(iva_db);
-
-    $("#txt_iva").val(iva_total.toFixed(2));
-
-    let total_factura = importe_total + iva_total;
-    $("#welltotal").text("$ " + total_factura.toFixed(2));
-    $("#txt_totalPagar").val(total_factura.toFixed(2));
-
-
-    return total_factura.toFixed(2);
-};
-
-function getiva() {
     
-    let iva = 12;
-   
-    return iva;
 }

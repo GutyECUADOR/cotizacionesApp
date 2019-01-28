@@ -174,14 +174,7 @@ $vendedores = $cotizacion->getVendedores();
                                 <option></option>
                                 </select>
                             </div>
-
-                           
-                                <div class="input-group">
-                                <span class="input-group-addon">
-                                    <input type="checkbox">
-                                </span>
-                                <span class="input-group-addon">Documento requiere anticipo</span>
-                                </div><!-- /input-group -->
+   
                            
                         </div>
                     </div>
@@ -213,8 +206,8 @@ $vendedores = $cotizacion->getVendedores();
                             </div>
 
                             <div class="input-group input-group-sm">
-                                <span class="input-group-addon" id="sizing-addon3">Desc. en lineas x default</span>
-                                <input type="text" class="form-control">
+                                <span class="input-group-addon" id="sizing-addon3">Tipo Precio Cliente</span>
+                                <input type="text" id="inputTipoPrecioCli" class="form-control" disabled>
                             </div>
 
                         </div>
@@ -247,7 +240,7 @@ $vendedores = $cotizacion->getVendedores();
                             <th style="width: 25%" class="text-center headerTablaProducto">Nombre del Articulo</th>
                             <th style="width: 5%"  class="text-center headerTablaProducto">Cantidad</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Precio</th>
-                            <th style="width: 5%" class="text-center headerTablaProducto">Descuento</th>
+                            <th style="width: 5%" class="text-center headerTablaProducto">Desc (%)</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
                         </tr>
                         </thead>
@@ -334,7 +327,6 @@ $vendedores = $cotizacion->getVendedores();
                     <div id="responsibetable">        
                         <table class="table table-bordered tableExtras">
                         <thead>
-                        <th>
                             <th style="width: 5%" class="text-center headerTablaProducto">Unidades</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">IVA Bienes</th>
                             <th style="width: 5%" class="text-center headerTablaProducto">% ICE</th>
@@ -345,7 +337,6 @@ $vendedores = $cotizacion->getVendedores();
                             <th style="width: 10%" class="text-center headerTablaProducto">Impuesto</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Gastos</th>
                             <th style="width: 20%" class="text-center headerTablaProducto">Total</th>
-                        </th>
                         </thead>
                         <tbody>
                         <tr>
@@ -363,7 +354,7 @@ $vendedores = $cotizacion->getVendedores();
                         </tr>
                        
                         </tbody>
-                    </table>
+                        </table>
 
                     </div>
                 </div>
