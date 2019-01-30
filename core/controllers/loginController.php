@@ -6,8 +6,6 @@ class loginController  {
 
     public function __construct()
     {
-        require_once 'config/global.php';
-        require_once 'core/models/loginModel.php';
         $this->loginModel = new \models\loginModel();
     }
     
@@ -20,19 +18,15 @@ class loginController  {
                 $codigoDB = $_POST['select_empresa']; // recuperamos el codigo del select
                 $arrayDatos = array("usuario"=>$_POST['login_username'],"password"=>$_POST['login_password']);
 
-                $dataBaseName = $this->loginModel->getDBNameByCodigo($codigoDB); // Obtenemos nombre de la DB segun codigo, retorno de un array
-                $arrayResultados = $this->loginModel->validaIngreso($arrayDatos); // Validamos info del usuario en esa DB
-                
+                //$dataBaseName = $this->loginModel->getDBNameByCodigo($codigoDB); // Obtenemos nombre de la DB segun codigo, retorno de un array
+                $arrayResultados = $this->loginModel->validaIngreso($arrayDatos, $codigoDB); // Validamos info del usuario en esa DB
+               
                 //Funcion validar acceso retorna array de resultados
                     if (!empty($arrayResultados)) {
                         session_start();
-                        $_SESSION["usuarioRUC"] =  $arrayResultados['Cedula'] ;
-                        $_SESSION["usuarioNOMBRE"] =  $arrayResultados['Nombre']. " " . $arrayResultados['Apellido'] ;
-                        $_SESSION["usuarioTipo"] =  $arrayResultados['CodDpto'];
-                        $_SESSION["empresaAUTH"] = $dataBaseName['NameDatabase'];
-                        $codEmpresa = $this->loginModel->getCodeDBByName($dataBaseName['NameDatabase'])['Codigo']; // Funcion del modelo retorna el array con campo codigo
-                        $_SESSION["codEmpresaAUTH"] = $codEmpresa;
-
+                        $_SESSION["usuarioRUC"] =  $arrayResultados['Codigo'] ;
+                        $_SESSION["usuarioNOMBRE"] =  $arrayResultados['Nombre'] ;
+                        $_SESSION["empresaAUTH"] = $codigoDB;
                         header("Location: index.php?&action=inicio");
                     
                     }else{

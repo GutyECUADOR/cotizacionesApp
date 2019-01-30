@@ -1,32 +1,24 @@
 <?php namespace models;
-require_once 'conexion.php';
 
-class loginModel  {
-    
-    private $instanciaDB;
-    private $db;
-    
+class loginModel extends conexion {
+ 
     public function __construct() {
-        $this->instanciaDB = new \models\conexion();
-        $this->db = $this->instanciaDB->getInstanciaCNX();
-       
+        parent::__construct();
     }
 
-    /* Retorna array de consulta en SBIOKAO si existe, falso si no o existe error */
 
     public function validaIngreso($arrayDatos, $dataBaseName='SBIOKAO'){
 
-        $this->instanciaDB->setDbname($dataBaseName);
-        $this->db = $this->instanciaDB->getInstanciaCNX(); // Devolvemos instancia con la nueva DB seteada
-
+        $this->setDbname($dataBaseName);
+        $this->conectarDB();
+        
         $usuario = $arrayDatos['usuario'];
         $password = $arrayDatos['password'];
 
-        $query = "SELECT TOP 1 * FROM dbo.Empleados WHERE Cedula = :cedula AND Clave= :clave"; 
-        $stmt = $this->db->prepare($query); 
+        $query = "SELECT TOP 1 * FROM dbo.USUARIOS WHERE Codigo = :cedula"; 
+        $stmt = $this->instancia->prepare($query); 
         $stmt->bindParam(':cedula', $usuario); 
-        $stmt->bindParam(':clave', $password); 
-       
+    
             if($stmt->execute()){
                 $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
             }else{

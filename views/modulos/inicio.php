@@ -1,4 +1,8 @@
 <?php
+if (!isset($_SESSION["usuarioRUC"])){
+    header("Location:index.php?&action=login");  
+ }   
+
 $cotizacion = new \controllers\CotizacionController();
 $bodegas = $cotizacion->getBodegas();
 $vendedores = $cotizacion->getVendedores();
@@ -6,6 +10,8 @@ $vendedores = $cotizacion->getVendedores();
 ?>
  <!-- CSS Propios -->
  <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\cotizacionStyles.css">
+
+ <?php include 'sis_modules/header_main.php'?>
 
 <div class="container wrap">
         <!-- Row de cabecera-->
@@ -345,7 +351,7 @@ $vendedores = $cotizacion->getVendedores();
                             <td><select class="form-control input-sm centertext"></select></td>
                             <td><input type="text" class="form-control text-center" readonly></td>
                             <td><input type="text" class="form-control text-center" id="txt_subtotal" value="0" readonly></td>
-                            <td><input type="text" class="form-control text-center" readonly></td>
+                            <td><input type="text" class="form-control text-center" id="txt_descuentoResumen" readonly></td>
                             <td><input type="text" class="form-control text-center" readonly></td>
                             <td><input type="text" class="form-control text-center" id="txt_impuesto" readonly></td>
                             <td><input type="text" class="form-control text-center" id="txt_gastos" readonly></td>

@@ -2,12 +2,14 @@
 
 class ajaxController  {
 
-    public $defaulDataBase = "LICEO";
-    public $dbEmpresa;
+    public $defaulDataBase;
     public $ajaxModel;
 
     public function __construct() {
-      $this->ajaxModel = new \models\ajaxModel();
+        $this->defaulDataBase = $_SESSION["empresaAUTH"];
+        $this->ajaxModel = new \models\ajaxModel();
+        $this->ajaxModel->setDbname($this->defaulDataBase);
+        $this->ajaxModel->conectarDB();
     }
   
     /* Retorna la respuesta del modelo ajax*/
@@ -47,7 +49,8 @@ class ajaxController  {
 
                 $new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$newCodigoWith0;
                 
-                
+                /* NOTA SE ESTABLECE DESCUENTO EN 0 TANTO PARA CABECERA COMO DETALLE */
+
                 $VEN_CAB->setCliente($datosCliente['CODIGO']);
                 $VEN_CAB->setPorcentDescuento(0);
                 $VEN_CAB->setPcID(php_uname('n'));
@@ -89,7 +92,7 @@ class ajaxController  {
                         $VEN_MOV->setCodProducto(strtoupper($producto->codigo));
                         $VEN_MOV->setCantidad($producto->cantidad);
                         $VEN_MOV->setPrecioProducto($producto->precio);
-                        $VEN_MOV->setPorcentajeDescuentoProd($producto->descuento);
+                        $VEN_MOV->setPorcentajeDescuentoProd(0);
                         $VEN_MOV->setTipoIVA('T12');
                         $VEN_MOV->setPorcentajeIVA(12);
                         $VEN_MOV->setPrecioTOTAL($VEN_MOV->calculaPrecioTOTAL());

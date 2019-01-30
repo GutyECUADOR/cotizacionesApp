@@ -1,0 +1,290 @@
+* {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+body {
+  background: #f2f2f2;
+  font-family: "Roboto";
+   }
+
+.wrap {
+  width: 90%;
+  max-width: 650px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0px 0px 10px grey; 
+  position: relative;
+  text-align:center;
+  top:25px;
+  margin: 0 auto;
+
+}
+
+.links1{
+  color: #3b5998;    
+  cursor: pointer;
+  font-family: Roboto, arial, sans-serif;
+  font-size: 10px;
+  }
+
+.contenedor-formulario {
+  width: 100%;
+  padding: 10px; }
+
+  .contenedor-formulario .formulario {
+    width: 100%;
+    margin: auto; }
+	
+	.contenedor-formulario .formulario .logo{
+            max-width: 170px; 
+            max-height: 80px;
+            position:relative;
+            margin: auto;
+            text-align: center;
+            margin-bottom: 10px;
+	 }
+       
+       .contenedor-formulario .formulario .txtcentro{
+          position:relative;
+          padding-top: 5px;
+          padding-bottom: 20px;
+	  margin: auto;
+          text-align: center;
+          color: #D32F2F;
+          font-size: 12px;
+   
+	 }
+         
+         .contenedor-formulario .formulario .txtseccion{
+          position:relative;
+          padding: 5px;
+	  margin: auto;
+          text-align: center;
+          font-weight: bold;
+          background: #303766;
+          color: #fff;
+          box-shadow: 0px 0px 1px grey;
+          margin-bottom:  18px;
+	 }
+         
+         .contenedor-formulario .formulario .txtseccion .etique{
+          position:relative;
+          margin: auto;
+          font-size:12px;
+          
+         }
+       
+ #inputuser{
+           background: url('../img/PNG/user.png') no-repeat right 8px center; 
+         }
+
+ #inputpass{
+           background: url('../img/PNG/key.png') no-repeat right 8px center; 
+         }         
+ #titulosoptionb{
+            left: 10px;
+            width: 100%;
+            color: #303766;
+          
+         }
+
+ .em{
+            left: 10px;
+            width: 100%;
+            color: #D32F2F;
+          
+         }
+         
+         #puestotrab {
+             width: 100%; 
+             margin-left: 25px;
+             margin-bottom: 17px;
+         }
+         
+         
+#bloque{  /*padre*/
+	width: 100%;
+        text-align:center;
+}
+#bloque .input-group{  /*hijos*/
+	display: inline-block;
+       
+}        
+        
+#bloquede2-1{  
+	width: 30%;
+        
+        
+}
+ 
+#nombresyapellidos{
+    width: 35%;
+}
+
+#cidentidad{
+    width: 17%;
+}
+
+#fechanacimiento{
+    width: 15%;
+}
+
+#lugarnacimiento{
+    width: 31%;
+}
+
+#estadocivil{
+    width: 15%;
+}
+
+#direcciondomicilio{
+    width: 84%;
+}
+
+
+#telefonoconv{
+    width: 20%;
+}
+
+#celular{
+    width: 20%;
+}
+
+#correoelectronico{
+    width: 29%;
+}
+
+#correoelectronicoalt{
+    width: 29%;
+}
+
+#bloquede2-2{  
+	width: 50%;
+        
+}
+
+#bloquede3-1{  
+	width: 30%;   
+}
+
+#bloquede3-2{  
+	width: 20%;   
+}
+
+#bloquede3-2{  
+	width: 34%;   
+}
+
+    .contenedor-formulario .formulario .input-group {
+      position: relative;
+      margin-bottom: 10px; 
+      width: 300px;
+     
+    }
+    
+    .contenedor-formulario .formulario .label{
+       font-size:12px;
+       font-family: "Roboto";
+       color: #4A4A4A;
+    }
+    
+      .contenedor-formulario .formulario .input-group input[type="text"],
+      .contenedor-formulario .formulario .input-group input[type="email"],
+      .contenedor-formulario .formulario .input-group input[type="password"] {
+        font-family: "Roboto";
+        font-size: 14px;
+        color: #303766;
+        width: 100%;
+        border:1px solid #DDDDDD;
+        padding: 5px;
+        margin-bottom: 10px;
+        
+        }
+      
+        .contenedor-formulario .formulario select{
+        margin-bottom:  10px;    
+        font-family: "Roboto";
+        font-size: 12px;
+        color: #303766;
+        width: 100%;
+        outline: none;
+        padding: 4px;
+       
+       
+        }
+        
+        
+
+       
+    .contenedor-formulario .formulario input[type="submit"] {
+      background: #303766;
+      border-radius: 1px;
+      border: 2px solid #f2f2f2;
+      color: #fff;
+      cursor: pointer;
+      display: inline-block;
+      font-family: "Roboto";
+      font-size: 14px;
+      padding: 5px;
+      width: 301px;
+      margin-bottom:  5px;
+      margin-top: 7px;
+      border-radius: 1px 1px 1px 1px;
+      -moz-border-radius: 1px 1px 1px 1px;
+      -webkit-border-radius: 1px 1px 1px 1px;
+       border: 0px solid #000000;
+      
+      -webkit-transition: all 0.3s ease;
+      -o-transition: all 0.3s ease;
+      transition: all 0.3s ease; }
+    
+      .contenedor-formulario .formulario input[type="submit"]:hover {
+        background: #1976D2; }
+
+
+    .footer {
+    border-top: solid 1px #A8A8A8;
+    margin-top: 10px;
+    text-align: center;
+    padding-top: 5px;
+    color: #616161;
+    font-size: 9px;
+}
+
+ /* INICIO RESPONSIVE DESING*/
+ 
+ 
+@media screen and (max-width:800px){
+    
+    .contenedor-formulario{
+        padding: 0px;
+        width: 100%;
+    }
+    
+    .wrap{
+        width: 100%;
+        max-width: 100%;
+        padding: 0px;
+        padding-top: 10px;
+        background: #fff;
+        box-shadow: 0px 0px 0px; 
+        position: relative;
+        text-align:center;
+        top:0px;
+        margin: 0 auto;
+    }
+
+    .contenedor-formulario .formulario input[type="submit"] {
+          height: 60px;
+    }
+    
+    .contenedor-formulario .formulario .input-group input[type="text"],
+    .contenedor-formulario .formulario .input-group input[type="email"],
+    .contenedor-formulario .formulario .input-group input[type="password"] {
+        height: 40px; 
+    }
+    
+}

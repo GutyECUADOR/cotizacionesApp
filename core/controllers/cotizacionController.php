@@ -2,10 +2,14 @@
 
 class CotizacionController  {
 
+    public $defaulDataBase;
     public $cotizacion;
 
     public function __construct() {
-        $this->cotizacion = new \models\CotizacionClass;
+        $this->defaulDataBase = $_SESSION["empresaAUTH"];
+        $this->cotizacion = new \models\CotizacionClass();
+        $this->cotizacion->setDbname($this->defaulDataBase);
+        $this->cotizacion->conectarDB();
     }
     
     public function getStatusDataBase (){

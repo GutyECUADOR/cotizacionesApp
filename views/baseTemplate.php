@@ -17,41 +17,35 @@
 
       <!--Import Google Icon Font-->
       <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        
+      <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>  
+
       <!-- CSS Bootstrap -->
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-      
-      <!-- Optional theme -->
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+     
       <!-- Librerias-->
       <link href="<?php echo ROOT_PATH; ?>assets\bootstrap-datepicker-1.6.4\css\bootstrap-datepicker3.css" rel="stylesheet">
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\sweetalert2\dist\sweetalert2.min.css">
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\uikit\css\uikit.min.css">
-    
+      
      
       <!-- CSS Propios -->
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\styles.css">
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\pnotify.custom.min.css">
       <link rel="shortcut icon" href="<?php echo ROOT_PATH; ?>assets\css\img\favicon.ico">
        
-      
+      <!-- CSS Paginas -->
+
       <title><?php echo APP_NAME; ?></title>
 
   </head>
 
   <body>
-    <div>
-      <div>
-        
-        <?php
-            $inicioController = new controllers\mainController();
-            $inicioController->actionCatcherController();
-        ?>
-      </div>
-    </div>
-
-         
+    
+    <?php
+        $inicioController = new controllers\mainController();
+        $inicioController->actionCatcherController();
+    ?>
+      
     <!-- USO JQUERY, y Bootstrap CDN-->
     <script src="<?php echo ROOT_PATH; ?>assets\js\jquery-3.3.1.min.js"></script>
     <script href="<?php echo ROOT_PATH; ?>assets\bootstrap-datepicker-1.6.4\js\bootstrap-datepicker.js"></script>

@@ -3,6 +3,38 @@ class Cotizacion {
         this.cliente = null,
         this.productos = []
     }
+
+    sumarFromProductos(propiedad) {
+        let total = 0;
+        for ( var i = 0, _len = this.productos.length; i < _len; i++ ) {
+            total += parseInt(this.productos[i][propiedad]);
+        }
+        return total
+    }
+
+    getTotalProductos(){
+        let total = 0;
+        for ( var i = 0, _len = this.productos.length; i < _len; i++ ) {
+            total += parseFloat(this.productos[i].getSubtotal());
+        }
+        return total
+    }
+
+    getIVAProductos(){
+        let total = 0;
+        for ( var i = 0, _len = this.productos.length; i < _len; i++ ) {
+            total += parseFloat(this.productos[i].getIVA());
+        }
+        return total
+    }
+
+    getDescuentoProductos(){
+        let total = 0;
+        for ( var i = 0, _len = this.productos.length; i < _len; i++ ) {
+            total += parseFloat(this.productos[i].getDescuento());
+        }
+        return total
+    }
 }
 
 class Cliente {
@@ -36,8 +68,8 @@ class Producto {
         return (this.getSubtotal() * IVA) / 100;
     }
 
-    getDescuento(porcentajeDescuento){
-        return ((this.cantidad * this.precio)*porcentajeDescuento)/100;
+    getDescuento(){
+        return ((this.cantidad * this.precio)* this.descuento)/100;
     }
 
     getSubtotal(){
@@ -72,7 +104,7 @@ $(document).ready(function() {
             $(this).prop("disabled", true);
             saveData(cotizacionJSON);
         }else{
-            alert('El formulario esta incompleto');
+            alert('El formulario esta incompleto indique cliente y al menos un producto');
         }
         
         
@@ -81,9 +113,9 @@ $(document).ready(function() {
     // Boton remover fila de tabla productos
     $("#tablaProductos").on('click', '.btnEliminaRow', function(event) {
         let codProdToDelete = $(this).data("codigo"); // Obtenemos el campo data-value custom
-
         deleteProductToList(codProdToDelete);
-
+        let objectResumen = resumenProdutosInList();
+        printResumen(objectResumen);
     });
 
     // Caja de texto de producto nuevo
@@ -131,8 +163,10 @@ $(document).ready(function() {
     // Caja de texto de producto nuevo
     $("#btnAgregarProdToList").on('click', function(event) {
        if (newProducto != null) {
-           addProductToList(newProducto);
-           printProductos(cotizacion.productos);
+            addProductToList(newProducto);
+            printProductos(cotizacion.productos);
+            let objectResumen = resumenProdutosInList();
+            printResumen(objectResumen);
        }else{
            alert('No hay producto que agregar a la lista');
        }
@@ -142,7 +176,7 @@ $(document).ready(function() {
     /* Multiplica la cantidad del producto a añadir a la lista*/
     $("#inputNuevoProductoCantidad").on('change', function(event) {
         let nuevacantidad = $(this).val();
-        console.log(nuevacantidad);
+        //console.log(nuevacantidad);
         if (newProducto != null) {
             newProducto.cantidad = nuevacantidad;
             printSubtotalNewProd();
@@ -153,10 +187,10 @@ $(document).ready(function() {
     /* Establece el valor del descuento del producto a agregar*/
     $("#inputNuevoProductoDescuento").on('change', function(event) {
         let nuevodescuento = $(this).val();
-        console.log(nuevodescuento);
+        //console.log(nuevodescuento);
         if (newProducto != null) {
             newProducto.descuento = nuevodescuento;
-            console.log(newProducto.getDescuento(nuevodescuento));
+            //console.log(newProducto.getDescuento(nuevodescuento));
             printSubtotalNewProd();
         }
         
@@ -205,7 +239,7 @@ $(document).ready(function() {
             alert('El item ya existe en la lista');
         }
 
-        console.log(cotizacion.productos);
+        //console.log(cotizacion.productos);
     }
 
     function deleteProductToList(codProdToDelete){
@@ -217,7 +251,7 @@ $(document).ready(function() {
         //console.log('elimina el: '+ index);
         cotizacion.productos.splice(index, 1);
 
-        console.log(cotizacion.productos);
+        //console.log(cotizacion.productos);
         printProductos(cotizacion.productos);
     }
 
@@ -256,12 +290,12 @@ $(document).ready(function() {
                 <tr>
                     <td><input type="text" class="form-control text-center" value="${producto.codigo}" disabled></td>
                     <td><input type="text" class="form-control text-center"  value="${producto.nombre}" readonly></td>
-                    <td><input type="number" class="form-control text-center rowcantidad data-codigo="${producto.codigo}"" value="${producto.cantidad}"></td>
+                    <td><input type="number" class="form-control text-center rowcantidad data-codigo="${producto.codigo}"" value="${producto.cantidad}" disabled></td>
                     <td>
                         <input type="text" class="form-control text-center precio_linea" value="${producto.precio}" readonly>
                     </td>
-                    <td><input type="text" class="form-control text-center" placeholder="%" data-codigo="${producto.codigo}" value="${producto.descuento}" ></td>
-                    <td><input type="text" class="form-control text-center" value="${producto.getSubtotal()}" readonly></td>
+                    <td><input type="text" class="form-control text-center" placeholder="%" data-codigo="${producto.codigo}" value="${producto.descuento}" disabled></td>
+                    <td><input type="text" class="form-control text-center" value="${producto.getSubtotal().toFixed(2)}" readonly></td>
                     <td><input type="text" class="form-control text-center" value="${producto.getIVA().toFixed(2)}" readonly></td>
                     <td><button type="button" class="btn btn-danger btn-sm btn-block btnEliminaRow" data-codigo="${producto.codigo}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                     </td>
@@ -312,7 +346,7 @@ $(document).ready(function() {
                     $('#inputTelefono').val('');
                     $('#inputCupo').val('');
     
-                    console.log('No data');
+                    //console.log('No data');
     
                 }
     
@@ -324,7 +358,25 @@ $(document).ready(function() {
         $("#inputNuevoProductoSubtotal").val(newProducto.getSubtotal().toFixed(2));
     }
    
-   
+    function resumenProdutosInList() {
+        
+        return {
+            sumaSubtotalproductos: cotizacion.getTotalProductos() + cotizacion.getIVAProductos(),
+            sumaTotalItems: cotizacion.sumarFromProductos("cantidad"),
+            sumaIVABienes: cotizacion.getIVAProductos(),
+            sumaDescuento: cotizacion.getDescuentoProductos()
+        };
+    }
+
+    function printResumen(objectResumen){
+        $("#txt_unidadesProd").val(objectResumen.sumaTotalItems);
+        $("#welltotal").html('$ '+ objectResumen.sumaSubtotalproductos.toFixed(2));
+        $("#txt_subtotal").val(objectResumen.sumaSubtotalproductos.toFixed(2));
+        $("#txt_ivaBienes").val(objectResumen.sumaIVABienes.toFixed(2));
+        $("#txt_impuesto").val(objectResumen.sumaIVABienes.toFixed(2));
+        $("#txt_descuentoResumen").val(objectResumen.sumaDescuento.toFixed(2));
+        $("#txt_totalPagar").val(objectResumen.sumaSubtotalproductos.toFixed(2));
+    }
    
 });
 
@@ -334,7 +386,7 @@ $(document).ready(function() {
 $("#formulario_registro").on("submit", function(event) {
     event.preventDefault();
     let form = $(this).serialize();
-    console.log(form);
+    //console.log(form);
 
 });
 
