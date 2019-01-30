@@ -40,6 +40,41 @@ class loginController  {
                     }
         }
     }
+
+    public function checkXMLFile(){
+       
+            if(file_exists(CONFIG_FILE) && $configXML = simplexml_load_file(CONFIG_FILE)){
+                $enMantenimiento = $configXML->enMantenimiento;
+                if ($enMantenimiento == 'true'){
+                    echo '
+                    <div class="alert alert-danger" role="alert">
+                      <p class="text-center">Los formularios se encuentran en mantenimiento, no realice ninguna accion de momento, intentelo mas tarde.</p>
+                    </div>
+                    
+                    ';
+                  }
+            }else{
+                echo 'Error, no se encuentra archivo de configuraciones'. CONFIG_FILE;
+                die();
+            }
+        
+    }
+
+    public function printOpcionsFromXMLFile(){
+
+        if(file_exists(CONFIG_FILE) && $configXML = simplexml_load_file(CONFIG_FILE)){
+            $empresas = $configXML->empresas->empresa;
+            foreach($empresas as $empresa)
+            {
+                echo "<option value='".$empresa['dbName']."'>".$empresa."</option>";
+            }
+            
+        }else{
+            echo 'Error, no se encuentra archivo de configuraciones'. CONFIG_FILE;
+            die();
+        }
+        
+    }
     
 
     public function resetPassword(){

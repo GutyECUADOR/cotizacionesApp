@@ -67,12 +67,12 @@ $vendedores = $cotizacion->getVendedores();
 
                 <div class="form-group formextra col-lg-2">
                     <span class="input-group-addon bordederecho">Fecha Emision</span>
-                        <input type="text" class="form-control centertext pickyDate" value="<?php echo date('Y-m-d');?>">
+                        <input type="text" class="form-control centertext pickyDate" value="<?php echo date('Y-m-d');?>" disabled>
                 </div>
 
                  <div class="form-group formextra col-lg-2">
                     <span class="input-group-addon bordederecho">Almacen</span>
-                        <select class="form-control input-sm centertext">
+                        <select class="form-control input-sm centertext" disabled>
                             <?php
                               foreach ($bodegas as $bodega => $row) {
 

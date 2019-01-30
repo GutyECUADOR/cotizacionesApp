@@ -1,11 +1,9 @@
 <?php 
-  
     if (isset($_SESSION["usuarioRUC"])){
         echo "Sigue Logeado";
-        header('location:index.php?action=inicio');
-        
+        header('location:index.php?action=inicio');  
     }
-
+    
     $login = new controllers\loginController();
 ?>
 
@@ -14,10 +12,16 @@
     <?php include 'sis_modules/header_main.php'?>
 
     <div class="contenedor-formulario">
+        
 		<div class="wrap">
+
+            <?php
+                $login->checkXMLFile();
+            ?>
+
 			<form action=""  autocomplete="off"  class="formulario" name="formulario_registro" method="POST">
                			<div>
-	           		   	<img class="logo" src="http://www.agricolabaquero.com/img/resources/logo-2.png" alt="Logo">
+	           		   	<img class="logo" src="<?php echo LOGO_NAME?>" alt="Logo">
                     		</div>
                     
                                 <div  id="bloque">
@@ -29,8 +33,11 @@
                                             <label class="label" for="nombre">Indique empresa:</label>
                                             <select name="select_empresa" id="select_empresa" required="true">
                                                 <option value=''>---Seleccione Empresa---</option>
-                                                <option value='LICEO'>Agricola Baquero</option> 
-                                                <option value='MODELO'>Modelo</option>   
+                                                <?php
+                                                    $login->printOpcionsFromXMLFile();
+                                                ?>
+                                                <!-- <option value='LICEO'>Agricola Baquero</option> 
+                                                <option value='MODELO'>Modelo</option>   --> 
                                              </select>
                                             
                                             <input type="text" name="login_username" id="inputuser" maxlength="30" placeholder="Usuario del Sistema o RUC" required >
@@ -45,7 +52,7 @@
 				</div>
 				
 			</form>
-			<div class="footer">Todos los derechos reservados © 2017 - <?php echo date("Y")?>, Ver 2.0.0</div>
+			<div class="footer">Todos los derechos reservados © 2017 - <?php echo date("Y")?>, Ver <?php echo APP_VERSION ?></div>
 		</div>
 		
 	</div>

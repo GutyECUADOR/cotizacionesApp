@@ -1,4 +1,8 @@
 <?xml version="1.0"?>
 <xmlConfig>
-     
+    <enMantenimiento>false</enMantenimiento>
+    <empresas>
+        <empresa dbName="MODELO">Modelo</empresa>
+        <!-- <empresa dbName="AGRICOLABAQUERO_V7">Agricola Baquero</empresa> -->
+    </empresas>
 </xmlConfig>

@@ -391,16 +391,28 @@ $("#formulario_registro").on("submit", function(event) {
 });
 
 
-function mySwal(mensajem, tipoAlerta = 'warning') {
-    swal({
+function mySwal(mensajem, tipoAlerta = 'info') {
+    Swal.fire({
         title: 'Atención',
         text: mensajem,
         type: tipoAlerta,
+        allowOutsideClick: false,
         showCancelButton: false,
-        closeOnConfirm: false,
         confirmButtonText: 'Aceptar',
-        showLoaderOnConfirm: true
-    });
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.value) {
+            location.reload();
+            // For more information about handling dismissals please visit
+            // https://sweetalert2.github.io/#handling-dismissals
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelled',
+            'Your imaginary file is safe :)',
+            'error'
+          )
+        }
+      })
 }
 
 function disableEnter() {
