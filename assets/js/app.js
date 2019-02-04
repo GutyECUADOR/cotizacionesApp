@@ -90,9 +90,62 @@ $(document).ready(function() {
     var newProducto = null;
     
     /* Eventos y Acciones */
-    $("#inputRUC").on("keyup", function(event) {
+    $("#inputRUC").on("keyup change", function(event) {
         validaCliente();
     });
+
+    // Boton de busqueda de clientes
+    $("#searchClienteModal").on('click', function(event) {
+        event.preventDefault();
+        let terminoBusqueda = document.getElementById("terminoBusquedaModalCliente").value;
+        let tipoBusqueda = document.getElementById("tipoBusquedaModalCliente").value;
+        if (terminoBusqueda.length > 0) {
+            buscarClientes(terminoBusqueda, tipoBusqueda);
+        }else{
+            alert('Indique un termino de busqueda');
+        }
+        
+    });
+
+    // Boton de busqueda de productos
+    $("#searchProductoModal").on('click', function(event) {
+        event.preventDefault();
+        if (cotizacion.cliente == null) {
+            alert('Indique un cliente antes de agregar productos.');
+            return;
+        }
+
+        let terminoBusqueda = document.getElementById("terminoBusquedaModalProducto").value;
+        let tipoBusqueda = document.getElementById("tipoBusquedaModalProducto").value;
+        console.log(terminoBusqueda);
+        console.log(tipoBusqueda);
+        if (terminoBusqueda.length > 0) {
+            buscarProductos(terminoBusqueda, tipoBusqueda);
+        }else{
+            alert('Indique un termino de busqueda');
+        }
+        
+    });
+
+    // Boton de asignacion de inputRUC
+    $("#tblResultadosBusquedaClientes").on('click', '.btnSeleccionaCliente', function(event) {
+        event.preventDefault();
+        let RUCCliente = $(this).data("codigo"); // Obtenemos el campo data-value custom
+        $("#inputRUC").val(RUCCliente);
+        validaCliente();
+        $('#modalBuscarCliente').modal('toggle'); // Cerramos modal
+    });
+
+
+    // Boton de asignacion de inputNuevoCodProducto
+    $("#tblResultadosBusquedaProductos").on('click', '.btnSeleccionaProducto', function(event) {
+        event.preventDefault();
+        let codProducto = $(this).data("codigo"); // Obtenemos el campo data-value custom
+        $("#inputNuevoCodProducto").val(codProducto);
+        validaProducto();
+        $('#modalBuscarProducto').modal('toggle'); // Cerramos modal
+    });
+    
 
     // Boton de envio de datos
     $("#btnGuardar").on('click', function(event) {
@@ -119,44 +172,14 @@ $(document).ready(function() {
     });
 
     // Caja de texto de producto nuevo
-    $("#inputNuevoCodProducto").on('blur', function(event) {
+    $("#inputNuevoCodProducto").on('blur change', function(event) {
        
         if (cotizacion.cliente == null) {
             alert('Indique un cliente antes de agregar productos.');
             return;
         }
 
-        let codProducto = $(this).val(); // Obtenemos el item 
-        let clienteRUC = $('#inputRUC').val();
-
-        $.ajax({
-            type: 'get',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
-            dataType: "json",
-
-            data: { codigo: codProducto, clienteRUC: clienteRUC },
-
-            success: function(response) {
-            console.log(response);
-                let producto = response.data;
-                if (producto) {
-                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0);
-                    printDataProducto(newProducto);
-
-                } else {
-                    new PNotify({
-                        title: 'Item no disponible',
-                        text: 'No se ha encontrado el producto con el codigo: ' + codProducto,
-                        delay: 3000,
-                        type: 'warn',
-                        styling: 'bootstrap3'
-                    });
-
-
-                }
-
-            }
-        });
+        validaProducto();
 
     });
 
@@ -308,6 +331,47 @@ $(document).ready(function() {
         });
     }
 
+    function printBusquedaClientes(arrayClientes){
+        $('#tblResultadosBusquedaClientes').find("tr:gt(0)").remove();
+        let cont = 1;
+        arrayClientes.forEach(cliente => {
+            let row = `
+            <tr>
+                <th scope="row">${cont}</th> 
+                <td>${cliente.RUC}</td>
+                <td>${cliente.NOMBRE.trim()}</td>
+                <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaCliente" data-codigo="${cliente.RUC.trim()}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Seleccionar</button></td>
+                
+            </tr>
+                `;
+
+                $('#tblResultadosBusquedaClientes > tbody:last-child').append(row);
+            cont++;
+
+        });
+    }
+
+    function printBusquedaProductos(arrayProductos){
+        $('#tblResultadosBusquedaProductos').find("tr:gt(0)").remove();
+        let cont = 1;
+        arrayProductos.forEach(producto => {
+            let row = `
+            <tr>
+                <th scope="row">${cont}</th> 
+                <td>${producto.Codigo}</td>
+                <td>${producto.Nombre.trim()}</td>
+                <td>0.00</td>
+                <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.Codigo.trim()}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Seleccionar</button></td>
+                
+            </tr>
+                `;
+
+                $('#tblResultadosBusquedaProductos > tbody:last-child').append(row);
+            cont++;
+
+        });
+    }
+
     function validaCliente() {
         let CI_RUC = document.getElementById("inputRUC").value;
     
@@ -352,6 +416,78 @@ $(document).ready(function() {
     
             }
         });
+    }
+
+    function validaProducto(){
+
+        let codProducto = $('#inputNuevoCodProducto').val();
+        let clienteRUC = $('#inputRUC').val();
+
+        $.ajax({
+            type: 'get',
+            url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
+            dataType: "json",
+
+            data: { codigo: codProducto, clienteRUC: clienteRUC },
+
+            success: function(response) {
+            console.log(response);
+                let producto = response.data;
+                if (producto) {
+                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0);
+                    printDataProducto(newProducto);
+
+                } else {
+                    new PNotify({
+                        title: 'Item no disponible',
+                        text: 'No se ha encontrado el producto con el codigo: ' + codProducto,
+                        delay: 3000,
+                        type: 'warn',
+                        styling: 'bootstrap3'
+                    });
+
+
+                }
+
+            }
+        });
+    }
+
+    function buscarClientes(terminoBusqueda, tipoBusqueda) {
+        
+        $.ajax({
+            type: 'get',
+            url: 'views/modulos/ajax/API_cotizaciones.php?action=searchClientes',
+            dataType: "json",
+    
+            data: { terminoBusqueda:terminoBusqueda, tipoBusqueda:tipoBusqueda },
+            
+            success: function(response) {
+                console.log(response);
+                let clientes = response.data;
+                printBusquedaClientes(clientes);
+            }
+        });
+
+    }
+
+
+    function buscarProductos(terminoBusqueda, tipoBusqueda) {
+        
+        $.ajax({
+            type: 'get',
+            url: 'views/modulos/ajax/API_cotizaciones.php?action=searchProductos',
+            dataType: "json",
+    
+            data: { terminoBusqueda:terminoBusqueda, tipoBusqueda:tipoBusqueda },
+            
+            success: function(response) {
+                console.log(response);
+                let productos = response.data;
+                printBusquedaProductos(productos);
+            }
+        });
+
     }
 
     function printSubtotalNewProd (){

@@ -21,6 +21,14 @@ class ajax{
         return $this->ajaxController->getInfoClienteController($RUC);
     }
 
+    public function getAllClientes($terminoBusqueda,  $tipoBusqueda) {
+      return $this->ajaxController->getAllClientesController($terminoBusqueda,  $tipoBusqueda);
+    }
+
+    public function getAllProductos($terminoBusqueda,  $tipoBusqueda) {
+      return $this->ajaxController->getAllProductosController($terminoBusqueda,  $tipoBusqueda);
+    }
+
     public function getInfoProducto($codigoProducto, $clienteRUC) {
         return $this->ajaxController->getInfoProductoController($codigoProducto, $clienteRUC);
     }
@@ -58,6 +66,36 @@ class ajax{
           if (isset($_GET['ruc'])) {
             $RUC = $_GET['ruc'];
             $respuesta = $ajax->getInfoCliente($RUC);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        /* Obtiene array de los cliente*/ 
+        case 'searchClientes':
+          if (isset($_GET['terminoBusqueda']) && isset($_GET['tipoBusqueda'])) {
+            $terminoBusqueda = $_GET['terminoBusqueda'];
+            $tipoBusqueda = $_GET['tipoBusqueda'];
+            $respuesta = $ajax->getAllClientes($terminoBusqueda,  $tipoBusqueda);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        /* Obtiene array de los productos*/ 
+        case 'searchProductos':
+          if (isset($_GET['terminoBusqueda']) && isset($_GET['tipoBusqueda'])) {
+            $terminoBusqueda = $_GET['terminoBusqueda'];
+            $tipoBusqueda = $_GET['tipoBusqueda'];
+            $respuesta = $ajax->getAllProductos($terminoBusqueda,  $tipoBusqueda);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');

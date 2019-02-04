@@ -13,7 +13,7 @@ $vendedores = $cotizacion->getVendedores();
 
  <?php include 'sis_modules/header_main.php'?>
 
-<div class="container wrap">
+    <div class="container wrap">
         <!-- Row de cabecera-->
         <div class="row">
             <div class="col">
@@ -112,7 +112,9 @@ $vendedores = $cotizacion->getVendedores();
                                 <span class="input-group-addon">Cliente</span>
                                 <input type="text" class="form-control" id="inputRUC">
                                 <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                    <button class="btn btn-default" type="button" data-toggle="modal" data-target="#modalBuscarCliente">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                    </button>
                                 </span>
                                 
                                 <span class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
@@ -252,14 +254,23 @@ $vendedores = $cotizacion->getVendedores();
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input type="text" id="inputNuevoCodProducto" class="form-control text-center"></td>
+                                <td>
+                                    <div class="input-group">
+                                    <input type="text" id="inputNuevoCodProducto" class="form-control text-center" placeholder="Cod Producto...">
+                                    <span class="input-group-btn">
+                                        <button id="btnSeachProductos" class="btn btn-default" type="button" data-toggle="modal" data-target="#modalBuscarProducto">
+                                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                                    </div><!-- /input-group -->
+                                </td>
                                 <td><input type="text" id="inputNuevoProductoNombre" class="form-control text-center" readonly></td>
                                 <td><input type="number" id="inputNuevoProductoCantidad" class="form-control text-center" value="0"></td>
                                 <td>
                                     <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center" readonly>
                                     <input type="hidden">
                                 </td>
-                                <td><input type="text"  id="inputNuevoProductoDescuento" class="form-control text-center" placeholder="%"></td>
+                                <td><input type="text"  id="inputNuevoProductoDescuento" class="form-control text-center" placeholder="%" disabled></td>
                                 <td><input type="text"  id="inputNuevoProductoSubtotal" class="form-control text-center importe_linea" readonly></td>
                                
                                 </td>
@@ -384,4 +395,107 @@ $vendedores = $cotizacion->getVendedores();
                 </div>
             </div>
         </div>    
+
+        <!-- Modal Cliente -->
+        <div class="modal fade" id="modalBuscarCliente" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Busqueda de Clientes</h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="input-group select-group">
+                        <input type="text" id="terminoBusquedaModalCliente" class="form-control"/>
+                        <select id="tipoBusquedaModalCliente" class="form-control input-group-addon">
+                            <option value="NOMBRE">Nombre</option>
+                            <option value="RUC">Cedula / RUC</option>
+                        </select>
+                        <div class="input-group-btn">
+                            <button id="searchClienteModal" type="button" class="btn btn-default" aria-label="Help">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div> 
+                    </div>
+
+                    <div class="panel panel-default"> 
+                        <div class="panel-heading">Resultados</div> 
+                            <table id="tblResultadosBusquedaClientes" class="table"> 
+                                <thead>
+                                    <tr> 
+                                        <th>#</th> 
+                                        <th>RUC</th> 
+                                        <th>Cliente</th> 
+                                        <th>Seleccionar</th> 
+                                    </tr>
+                                </thead> 
+                                
+                                <tbody>
+                                    <!-- Los resultados de la busqueda se desplegaran aqui-->
+                                </tbody>
+                            </table>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Producto -->
+        <div class="modal fade" id="modalBuscarProducto" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Busqueda de Producto</h4>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="input-group select-group">
+                        <input type="text" id="terminoBusquedaModalProducto" class="form-control"/>
+                        <select id="tipoBusquedaModalProducto" class="form-control input-group-addon">
+                            <option value="NOMBRE">Nombre</option>
+                            <option value="CODIGO">Codigo</option>
+                            <option value="CodBarra">CodBarra</option>
+                        </select>
+                        <div class="input-group-btn">
+                            <button id="searchProductoModal" type="button" class="btn btn-default" aria-label="Help">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </div> 
+                    </div>
+
+                    <div class="panel panel-default"> 
+                        <div class="panel-heading">Resultados</div> 
+                            <table id="tblResultadosBusquedaProductos" class="table"> 
+                                <thead>
+                                    <tr> 
+                                        <th>#</th> 
+                                        <th>Codigo</th> 
+                                        <th>Nombre</th> 
+                                        <th>Stock</th> 
+                                        <th>Accion</th> 
+                                    </tr>
+                                </thead> 
+                                
+                                <tbody>
+                                    <!-- Los resultados de la busqueda se desplegaran aqui-->
+                                </tbody>
+                            </table>
+                        </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+

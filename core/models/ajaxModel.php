@@ -83,6 +83,51 @@ class ajaxModel extends conexion  {
    
     }
 
+    public function getAllClientesModel($terminoBusqueda, $tipoBusqueda='NOMBRE') {
+
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = "SELECT TOP 10 RUC, NOMBRE, CODIGO, TIPOPRECIO FROM dbo.COB_CLIENTES WHERE $tipoBusqueda LIKE '$terminoBusqueda%'";  // Final del Query SQL 
+
+        $stmt = $this->instancia->prepare($query); 
+    
+        $arrayResultados = array();
+
+            if($stmt->execute()){
+                while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
+                    array_push($arrayResultados, $row);
+                }
+                return $arrayResultados;
+                
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+
+   
+    }
+
+    public function getAllProductosModel($terminoBusqueda, $tipoBusqueda='NOMBRE') {
+
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = "SELECT top 10 Codigo, Nombre FROM INV_ARTICULOS WHERE $tipoBusqueda LIKE '$terminoBusqueda%'";  // Final del Query SQL 
+
+        $stmt = $this->instancia->prepare($query); 
+    
+        $arrayResultados = array();
+
+            if($stmt->execute()){
+                while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
+                    array_push($arrayResultados, $row);
+                }
+                return $arrayResultados;
+                
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+
+   
+    }
 
     public function getArraysBodegas() {
 

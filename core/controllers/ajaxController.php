@@ -6,7 +6,7 @@ class ajaxController  {
     public $ajaxModel;
 
     public function __construct() {
-        $this->defaulDataBase = $_SESSION["empresaAUTH"];
+        $this->defaulDataBase = (!isset($_SESSION["empresaAUTH"])) ? 'MODELO' : $_SESSION["empresaAUTH"] ;
         $this->ajaxModel = new \models\ajaxModel();
         $this->ajaxModel->setDbname($this->defaulDataBase);
         $this->ajaxModel->conectarDB();
@@ -15,6 +15,18 @@ class ajaxController  {
     /* Retorna la respuesta del modelo ajax*/
     public function getInfoClienteController($RUC){
         $response = $this->ajaxModel->getInfoClienteModel($RUC);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
+    public function getAllClientesController($terminoBusqueda, $tipoBusqueda){
+        $response = $this->ajaxModel->getAllClientesModel($terminoBusqueda, $tipoBusqueda);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
+    public function getAllProductosController($terminoBusqueda, $tipoBusqueda){
+        $response = $this->ajaxModel->getAllProductosModel($terminoBusqueda, $tipoBusqueda);
         return $response;
     }
 
