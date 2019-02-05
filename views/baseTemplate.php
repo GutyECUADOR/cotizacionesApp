@@ -30,6 +30,7 @@
      
       <!-- CSS Propios -->
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\styles.css">
+      <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\loaders.css">
       <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>assets\css\pnotify.custom.min.css">
       <link rel="shortcut icon" href="<?php echo ROOT_PATH; ?>assets\css\img\favicon.ico">
        

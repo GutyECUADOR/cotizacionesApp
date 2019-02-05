@@ -13,6 +13,10 @@
     margin-bottom: 20px;
 }
 
+#loaderClientes, #loaderProductos{
+    display: none;
+}
+
 .formextra {
     margin-top: 10px;
 }
@@ -41,10 +45,6 @@
     width: 100%;
 }
 
-.tableExtras {
-    max-width: 0;
-    min-width: 1280px !important;
-}
 
 .bordederecho {
     border-right: 1px solid #c1bdbd !important;

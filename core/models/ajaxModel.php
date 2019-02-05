@@ -60,7 +60,8 @@ class ajaxModel extends conexion  {
             SELECT 
                 RTRIM(CODIGO) as CODIGO, 
                 RTRIM(NOMBRE) as NOMBRE, 
-                RTRIM($tipoPrec) as PRECIO 
+                RTRIM($tipoPrec) as PRECIO,
+                (select dbo.DIMESTOCKFIS('99','$codigoProducto','','B01')) AS STOCK
             FROM 
                 dbo.INV_ARTICULOS
             
@@ -109,10 +110,13 @@ class ajaxModel extends conexion  {
     public function getAllProductosModel($terminoBusqueda, $tipoBusqueda='NOMBRE') {
 
         //Query de consulta con parametros para bindear si es necesario.
-        $query = "SELECT top 10 Codigo, Nombre FROM INV_ARTICULOS WHERE $tipoBusqueda LIKE '$terminoBusqueda%'";  // Final del Query SQL 
+        $query = "exec Sp_INVCONARTWAN ?,'','VEN','N','B01','','100','0','0','1','99','','','','','','','','','','1'";
+        //$query = "SELECT top 10 Codigo, Nombre FROM INV_ARTICULOS WHERE $tipoBusqueda LIKE '$terminoBusqueda%'";  // Final del Query SQL 
 
         $stmt = $this->instancia->prepare($query); 
-    
+        $stmt->bindValue(1, $terminoBusqueda); 
+        $stmt->execute();
+
         $arrayResultados = array();
 
             if($stmt->execute()){

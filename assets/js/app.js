@@ -56,12 +56,13 @@ class Cliente {
 }
 
 class Producto {
-    constructor(codigo, nombre, cantidad, precio, descuento) {
+    constructor(codigo, nombre, cantidad, precio, descuento, stock) {
       this.codigo = codigo;
       this.nombre = nombre;
       this.cantidad = cantidad;
       this.precio = precio;
       this.descuento = descuento;
+      this.stock = stock;
     }
 
     getIVA(IVA = 12){
@@ -97,10 +98,12 @@ $(document).ready(function() {
     // Boton de busqueda de clientes
     $("#searchClienteModal").on('click', function(event) {
         event.preventDefault();
+        
         let terminoBusqueda = document.getElementById("terminoBusquedaModalCliente").value;
         let tipoBusqueda = document.getElementById("tipoBusquedaModalCliente").value;
         if (terminoBusqueda.length > 0) {
             buscarClientes(terminoBusqueda, tipoBusqueda);
+            
         }else{
             alert('Indique un termino de busqueda');
         }
@@ -120,7 +123,9 @@ $(document).ready(function() {
         console.log(terminoBusqueda);
         console.log(tipoBusqueda);
         if (terminoBusqueda.length > 0) {
+           
             buscarProductos(terminoBusqueda, tipoBusqueda);
+            
         }else{
             alert('Indique un termino de busqueda');
         }
@@ -293,7 +298,6 @@ $(document).ready(function() {
         document.getElementById("inputNuevoProductoNombre").value = "";
         document.getElementById("inputNuevoProductoCantidad").value = "";
         document.getElementById("inputNuevoProductoPrecioUnitario").value = "";
-        document.getElementById("inputNuevoProductoDescuento").value = "";
         document.getElementById("inputNuevoProductoSubtotal").value = "";
     }
 
@@ -301,7 +305,6 @@ $(document).ready(function() {
        document.getElementById("inputNuevoProductoNombre").value = producto.nombre;
        document.getElementById("inputNuevoProductoCantidad").value = producto.cantidad;
        document.getElementById("inputNuevoProductoPrecioUnitario").value = producto.precio;
-       document.getElementById("inputNuevoProductoDescuento").value = producto.descuento;
        document.getElementById("inputNuevoProductoSubtotal").value = producto.getSubtotal();
     }
 
@@ -317,7 +320,7 @@ $(document).ready(function() {
                     <td>
                         <input type="text" class="form-control text-center precio_linea" value="${producto.precio}" readonly>
                     </td>
-                    <td><input type="text" class="form-control text-center" placeholder="%" data-codigo="${producto.codigo}" value="${producto.descuento}" disabled></td>
+                    <td><input type="text" class="form-control text-center" placeholder="%" data-codigo="${producto.codigo}" value="${producto.stock}" disabled></td>
                     <td><input type="text" class="form-control text-center" value="${producto.getSubtotal().toFixed(2)}" readonly></td>
                     <td><input type="text" class="form-control text-center" value="${producto.getIVA().toFixed(2)}" readonly></td>
                     <td><button type="button" class="btn btn-danger btn-sm btn-block btnEliminaRow" data-codigo="${producto.codigo}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
@@ -358,10 +361,15 @@ $(document).ready(function() {
             let row = `
             <tr>
                 <th scope="row">${cont}</th> 
-                <td>${producto.Codigo}</td>
-                <td>${producto.Nombre.trim()}</td>
-                <td>0.00</td>
-                <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.Codigo.trim()}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> Seleccionar</button></td>
+                <td>${producto.CODIGO}</td>
+                <td>${producto.NOMBRE.trim()}</td>
+                <td>${parseFloat(producto.PRECIO_A.trim()).toFixed(2)}</td>
+                <td>${parseFloat(producto.PRECIO_B.trim()).toFixed(2)}</td>
+                <td>${parseFloat(producto.PRECIO_C.trim()).toFixed(2)}</td>
+                <td>${parseFloat(producto.PRECIO_D.trim()).toFixed(2)}</td>
+                <td>${parseFloat(producto.PRECIO_E.trim()).toFixed(2)}</td>
+                <td>${producto.STOCK.trim()}</td>
+                <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.CODIGO.trim()}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
                 
             </tr>
                 `;
@@ -434,7 +442,7 @@ $(document).ready(function() {
             console.log(response);
                 let producto = response.data;
                 if (producto) {
-                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0);
+                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK);
                     printDataProducto(newProducto);
 
                 } else {
@@ -454,7 +462,7 @@ $(document).ready(function() {
     }
 
     function buscarClientes(terminoBusqueda, tipoBusqueda) {
-        
+        $("#loaderClientes").css("display", "block");
         $.ajax({
             type: 'get',
             url: 'views/modulos/ajax/API_cotizaciones.php?action=searchClientes',
@@ -465,6 +473,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
                 let clientes = response.data;
+                $("#loaderClientes").css("display", "none");
                 printBusquedaClientes(clientes);
             }
         });
@@ -473,7 +482,8 @@ $(document).ready(function() {
 
 
     function buscarProductos(terminoBusqueda, tipoBusqueda) {
-        
+        $("#loaderProductos").css("display", "block");
+       
         $.ajax({
             type: 'get',
             url: 'views/modulos/ajax/API_cotizaciones.php?action=searchProductos',
@@ -484,6 +494,7 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
                 let productos = response.data;
+                $("#loaderProductos").css("display", "none");
                 printBusquedaProductos(productos);
             }
         });
@@ -497,7 +508,8 @@ $(document).ready(function() {
     function resumenProdutosInList() {
         
         return {
-            sumaSubtotalproductos: cotizacion.getTotalProductos() + cotizacion.getIVAProductos(),
+            sumaSubtotalproductos: cotizacion.getTotalProductos(),
+            sumatotalproductosWithIVA: cotizacion.getTotalProductos() + cotizacion.getIVAProductos(),
             sumaTotalItems: cotizacion.sumarFromProductos("cantidad"),
             sumaIVABienes: cotizacion.getIVAProductos(),
             sumaDescuento: cotizacion.getDescuentoProductos()
@@ -506,12 +518,12 @@ $(document).ready(function() {
 
     function printResumen(objectResumen){
         $("#txt_unidadesProd").val(objectResumen.sumaTotalItems);
-        $("#welltotal").html('$ '+ objectResumen.sumaSubtotalproductos.toFixed(2));
+        $("#welltotal").html('$ '+ objectResumen.sumatotalproductosWithIVA.toFixed(2));
         $("#txt_subtotal").val(objectResumen.sumaSubtotalproductos.toFixed(2));
         $("#txt_ivaBienes").val(objectResumen.sumaIVABienes.toFixed(2));
         $("#txt_impuesto").val(objectResumen.sumaIVABienes.toFixed(2));
         $("#txt_descuentoResumen").val(objectResumen.sumaDescuento.toFixed(2));
-        $("#txt_totalPagar").val(objectResumen.sumaSubtotalproductos.toFixed(2));
+        $("#txt_totalPagar").val(objectResumen.sumatotalproductosWithIVA.toFixed(2));
     }
    
 });

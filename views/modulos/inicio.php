@@ -14,6 +14,8 @@ $vendedores = $cotizacion->getVendedores();
  <?php include 'sis_modules/header_main.php'?>
 
     <div class="container wrap">
+
+
         <!-- Row de cabecera-->
         <div class="row">
             <div class="col">
@@ -240,16 +242,16 @@ $vendedores = $cotizacion->getVendedores();
                 </div>
 
                 <div class="panel-body">
-                    <div id="responsibetable">        
+                    <div id="">        
                     <table id="tablaAgregaNuevo" class="table table-bordered tableExtras">
                         <thead>
                         <tr>
-                            <th style="width: 10%" class="text-center headerTablaProducto">Codigo</th>
-                            <th style="width: 25%" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                            <th style="width: 5%"  class="text-center headerTablaProducto">Cantidad</th>
-                            <th style="width: 10%" class="text-center headerTablaProducto">Precio</th>
-                            <th style="width: 5%" class="text-center headerTablaProducto">Desc (%)</th>
-                            <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
+                            <th style="width: 5%" class="text-center headerTablaProducto">Codigo</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                            <th style="width: 2%"  class="text-center headerTablaProducto">Cantidad</th>
+                            <th style="width: 5%" class="text-center headerTablaProducto">Precio</th>
+
+                            <th style="width: 5%" class="text-center headerTablaProducto">Subtotal</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -270,7 +272,7 @@ $vendedores = $cotizacion->getVendedores();
                                     <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center" readonly>
                                     <input type="hidden">
                                 </td>
-                                <td><input type="text"  id="inputNuevoProductoDescuento" class="form-control text-center" placeholder="%" disabled></td>
+                                
                                 <td><input type="text"  id="inputNuevoProductoSubtotal" class="form-control text-center importe_linea" readonly></td>
                                
                                 </td>
@@ -310,13 +312,14 @@ $vendedores = $cotizacion->getVendedores();
                             <th style="width: 20%" class="text-center headerTablaProducto">Nombre del Articulo</th>
                             <th style="width: 3%"  class="text-center headerTablaProducto">Cantidad</th>
                             <th style="width: 5%" class="text-center headerTablaProducto">Precio</th>
-                            <th style="width: 5%" class="text-center headerTablaProducto">Descuento</th>
+                            <th style="width: 5%" class="text-center headerTablaProducto">Stock</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
                             <th style="width: 5%" class="text-center headerTablaProducto">IVA</th>
                             <th style="width: 5%" class="text-center headerTablaProducto">Eliminar</th>
                         </tr>
                         </thead>
                         <tbody>
+                            <!--Resultados de busqueda aqui -->
                         </tbody>
                     </table>
 
@@ -404,17 +407,17 @@ $vendedores = $cotizacion->getVendedores();
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">Busqueda de Clientes</h4>
                 </div>
+
                 <div class="modal-body">
-                    
                     <div class="input-group select-group">
-                        <input type="text" id="terminoBusquedaModalCliente" class="form-control"/>
+                        <input type="text" id="terminoBusquedaModalCliente" placeholder="Termino de busqueda..." class="form-control"/>
                         <select id="tipoBusquedaModalCliente" class="form-control input-group-addon">
                             <option value="NOMBRE">Nombre</option>
                             <option value="RUC">Cedula / RUC</option>
                         </select>
                         <div class="input-group-btn">
-                            <button id="searchClienteModal" type="button" class="btn btn-default" aria-label="Help">
-                                <span class="glyphicon glyphicon-search"></span>
+                            <button id="searchClienteModal" type="button" class="btn btn-primary" aria-label="Help">
+                                <span class="glyphicon glyphicon-search"></span> Buscar
                             </button>
                         </div> 
                     </div>
@@ -433,6 +436,12 @@ $vendedores = $cotizacion->getVendedores();
                                 
                                 <tbody>
                                     <!-- Los resultados de la busqueda se desplegaran aqui-->
+                                    <div id="loaderClientes">
+                                        <div class="loader" id="loader-4">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>        
+                                    </div>
                                 </tbody>
                             </table>
                         </div>
@@ -447,7 +456,7 @@ $vendedores = $cotizacion->getVendedores();
 
         <!-- Modal Producto -->
         <div class="modal fade" id="modalBuscarProducto" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -456,15 +465,13 @@ $vendedores = $cotizacion->getVendedores();
                 <div class="modal-body">
                     
                     <div class="input-group select-group">
-                        <input type="text" id="terminoBusquedaModalProducto" class="form-control"/>
+                        <input type="text" id="terminoBusquedaModalProducto" placeholder="Termino de busqueda..." class="form-control"/>
                         <select id="tipoBusquedaModalProducto" class="form-control input-group-addon">
                             <option value="NOMBRE">Nombre</option>
-                            <option value="CODIGO">Codigo</option>
-                            <option value="CodBarra">CodBarra</option>
                         </select>
                         <div class="input-group-btn">
-                            <button id="searchProductoModal" type="button" class="btn btn-default" aria-label="Help">
-                                <span class="glyphicon glyphicon-search"></span>
+                            <button id="searchProductoModal" type="button" class="btn btn-primary" aria-label="Help">
+                                <span class="glyphicon glyphicon-search"></span> Buscar
                             </button>
                         </div> 
                     </div>
@@ -477,6 +484,11 @@ $vendedores = $cotizacion->getVendedores();
                                         <th>#</th> 
                                         <th>Codigo</th> 
                                         <th>Nombre</th> 
+                                        <th>PrecA</th>
+                                        <th>PrecB</th>
+                                        <th>PrecC</th>
+                                        <th>PrecD</th>
+                                        <th>PrecE</th>
                                         <th>Stock</th> 
                                         <th>Accion</th> 
                                     </tr>
@@ -484,6 +496,12 @@ $vendedores = $cotizacion->getVendedores();
                                 
                                 <tbody>
                                     <!-- Los resultados de la busqueda se desplegaran aqui-->
+                                    <div id="loaderProductos">
+                                        <div class="loader" id="loader-4">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>        
+                                    </div>
                                 </tbody>
                             </table>
                         </div>
