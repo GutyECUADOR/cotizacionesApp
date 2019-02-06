@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima');
 session_start();
+require_once '../../../vendor/autoload.php';
 require_once '../../../core/models/conexion.php';
 require_once '../../../core/controllers/ajaxController.php';
 require_once '../../../core/models/ajaxModel.php';
@@ -35,6 +36,10 @@ class ajax{
 
     public function saveCotizacion($formCotizacion){
       return $this->ajaxController->insertCotizacion($formCotizacion);
+    }
+
+    public function sendEmail($email){
+      return $this->ajaxController->sendEmail($email);
     }
 
 }
@@ -115,6 +120,22 @@ class ajax{
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+          
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        /* Utiliza PHPMailer para el envio de correo*/ 
+        case 'sendEmail':
+
+          if (isset($_GET['email'])) {
+            $email = $_GET['email'];
+            $respuesta = $ajax->sendEmail($email);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.' );
           }
           
         

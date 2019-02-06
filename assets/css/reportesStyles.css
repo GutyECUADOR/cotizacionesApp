@@ -1,0 +1,77 @@
+body{
+	font-family: sans;
+}
+
+.rounded {
+	border:1px solid #000000;
+	border-radius: 4px;
+	
+}
+
+h4 {
+	font-size:9pt;
+	margin: 2px;
+}
+
+h2 {
+	font-size:5pt;
+	margin: 2px;
+}
+
+div {
+	margin-bottom: 5px;
+}
+
+.cabecera{
+	font-size: 12px;
+}
+
+.row {
+	display: flex;
+  }
+
+#logo {
+	text-align: center;
+	/* background: lightblue; */
+	/* Just so it's visible */
+}
+#informacion {
+	text-align: center;
+	/* Grow to rest of container */
+	/* background: lightgreen; */
+	/* Just so it's visible */
+}
+
+#infoCliente{
+	padding: 5px;
+}
+
+
+table.items {
+	border: 0.1mm solid #000000;
+}
+td { vertical-align: top; }
+.items td {
+	border-left: 0.1mm solid #000000;
+	border-right: 0.1mm solid #000000;
+}
+table thead td { background-color: #EEEEEE;
+	text-align: center;
+	border: 0.1mm solid #000000;
+	font-variant: small-caps;
+}
+.items td.blanktotal {
+	background-color: #EEEEEE;
+	border: 0.1mm solid #000000;
+	background-color: #FFFFFF;
+	border: 0mm none #000000;
+	border-top: 0.1mm solid #000000;
+	border-right: 0.1mm solid #000000;
+}
+.items td.totals {
+	text-align: right;
+	border: 0.1mm solid #000000;
+}
+.items td.cost {
+	text-align: "." center;
+}

@@ -1,0 +1,16 @@
+{
+    "name": "vidiasoft/cotizacionesapp",
+    "description": "Proyecto de cotizaciones de winfenix",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "José Gutiérrez",
+            "email": "gutiecuador@gmail.com"
+        }
+    ],
+    "require": {
+        "mpdf/mpdf": "6.1.0",
+        "phpmailer/phpmailer": "^6.0"
+    }
+}
