@@ -56,17 +56,19 @@ class Cliente {
 }
 
 class Producto {
-    constructor(codigo, nombre, cantidad, precio, descuento, stock) {
+    constructor(codigo, nombre, cantidad, precio, descuento, stock, tipoIVA, valorIVA) {
       this.codigo = codigo;
       this.nombre = nombre;
       this.cantidad = cantidad;
       this.precio = precio;
       this.descuento = descuento;
       this.stock = stock;
+      this.tipoIVA = tipoIVA;
+      this.valorIVA = valorIVA;
     }
 
-    getIVA(IVA = 12){
-        return (this.getSubtotal() * IVA) / 100;
+    getIVA(){
+        return (this.getSubtotal() * this.valorIVA) / 100;
     }
 
     getDescuento(){
@@ -89,6 +91,7 @@ $(document).ready(function() {
     var limite_productos = 0;
     var cotizacion = new Cotizacion();
     var newProducto = null;
+    var nuevoIDDocumentGenerated = null;
     
     /* Eventos y Acciones */
     $("#inputRUC").on("keyup change", function(event) {
@@ -246,6 +249,8 @@ $(document).ready(function() {
             
             success: function(response) {
                 console.log(response);
+                nuevoIDDocumentGenerated = response.data.new_cod_VENCAB;
+                console.log (nuevoIDDocumentGenerated);
                 mySwal(response.data.mensaje + 'ID de documento generado: ' + response.data.new_cod_VENCAB, "success");
             }
         });
@@ -442,9 +447,9 @@ $(document).ready(function() {
             console.log(response);
                 let producto = response.data;
                 if (producto) {
-                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK);
+                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA, parseFloat(producto.VALORIVA));
                     printDataProducto(newProducto);
-
+                    console.log(newProducto);
                 } else {
                     new PNotify({
                         title: 'Item no disponible',
@@ -526,6 +531,56 @@ $(document).ready(function() {
         $("#txt_totalPagar").val(objectResumen.sumatotalproductosWithIVA.toFixed(2));
     }
    
+    function mySwal(mensajem, tipoAlerta = 'info') {
+        Swal.fire({
+            title: 'Atención',
+            text: mensajem + ', desea inviar email con la cotizacion al cliente?',
+            type: tipoAlerta,
+            allowOutsideClick: false,
+            showCancelButton: true,
+            confirmButtonText: 'Aceptar',
+            cancelButtonText: 'Cancelar'
+          }).then((result) => {
+            if (result.value) {
+                
+                $.ajax({
+                    type: 'get',
+                    url: 'views/modulos/ajax/API_cotizaciones.php?action=sendEmail',
+                    dataType: "json",
+                    data: { email: 'soporteweb@sudcompu.net', IDDocument: nuevoIDDocumentGenerated },
+                    success: function (response) {
+                        console.log(response);
+                        Swal.fire({
+                            type: 'info',
+                            title: 'Envio de email',
+                            text: response.data.mensaje,
+                          }).then((result) => {
+                            if (result.value) {
+                                location.reload();
+                            }
+                          })
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong!'
+                          }).then((result) => {
+                            if (result.value) {
+                                location.reload();
+                            }
+                          })
+                    }
+                });
+    
+                
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              
+              location.reload();
+            }
+          })
+    }
+
 });
 
 /* FIN DOC Ready */
@@ -539,29 +594,7 @@ $("#formulario_registro").on("submit", function(event) {
 });
 
 
-function mySwal(mensajem, tipoAlerta = 'info') {
-    Swal.fire({
-        title: 'Atención',
-        text: mensajem,
-        type: tipoAlerta,
-        allowOutsideClick: false,
-        showCancelButton: false,
-        confirmButtonText: 'Aceptar',
-        cancelButtonText: 'Cancelar'
-      }).then((result) => {
-        if (result.value) {
-            location.reload();
-            // For more information about handling dismissals please visit
-            // https://sweetalert2.github.io/#handling-dismissals
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire(
-            'Cancelled',
-            'Your imaginary file is safe :)',
-            'error'
-          )
-        }
-      })
-}
+
 
 function disableEnter() {
     $("form").keypress(function(e) {

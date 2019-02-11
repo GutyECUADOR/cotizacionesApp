@@ -8,6 +8,29 @@ class ajaxModel extends conexion  {
         parent::__construct();
     }
 
+    public function getAllInfoEmpresaModel() {
+
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = " 
+            SELECT NomCia, DirCia, RucCia, TelCia, Ciudad FROM dbo.DATOSEMPRESA    
+        ";  // Final del Query SQL 
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+                if($stmt->execute()){
+                    $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+   
+    }
 
     public function getInfoClienteModel($RUC) {
 
@@ -52,20 +75,91 @@ class ajaxModel extends conexion  {
    
     }
 
+
+    public function getVENCABByID($IDDocument) {
+
+     
+        $query = " 
+        SELECT 
+            CLIENTE.NOMBRE,
+            CLIENTE.RUC,
+            CLIENTE.DIRECCION1,
+            CLIENTE.TELEFONO1,
+            CLIENTE.EMAIL,
+            VEN_CAB.*
+        FROM 
+            dbo.VEN_CAB 
+            INNER JOIN dbo.COB_CLIENTES as CLIENTE on CLIENTE.CODIGO = VEN_CAB.CLIENTE	
+        WHERE ID='$IDDocument'
+        ";  // Final del Query SQL 
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+                if($stmt->execute()){
+                    $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+   
+    }
+
+    public function getVENMOVByID($IDDocument) {
+
+       //Query de consulta con parametros para bindear si es necesario.
+       $query = "
+       SELECT
+            ARTICULO.Nombre,
+            VEN_MOV.*
+            
+        FROM 
+            dbo.VEN_MOV
+            INNER JOIN dbo.INV_ARTICULOS as ARTICULO ON ARTICULO.Codigo = VEN_MOV.CODIGO
+        WHERE 
+            ID = '$IDDocument'
+       ";  // Final del Query SQL 
+
+       $stmt = $this->instancia->prepare($query); 
+   
+       $arrayResultados = array();
+
+           if($stmt->execute()){
+               while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
+                   array_push($arrayResultados, $row);
+               }
+               return $arrayResultados;
+               
+           }else{
+               $resulset = false;
+           }
+       return $resulset; 
+   
+    }
+    
+
     public function getInfoProductoModel($codigoProducto, $tipoPrecio='A') {
 
         $tipoPrec = 'Prec'.$tipoPrecio; // Determina el tipo de precio que se devolvera segun el cliente
         //Query de consulta con parametros para bindear si es necesario.
         $query = " 
             SELECT 
-                RTRIM(CODIGO) as CODIGO, 
-                RTRIM(NOMBRE) as NOMBRE, 
-                RTRIM($tipoPrec) as PRECIO,
+                RTRIM(INV_ARTICULOS.CODIGO) as CODIGO, 
+                RTRIM(INV_ARTICULOS.NOMBRE) as NOMBRE, 
+                RTRIM(INV_ARTICULOS.$tipoPrec) as PRECIO,
+                RTRIM(INV_ARTICULOS.TipoIva) as TIPOIVA,
+                RTRIM(IVA.VALOR) as VALORIVA,
                 (select dbo.DIMESTOCKFIS('99','$codigoProducto','','B01')) AS STOCK
             FROM 
                 dbo.INV_ARTICULOS
+                INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
             
-            WHERE Codigo='$codigoProducto'";  // Final del Query SQL 
+            WHERE INV_ARTICULOS.Codigo='$codigoProducto'";  // Final del Query SQL 
 
         try{
             $stmt = $this->instancia->prepare($query); 

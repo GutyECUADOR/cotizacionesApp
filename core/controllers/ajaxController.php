@@ -10,7 +10,7 @@ class ajaxController  {
     public $ajaxModel;
 
     public function __construct() {
-        $this->defaulDataBase = (!isset($_SESSION["empresaAUTH"])) ? 'MODELO' : $_SESSION["empresaAUTH"] ;
+        $this->defaulDataBase = (!isset($_SESSION["empresaAUTH"])) ? 'AGRICOLABAQUERO_V7' : $_SESSION["empresaAUTH"] ;
         $this->ajaxModel = new \models\ajaxModel();
         $this->ajaxModel->setDbname($this->defaulDataBase);
         $this->ajaxModel->conectarDB();
@@ -19,6 +19,24 @@ class ajaxController  {
     /* Retorna la respuesta del modelo ajax*/
     public function getInfoClienteController($RUC){
         $response = $this->ajaxModel->getInfoClienteModel($RUC);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
+    public function getInfoEmpresaController(){
+        $response = $this->ajaxModel->getAllInfoEmpresaModel();
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
+    public function getVEN_CABController($IDDocument){
+        $response = $this->ajaxModel->getVENCABByID($IDDocument);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
+    public function getVEN_MOVController($IDDocument){
+        $response = $this->ajaxModel->getVENMOVByID($IDDocument);
         return $response;
     }
 
@@ -108,15 +126,15 @@ class ajaxController  {
                         $VEN_MOV->setCantidad($producto->cantidad);
                         $VEN_MOV->setPrecioProducto($producto->precio);
                         $VEN_MOV->setPorcentajeDescuentoProd(0);
-                        $VEN_MOV->setTipoIVA('T12');
-                        $VEN_MOV->setPorcentajeIVA(12);
+                        $VEN_MOV->setTipoIVA('T00');
+                        $VEN_MOV->setPorcentajeIVA(0);
                         $VEN_MOV->setPrecioTOTAL($VEN_MOV->calculaPrecioTOTAL());
                         $VEN_MOV->setObservacion('');
                         
                         $response_VEN_MOV =  $this->ajaxModel->insertVEN_MOV($VEN_MOV, $this->defaulDataBase);
                         
                         array_push($arrayVEN_MOVinsets, $response_VEN_MOV);
-                        
+
                     }
                 }
             } catch (Exception $e) {
@@ -125,8 +143,6 @@ class ajaxController  {
                 ); 
             }
             
-                
-         
             return array('status' => 'OK', 
                     'mensaje'  => 'Documento registrado.',
                     'new_cod_VENCAB' => $new_cod_VENCAB,
@@ -143,7 +159,11 @@ class ajaxController  {
         
     }
 
-    public function generaReporte(){
+    public function generaReporte($IDDocument){
+
+       $empresaData = $this->getInfoEmpresaController();
+       $VEN_CAB = $this->getVEN_CABController($IDDocument);
+       $VEN_MOV = $this->getVEN_MOVController($IDDocument);
         
         $html = '
             
@@ -151,11 +171,11 @@ class ajaxController  {
             
                 <div style="float: left; width: 75%;">
                     <div id="informacion">
-                        <h4>AGRICOLA BAQUERO</h4>
-                        <h4>Direccion Av. Alpahuasi y Ana Paredez de Alfaro</h4>
-                        <h4>Telefono</h4>
-                        <h4>RUC</h4>
-                        <h4>PROFORMA # </h4>
+                        <h4>'.$empresaData["NomCia"].'</h4>
+                        <h4>Direccion: '.$empresaData["DirCia"].'</h4>
+                        <h4>Telefono: '.$empresaData["TelCia"].'</h4>
+                        <h4>RUC: '.$empresaData["RucCia"].'</h4>
+                        <h4>PROFORMA #  '.$VEN_CAB["ID"].' </h4>
                     </div>
                 </div>
 
@@ -166,11 +186,11 @@ class ajaxController  {
             </div>
 
             <div id="infoCliente" class="rounded">
-                <div class="cabecera">Fecha: </div>
-                <div class="cabecera">Cliente: </div>
-                <div class="cabecera">Direccion: </div>
-                <div class="cabecera">Telefono: </div>
-                <div class="cabecera">Email: </div>
+                <div class="cabecera"><b>Fecha:</b> '. date('Y-m-d').'</div>
+                <div class="cabecera"><b>Cliente:</b> '.$VEN_CAB["NOMBRE"].'</div>
+                <div class="cabecera"><b>Direccion: </b> '.$VEN_CAB["DIRECCION1"].' </div>
+                <div class="cabecera"><b>Telefono: </b> '.$VEN_CAB["TELEFONO1"].' </div>
+                <div class="cabecera"><b>Email: </b> '.$VEN_CAB["EMAIL"].' </div>
             </div>
 
             <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
@@ -186,14 +206,24 @@ class ajaxController  {
             <tbody>
 
             <!-- ITEMS HERE -->
-            
-                <tr>
-                    <td align="center">MF1234567</td>
-                    <td align="center">0</td>
-                    <td>Large pack Hoover bags</td>
-                    <td class="cost">0</td>
-                    <td class="cost">0</td>
-                </tr>
+            ';
+
+                    foreach($VEN_MOV as $row){
+                    
+                        $html .= '
+    
+                        <tr>
+                            <td align="center">'.$row["CODIGO"].'</td>
+                            <td align="center">'.$row["CANTIDAD"].'</td>
+                            <td>'.$row["Nombre"].'</td>
+                            <td class="cost"> '.$row["PRECIO"].' </td>
+                            <td class="cost"> '.$row["PRECIOTOT"].'</td>
+                        </tr>';
+                       
+                        }
+
+            $html .= ' 
+                
 
             <!-- END ITEMS HERE -->
                 <tr>
@@ -205,12 +235,12 @@ class ajaxController  {
                 
                 <tr>
                 <td class="totals">Imponible 12%:</td>
-                <td class="totals cost">0</td>
+                <td class="totals cost">'.$VEN_CAB["BASIVA"].'</td>
                 </tr>
 
                 <tr>
                 <td class="totals">Subtotal:</td>
-                <td class="totals cost">0</td>
+                <td class="totals cost">'.$VEN_CAB["SUBTOTAL"].'</td>
                 </tr>
 
                 <tr>
@@ -220,12 +250,12 @@ class ajaxController  {
 
                 <tr>
                 <td class="totals">IVA:</td>
-                <td class="totals cost">0</td>
+                <td class="totals cost">'.$VEN_CAB["IMPUESTO"].'</td>
                 </tr>
 
                 <tr>
                 <td class="totals"><b>Total Pagar:</b></td>
-                <td class="totals cost"><b>0</b></td>
+                <td class="totals cost"><b>'.$VEN_CAB["TOTAL"].'</b></td>
                 </tr>
 
             </tbody>
@@ -256,10 +286,12 @@ class ajaxController  {
     }
 
      /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
-     public function sendEmail($email){
+     public function sendEmail($email, $IDDocument){
        
-        $correoCliente = $email;
 
+        //$correoCliente = $email;
+        $correoCliente = $this->getVEN_CABController($IDDocument)['EMAIL'];
+        $arrayCorreos =  explode( ';', $correoCliente );
 
         $mail = new PHPMailer(true);  // Passing `true` enables exceptions
         try {
@@ -275,16 +307,21 @@ class ajaxController  {
 
             //Recipients
             $mail->setFrom('soporteweb@sudcompu.net', 'Administrador');
-            $mail->addAddress($correoCliente, 'Cliente KAO');     // Add a recipient
+
+            foreach ($arrayCorreos as $correo) {
+                $mail->addAddress($correo, 'Cliente');     // Add a recipient
+            }
+
+           
            
             //Content
             $mail->CharSet = "UTF-8";
             $mail->isHTML(true);                                  // Set email format to HTML
-            $mail->Subject = 'Pruebas de envio';
-            $mail->Body    = 'Test de envio';
+            $mail->Subject = 'Cotizacion #'.$IDDocument;
+            $mail->Body    = 'Se adjunta documento requerido.';
         
             // Adjuntos
-            $mail->addStringAttachment($this->generaReporte(), 'doc.pdf');
+            $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion.pdf');
 
             $mail->send();
             $detalleMail = 'Correo ha sido enviado a : '. $correoCliente;
