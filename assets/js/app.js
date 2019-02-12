@@ -1,7 +1,8 @@
 class Cotizacion {
     constructor() {
         this.cliente = null,
-        this.productos = []
+        this.productos = [],
+        this.comentario = 'proforma'
     }
 
     sumarFromProductos(propiedad) {
@@ -117,7 +118,11 @@ $(document).ready(function() {
     $("#searchProductoModal").on('click', function(event) {
         event.preventDefault();
         if (cotizacion.cliente == null) {
-            alert('Indique un cliente antes de agregar productos.');
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Indique un cliente antes de agregar productos.',
+              })
             return;
         }
 
@@ -158,8 +163,7 @@ $(document).ready(function() {
     // Boton de envio de datos
     $("#btnGuardar").on('click', function(event) {
         event.preventDefault();
-        console.log('enviar data');
-
+       
         let cotizacionJSON = JSON.stringify((cotizacion));
         if (cotizacion.cliente != null && cotizacion.productos.length > 0) {
             $(this).prop("disabled", true);
@@ -235,11 +239,18 @@ $(document).ready(function() {
        
     });
 
+
+    // Caja de comentarios y observaciones 
+    $("#comment").on("keyup change", function(event) {
+       cotizacion.comentario = $(this).val();
+       //console.log(cotizacion.comentario);
+    });
+
     /* Funciones */
 
     function saveData(formData){
        
-        console.log(formData);
+        console.log(JSON.parse(formData));
         $.ajax({
             type: 'get',
             url: 'views/modulos/ajax/API_cotizaciones.php?action=saveCotizacion',
@@ -286,15 +297,6 @@ $(document).ready(function() {
 
         //console.log(cotizacion.productos);
         printProductos(cotizacion.productos);
-    }
-
-    function multiProdCant(codProducto){
-
-        let index = cotizacion.productos.findIndex(function(productoEnArray) {
-            return productoEnArray.codigo === codProducto;
-        });
-            
-        
     }
 
     function resetnewProducto() {
@@ -543,11 +545,20 @@ $(document).ready(function() {
           }).then((result) => {
             if (result.value) {
                 
+                Swal.fire({
+                    title: 'Procesando',
+                    html: 'Enviando correo(s), espere por favor...',
+                    onBeforeOpen: () => {
+                      Swal.showLoading();
+                      
+                    }
+                })
+
                 $.ajax({
                     type: 'get',
                     url: 'views/modulos/ajax/API_cotizaciones.php?action=sendEmail',
                     dataType: "json",
-                    data: { email: 'soporteweb@sudcompu.net', IDDocument: nuevoIDDocumentGenerated },
+                    data: { email: '', IDDocument: nuevoIDDocumentGenerated },
                     success: function (response) {
                         console.log(response);
                         Swal.fire({
@@ -555,16 +566,18 @@ $(document).ready(function() {
                             title: 'Envio de email',
                             text: response.data.mensaje,
                           }).then((result) => {
+
                             if (result.value) {
                                 location.reload();
                             }
                           })
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
+                        console.log(thrownError);
                         Swal.fire({
                             type: 'error',
                             title: 'Oops...',
-                            text: 'Something went wrong!'
+                            text: 'Se ha producido un error al enviar el email.'
                           }).then((result) => {
                             if (result.value) {
                                 location.reload();
@@ -573,6 +586,7 @@ $(document).ready(function() {
                     }
                 });
     
+               
                 
             } else if (result.dismiss === Swal.DismissReason.cancel) {
               
@@ -580,6 +594,8 @@ $(document).ready(function() {
             }
           })
     }
+
+    
 
 });
 
@@ -592,7 +608,6 @@ $("#formulario_registro").on("submit", function(event) {
     //console.log(form);
 
 });
-
 
 
 

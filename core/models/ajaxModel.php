@@ -76,6 +76,31 @@ class ajaxModel extends conexion  {
     }
 
 
+    public function getInfoUsuarioModel($codigoUsuario) {
+
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = " 
+            SELECT Correo, Pop3, Smtp, User_Mail, Pwd_Mail FROM dbo.USUARIOS WHERE Codigo = '$codigoUsuario'
+        ";  // Final del Query SQL 
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+                if($stmt->execute()){
+                    $resulset = $stmt->fetch( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+   
+    }
+
+
     public function getVENCABByID($IDDocument) {
 
      
@@ -360,7 +385,7 @@ class ajaxModel extends conexion  {
         $VEN_CAB = new \models\venCabClass();
         $VEN_CAB = $VEN_CAB_obj;
         
-        $query = "exec dbo.SP_VENGRACAB 'I','ADMINWSSP','$VEN_CAB->pcID','$VEN_CAB->oficina', '$VEN_CAB->ejercicio', '$VEN_CAB->tipoDoc', '$VEN_CAB->numeroDoc','','$VEN_CAB->fecha','$VEN_CAB->cliente','$VEN_CAB->bodega','$VEN_CAB->divisa','1.00','0.00','$VEN_CAB->subtotal','0.00','0.00','0.00','0.00','0.00','$VEN_CAB->subtotal','0.00','$VEN_CAB->impuesto','0.00','$VEN_CAB->total','CON','0','1','0','S','0','1','0','0','','','999',' ',' ','$VEN_CAB->observacion','$VEN_CAB->serie','$VEN_CAB->secuencia','','','','','0.00','0.00','0.00','','','','','','','','','','0','P','','','','','','0','','','','','0','2','0.00','0.00','0.00','0','999999999 ','0','','','','','','$VEN_CAB->formaPago','','','','','$VEN_CAB->fecha','',''";
+        $query = "exec dbo.SP_VENGRACAB 'I','ADMINWSSP','$VEN_CAB->pcID','$VEN_CAB->oficina', '$VEN_CAB->ejercicio', '$VEN_CAB->tipoDoc', '$VEN_CAB->numeroDoc','','$VEN_CAB->fecha','$VEN_CAB->cliente','$VEN_CAB->bodega','$VEN_CAB->divisa','1.00','$VEN_CAB->subtotalBase0','$VEN_CAB->subtotal','0.00','0.00','0.00','0.00','0.00','$VEN_CAB->subtotal','0.00','$VEN_CAB->impuesto','0.00','$VEN_CAB->total','CON','0','1','0','S','0','1','0','0','','','999',' ',' ','$VEN_CAB->observacion','$VEN_CAB->serie','$VEN_CAB->secuencia','','','','','0.00','0.00','0.00','','','','','','','','','','0','P','','','','','','0','','','','','0','$VEN_CAB->impuesto','0.00','0.00','0.00','0','999999999 ','0','','','','','','$VEN_CAB->formaPago','','','','','$VEN_CAB->fecha','',''";
         
         try{
             $rowsAfected = $this->instancia->exec($query);
@@ -393,89 +418,6 @@ class ajaxModel extends conexion  {
 
     }
 
-
-    /*
-       - Realiza conteo de mantenimientos pendientes 
-    */
-    public function getCountMantenimientos($codEmpresa, $dataBaseName='KAO_wssp') {
-        
-        //Query de consulta con parametros para bindear si es necesario.
-        $query = "
-            SELECT 
-                MantPendientes = (SELECT COUNT (*) FROM dbo.mantenimientosEQ WHERE codEmpresa = '$codEmpresa' AND estado = 0),
-                PorcentMantFinalizados = (SELECT COUNT( * ) FROM dbo.mantenimientosEQ  WHERE estado != 0 AND codEmpresa = '$codEmpresa') * 100 / (SELECT COUNT( * ) FROM dbo.mantenimientosEQ WHERE codEmpresa = '$codEmpresa') 
-        
-        ";  // Final del Query SQL 
-
-        $stmt = $this->instancia->prepare($query); 
-    
-        $arrayResultados = array();
-
-            if($stmt->execute()){
-
-                while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
-                    array_push($arrayResultados, $row);
-                }
-               
-                return $arrayResultados;
-            }else{
-                return false;
-                
-            }
-        return $resulset;  
-
-   
-    }
-
-
-    /*
-       - Retorna todos los mantenimientos de la tabla 
-    */
-    public function getHistorico($dataBaseName='KAO_wssp', $fechaINI, $fechaFIN, $codEmpresa, $tiposDocs) {
-        
-        $tiposDOC = $this->getFiltroTiposDoc($tiposDocs);
-        //Query de consulta con parametros para bindear si es necesario.
-        $query = "
-            SELECT 
-                Compra.ID as CodigoFac,
-                Mant.codMantenimiento as CodMNT,
-                Mant.codEquipo as CodProducto,
-                Cliente.NOMBRE as Cliente,
-                Mant.tipo as TipoMant,
-                Mant.fechaInicio as FechaINI,
-                Mant.estado as Estado
-            
-            FROM
-                dbo.VEN_CAB as Compra
-                INNER JOIN KAO_wssp.dbo.mantenimientosEQ as Mant ON Mant.codFactura COLLATE Modern_Spanish_CI_AS = Compra.ID
-                INNER JOIN dbo.COB_CLIENTES as Cliente on Compra.CLIENTE = Cliente.CODIGO 
-                
-            WHERE 
-                codEmpresa = '$codEmpresa'
-                AND Mant.fechaInicio BETWEEN '$fechaINI' AND '$fechaFIN'
-                ".$tiposDOC."
-            ORDER BY CodMNT ASC
-        ";  // Final del Query SQL 
-
-        $stmt =$this->instancia->prepare($query); 
-    
-        $arrayResultados = array();
-
-            if($stmt->execute()){
-
-                while ($row = $stmt->fetch( \PDO::FETCH_ASSOC )) {
-                    array_push($arrayResultados, $row);
-                }
-               
-                return $arrayResultados;
-            }else{
-                return false;
-                
-            }
-        return $resulset;  
-
-   
-    }
 
     private function getFiltroTiposDoc($tipoDOC){
         switch ($tipoDOC) {

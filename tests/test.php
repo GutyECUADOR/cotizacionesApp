@@ -1,15 +1,14 @@
 <?php
+session_start();
  require_once '../core/models/conexion.php';
  require_once '../core/models/ajaxModel.php';
  require_once '../core/controllers/ajaxController.php';
 
 $ajax = new \controllers\ajaxController();
 
-$email = $ajax->getVEN_CABController('992018PRO00014056')['EMAIL'];
 
-$emails = explode( ';', $email );
+$infoSender = $ajax->getInfoUsuarioController($_SESSION["usuarioRUC"]);
 
-foreach ($emails as $correo) {
-    echo $correo .'/br';   // Add a recipient
-}
-?>
+var_dump(trim($infoSender['Smtp']));
+var_dump(trim($infoSender['User_Mail']));
+var_dump(trim($infoSender['Pwd_Mail']));

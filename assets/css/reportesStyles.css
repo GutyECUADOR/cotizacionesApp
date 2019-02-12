@@ -42,6 +42,11 @@ div {
 	/* Just so it's visible */
 }
 
+#observacion {
+	font-size: 12px;
+	
+}
+
 #infoCliente{
 	padding: 5px;
 }

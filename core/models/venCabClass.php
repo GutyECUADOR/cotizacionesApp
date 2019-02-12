@@ -11,6 +11,7 @@ class venCabClass {
     public $bodega;
     public $divisa;
     public $porcentDescuento;
+    public $subtotalBase0;
     public $subtotal;
     public $impuesto;
     public $total;
@@ -24,6 +25,7 @@ class venCabClass {
     public $cants_prod;
     public $precios_prod;
     
+    
     public function __construct() {
         
     }
@@ -31,22 +33,38 @@ class venCabClass {
     function calculaSubtotal(){
         $subtotal = 0;
         foreach ($this->productos as $producto) {
+            if ($producto->tipoIVA != "T00") {
             $valorDescuento = ($producto->precio * $this->porcentDescuento)/100; 
             $subtotal += ($producto->precio * $producto->cantidad) - $valorDescuento;
+            }
         }
         $this->subtotal = $subtotal;
         return $subtotal;
          
     }
     
+    function calculaSubtotalOfItemsWithIVA0(){
+        $subtotal = 0;
+        foreach ($this->productos as $producto) {
+            if ($producto->tipoIVA == "T00") {
+                $valorDescuento = ($producto->precio * $this->porcentDescuento)/100; 
+                $subtotal += ($producto->precio * $producto->cantidad) - $valorDescuento;
+            }
+            
+        }
+        $this->subtotalBase0 = $subtotal;
+        return $subtotal;
+         
+    }
+
     function calculaIVA(){
-        $totalIVA =  round($this->subtotal * .12, 2);
+        $totalIVA =  round($this->calculaSubtotal() * .12, 2);
         $this->impuesto = $totalIVA;
         return $totalIVA;
     }
     
     function calculaTOTAL(){
-        $total = ($this->subtotal) + $this->impuesto ;
+        $total = $this->subtotal + $this->subtotalBase0 + $this->impuesto ;
         $this->total = round($total, 2);
         return round($total, 2);
     }
@@ -171,6 +189,10 @@ class venCabClass {
 
     function setSubtotal($subtotal) {
         $this->subtotal = $subtotal;
+    }
+
+    function setsubtotalBase0($subtotal0) {
+        $this->subtotalBase0 = $subtotal0;
     }
 
     function setImpuesto($impuesto) {

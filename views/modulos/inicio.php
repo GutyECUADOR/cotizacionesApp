@@ -212,7 +212,7 @@ $vendedores = $cotizacion->getVendedores();
                     <div class="panel-heading">Detalle</div>
                         <div class="panel-body">
                             <div class="form-group">
-                                <textarea class="form-control" rows="5" id="comment"></textarea>
+                                <textarea class="form-control" rows="5" id="comment" name="comment" maxlength="100" placeholder="Comentario de hasta maximo 100 caracteres..."></textarea>
                             </div>
 
                             <div class="input-group input-group-sm">
@@ -410,7 +410,7 @@ $vendedores = $cotizacion->getVendedores();
 
                 <div class="modal-body">
                     <div class="input-group select-group">
-                        <input type="text" id="terminoBusquedaModalCliente" placeholder="Termino de busqueda..." class="form-control"/>
+                        <input type="text" id="terminoBusquedaModalCliente" placeholder="Termino de busqueda..." class="form-control" value="%"/>
                         <select id="tipoBusquedaModalCliente" class="form-control input-group-addon">
                             <option value="NOMBRE">Nombre</option>
                             <option value="RUC">Cedula / RUC</option>
@@ -465,7 +465,7 @@ $vendedores = $cotizacion->getVendedores();
                 <div class="modal-body">
                     
                     <div class="input-group select-group">
-                        <input type="text" id="terminoBusquedaModalProducto" placeholder="Termino de busqueda..." class="form-control"/>
+                        <input type="text" id="terminoBusquedaModalProducto" placeholder="Termino de busqueda..." class="form-control" value="%"/>
                         <select id="tipoBusquedaModalProducto" class="form-control input-group-addon">
                             <option value="NOMBRE">Nombre</option>
                         </select>

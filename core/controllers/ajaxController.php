@@ -35,6 +35,12 @@ class ajaxController  {
     }
 
     /* Retorna la respuesta del modelo ajax*/
+    public function getInfoUsuarioController($codigoUsuario){
+        $response = $this->ajaxModel->getInfoUsuarioModel($codigoUsuario);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
     public function getVEN_MOVController($IDDocument){
         $response = $this->ajaxModel->getVENMOVByID($IDDocument);
         return $response;
@@ -97,12 +103,13 @@ class ajaxController  {
                 $VEN_CAB->setDivisa('DOL');
                 $VEN_CAB->setProductos($formData->productos);
                 $VEN_CAB->setSubtotal($VEN_CAB->calculaSubtotal());
+                $VEN_CAB->setsubtotalBase0($VEN_CAB->calculaSubtotalOfItemsWithIVA0());
                 $VEN_CAB->setImpuesto($VEN_CAB->calculaIVA());
                 $VEN_CAB->setTotal($VEN_CAB->calculaTOTAL());
                 $VEN_CAB->setFormaPago($formData->cliente->formaPago);
                 $VEN_CAB->setSerie($serieDocs); 
                 $VEN_CAB->setSecuencia('0'.$newCodigoWith0); //Agregar 0 extra segun winfenix
-                $VEN_CAB->setObservacion('WebForms');
+                $VEN_CAB->setObservacion('WebForms, ' . $formData->comentario);
                 
                 //Registro en VEN_CAB y MOV mantenimientosEQ
                 $response_VEN_CAB =  $this->ajaxModel->insertVEN_CAB($VEN_CAB, $this->defaulDataBase);
@@ -165,11 +172,11 @@ class ajaxController  {
        $VEN_CAB = $this->getVEN_CABController($IDDocument);
        $VEN_MOV = $this->getVEN_MOVController($IDDocument);
         
-        $html = '
+       $html = '
             
             <div style="width: 100%;">
-            
-                <div style="float: left; width: 75%;">
+        
+                <div style="float: right; width: 75%;">
                     <div id="informacion">
                         <h4>'.$empresaData["NomCia"].'</h4>
                         <h4>Direccion: '.$empresaData["DirCia"].'</h4>
@@ -178,13 +185,13 @@ class ajaxController  {
                         <h4>PROFORMA #  '.$VEN_CAB["ID"].' </h4>
                     </div>
                 </div>
-
-                <div id="logo" style="float: right; width: 20%;">
+        
+                <div id="logo" style="float: left; width: 20%;">
                     <img src="http://localhost/PHPProjects/cotizacionesApp/assets/img/logo.png" alt="Logo">
                 </div>
-
+        
             </div>
-
+        
             <div id="infoCliente" class="rounded">
                 <div class="cabecera"><b>Fecha:</b> '. date('Y-m-d').'</div>
                 <div class="cabecera"><b>Cliente:</b> '.$VEN_CAB["NOMBRE"].'</div>
@@ -192,76 +199,88 @@ class ajaxController  {
                 <div class="cabecera"><b>Telefono: </b> '.$VEN_CAB["TELEFONO1"].' </div>
                 <div class="cabecera"><b>Email: </b> '.$VEN_CAB["EMAIL"].' </div>
             </div>
-
+        
             <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">
                 <thead>
                     <tr>
-                        <td width="15%">Cod.</td>
-                        <td width="10%">Cant.</td>
+                        <td width="5%">Item</td>
+                        <td width="11%">Cod.</td>
+                        <td width="7%">Cant.</td>
                         <td width="45%">Descripcion</td>
-                        <td width="15%">Precio Unit.</td>
-                        <td width="15%">Precio Total</td>
+                        <td width="6%">IVA</td>
+                        <td width="15%">P. Unit.</td>
+                        <td width="10%">% Desc.</td>
+                        <td width="10%">V. Desc.</td>
+                        <td width="15%">P. Total</td>
                     </tr>
                 </thead>
             <tbody>
-
+        
             <!-- ITEMS HERE -->
             ';
-
-                    foreach($VEN_MOV as $row){
-                    
-                        $html .= '
-    
-                        <tr>
-                            <td align="center">'.$row["CODIGO"].'</td>
-                            <td align="center">'.$row["CANTIDAD"].'</td>
-                            <td>'.$row["Nombre"].'</td>
-                            <td class="cost"> '.$row["PRECIO"].' </td>
-                            <td class="cost"> '.$row["PRECIOTOT"].'</td>
-                        </tr>';
-                       
-                        }
-
+                $cont = 1;
+                foreach($VEN_MOV as $row){
+                   
+                    $html .= '
+        
+                    <tr>
+                        <td align="center">'.$cont.'</td>
+                        <td align="center">'.$row["CODIGO"].'</td>
+                        <td align="center">'.$row["CANTIDAD"].'</td>
+                        <td>'.$row["Nombre"].'</td>
+                        <td>'.$row["tipoiva"].'</td>
+                        <td>'.$row["PRECIO"].'</td>
+                        <td>'.$row["DESCU"].'</td>
+                        <td class="cost"> '.$row["DESCU"].' </td>
+                        <td class="cost"> '.$row["PRECIOTOT"].'</td>
+                    </tr>';
+                    $cont++;
+                    }
+        
             $html .= ' 
-                
-
+            
+        
             <!-- END ITEMS HERE -->
                 <tr>
-                <td class="blanktotal" colspan="3" rowspan="6"></td>
-                <td class="totals">Imponible 0%:</td>
-                <td class="totals cost">0</td>
+                <td class="blanktotal" colspan="6" rowspan="6"></td>
+                <td class="totals" colspan="2">Imponible 0%:</td>
+                <td class="totals cost">'.$VEN_CAB["BASCERO"].'</td>
                 </tr>
-
-                
+        
+            
                 <tr>
-                <td class="totals">Imponible 12%:</td>
+                <td class="totals" colspan="2">Imponible 12%:</td>
                 <td class="totals cost">'.$VEN_CAB["BASIVA"].'</td>
                 </tr>
-
+        
                 <tr>
-                <td class="totals">Subtotal:</td>
+                <td class="totals" colspan="2">Subtotal:</td>
                 <td class="totals cost">'.$VEN_CAB["SUBTOTAL"].'</td>
                 </tr>
-
+        
                 <tr>
-                <td class="totals">Base Imponible:</b></td>
+                <td class="totals" colspan="2">Base Imponible:</b></td>
                 <td class="totals cost">0</td>
                 </tr>
-
+        
                 <tr>
-                <td class="totals">IVA:</td>
+                <td class="totals" colspan="2">IVA:</td>
                 <td class="totals cost">'.$VEN_CAB["IMPUESTO"].'</td>
                 </tr>
-
+        
                 <tr>
-                <td class="totals"><b>Total Pagar:</b></td>
+                <td class="totals" colspan="2"><b>Total Pagar:</b></td>
                 <td class="totals cost"><b>'.$VEN_CAB["TOTAL"].'</b></td>
                 </tr>
-
+        
             </tbody>
             </table>
 
-            ';
+            <div style="width: 100%;">
+                <p id="observacion">Observacion: '.$VEN_CAB["OBSERVA"].'</p> 
+            </div>
+        
+        ';
 
         //==============================================================
         //==============================================================
@@ -286,27 +305,38 @@ class ajaxController  {
     }
 
      /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
-     public function sendEmail($email, $IDDocument){
+     public function sendCotizacion($IDDocument){
        
 
         //$correoCliente = $email;
         $correoCliente = $this->getVEN_CABController($IDDocument)['EMAIL'];
         $arrayCorreos =  explode( ';', $correoCliente );
 
+        //Correo de sender
+        
+        /* $smtpserver = 'mail.sudcompu.net';
+        $userEmail = 'soporteweb@sudcompu.net';
+        $pwdEmail = 'sw2019$sw$';  */
+
+        $infoSender = $this->getInfoUsuarioController($_SESSION["usuarioRUC"]);
+        $smtpserver = trim($infoSender['Smtp']);
+        $userEmail = trim($infoSender['User_Mail']);
+        $pwdEmail = trim($infoSender['Pwd_Mail']);
+
         $mail = new PHPMailer(true);  // Passing `true` enables exceptions
         try {
             //Server settings
             $mail->SMTPDebug = false;                                 // Enable verbose debug output 0->off 2->debug
             $mail->isSMTP();                                      // Set mailer to use SMTP
-            $mail->Host = 'mail.sudcompu.net';  // Specify main and backup SMTP servers
+            $mail->Host = $smtpserver;  // Specify main and backup SMTP servers
             $mail->SMTPAuth = true;                               // Enable SMTP authentication
-            $mail->Username = 'soporteweb@sudcompu.net';                 // SMTP username
-            $mail->Password = 'sw2019$sw$';                           // SMTP password
+            $mail->Username = $userEmail;                 // SMTP username
+            $mail->Password = $pwdEmail;                           // SMTP password
             $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
-            $mail->Port = 25;                                    // TCP port to connect to
+            $mail->Port = 587;                                    // TCP port to connect to
 
             //Recipients
-            $mail->setFrom('soporteweb@sudcompu.net', 'Administrador');
+            $mail->setFrom($userEmail, $userEmail);
 
             foreach ($arrayCorreos as $correo) {
                 $mail->addAddress($correo, 'Cliente');     // Add a recipient

@@ -93,14 +93,8 @@
     margin-bottom: 20px;
 }
 
-.txtcentro {
-    position: relative;
-    padding-top: 5px;
-    padding-bottom: 20px;
-    margin: auto;
-    text-align: center;
-    color: #D32F2F;
-    font-size: 12px;
+#observacion {
+    font-size: 10px;
 }
 
 .derechasub {

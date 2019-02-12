@@ -38,8 +38,8 @@ class ajax{
       return $this->ajaxController->insertCotizacion($formCotizacion);
     }
 
-    public function sendEmail($email, $IDDocument){
-      return $this->ajaxController->sendEmail($email, $IDDocument);
+    public function sendEmail($IDDocument){
+      return $this->ajaxController->sendCotizacion($IDDocument);
     }
 
 }
@@ -131,10 +131,9 @@ class ajax{
         /* Utiliza PHPMailer para el envio de correo*/ 
         case 'sendEmail':
 
-          if (isset($_GET['email']) && isset($_GET['IDDocument']) ) {
-            $email = $_GET['email'];
+          if (isset($_GET['IDDocument']) ) {
             $IDDocument = $_GET['IDDocument'];
-            $respuesta = $ajax->sendEmail($email, $IDDocument);
+            $respuesta = $ajax->sendEmail($IDDocument);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.' );

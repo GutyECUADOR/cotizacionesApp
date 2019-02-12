@@ -24,7 +24,7 @@
      
       <!-- Librerias-->
       <link href="<?php echo ROOT_PATH; ?>assets\bootstrap-datepicker-1.6.4\css\bootstrap-datepicker3.css" rel="stylesheet">
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+      
       
       
      
@@ -56,7 +56,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   
      <!-- JS Propio-->
+    
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\pnotify.custom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\app.js"></script>
     
   </body>
