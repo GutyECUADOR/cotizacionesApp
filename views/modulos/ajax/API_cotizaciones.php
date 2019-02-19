@@ -30,9 +30,17 @@ class ajax{
       return $this->ajaxController->getAllProductosController($terminoBusqueda,  $tipoBusqueda);
     }
 
+    public function getAllDocumentos($fechaINI, $fechaFIN) {
+      return $this->ajaxController->getAllDocumentosController($fechaINI,  $fechaFIN);
+    }
+
     public function getInfoProducto($codigoProducto, $clienteRUC) {
         return $this->ajaxController->getInfoProductoController($codigoProducto, $clienteRUC);
     }
+
+    public function generaProforma($IDDocument) {
+      return $this->ajaxController->generaReporte($IDDocument, 'I');
+  }
 
     public function saveCotizacion($formCotizacion){
       return $this->ajaxController->insertCotizacion($formCotizacion);
@@ -110,6 +118,40 @@ class ajax{
           echo json_encode($rawdata);
 
         break;
+
+        /* Obtiene array de los documentos SP Winfenix*/ 
+        case 'searchDocumentos':
+          if (isset($_GET['fechaINI']) && isset($_GET['fechaFIN'])) {
+            $fechaINI = date("Ymd", strtotime($_GET['fechaINI']));
+            $fechaFIN = date("Ymd", strtotime($_GET['fechaFIN']));
+
+            $respuesta = $ajax->getAllDocumentos($fechaINI,  $fechaFIN);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+          /* Obtiene array de los documentos SP Winfenix*/ 
+        case 'generaProforma':
+        if (isset($_GET['IDDocument'])) {
+          $IDDocument = $_GET['IDDocument'];
+         
+          $PDFDocument = $ajax->generaProforma($IDDocument);
+          //$rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          echo $PDFDocument;
+        }else{
+          $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          echo json_encode($rawdata);
+        }
+        
+        
+
+      break;
+
 
         /* Obtiene array de informacion del producto*/ 
         case 'getInfoProducto':

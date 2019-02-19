@@ -59,6 +59,12 @@ class ajaxController  {
     }
 
     /* Retorna la respuesta del modelo ajax*/
+    public function getAllDocumentosController($fechaINI,  $fechaFIN){
+        $response = $this->ajaxModel->getAllDocumentosModel($fechaINI,  $fechaFIN);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
     public function getInfoProductoController($codigoProducto, $clienteRUC){
         $tipoPrecio = $this->ajaxModel->getInfoClienteModel($clienteRUC)['TIPOPRECIO'];
         $response = $this->ajaxModel->getInfoProductoModel($codigoProducto, $tipoPrecio);
@@ -166,13 +172,13 @@ class ajaxController  {
         
     }
 
-    public function generaReporte($IDDocument){
+    public function generaReporte($IDDocument, $outputMode = 'S'){
 
        $empresaData = $this->getInfoEmpresaController();
        $VEN_CAB = $this->getVEN_CABController($IDDocument);
        $VEN_MOV = $this->getVEN_MOVController($IDDocument);
         
-       $html = '
+        $html = '
             
             <div style="width: 100%;">
         
@@ -187,7 +193,7 @@ class ajaxController  {
                 </div>
         
                 <div id="logo" style="float: left; width: 20%;">
-                    <img src="http://localhost/PHPProjects/cotizacionesApp/assets/img/logo.png" alt="Logo">
+                    <img src="../../../assets/img/logo.png" alt="Logo">
                 </div>
         
             </div>
@@ -296,7 +302,7 @@ class ajaxController  {
 
         $mpdf->WriteHTML($html);
         
-        return $mpdf->Output('doc.pdf', 'S');
+        return $mpdf->Output('doc.pdf', $outputMode);
 
         //==============================================================
         //==============================================================
@@ -314,14 +320,14 @@ class ajaxController  {
 
         //Correo de sender
         
-        /* $smtpserver = 'mail.sudcompu.net';
+        $smtpserver = 'mail.sudcompu.net';
         $userEmail = 'soporteweb@sudcompu.net';
-        $pwdEmail = 'sw2019$sw$';  */
+        $pwdEmail = 'sw2019$sw$'; 
 
-        $infoSender = $this->getInfoUsuarioController($_SESSION["usuarioRUC"]);
+        /* $infoSender = $this->getInfoUsuarioController($_SESSION["usuarioRUC"]);
         $smtpserver = trim($infoSender['Smtp']);
         $userEmail = trim($infoSender['User_Mail']);
-        $pwdEmail = trim($infoSender['Pwd_Mail']);
+        $pwdEmail = trim($infoSender['Pwd_Mail']); */
 
         $mail = new PHPMailer(true);  // Passing `true` enables exceptions
         try {

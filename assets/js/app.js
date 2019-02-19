@@ -246,6 +246,28 @@ $(document).ready(function() {
        //console.log(cotizacion.comentario);
     });
 
+
+    // Boton de busqueda de documentos 
+    $("#searchDocumentModal").on("click", function(event) {
+        let fechaINI = document.getElementById("fechaINIDoc").value;
+        let fechaFIN = document.getElementById("fechaFINDoc").value;
+        if (fechaINI.length > 0) {
+            buscarDocumentos(fechaINI, fechaFIN);
+            
+        }else{
+            alert('Indique rango de fechas');
+        }
+     });
+
+    // Boton de creacion de PDF en busqueda de documentos
+    $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalGeneraPDF', function(event) {
+        let IDDocument = $(this).data("codigo");
+       
+        window.open('http://localhost/PHPProjects/cotizacionesApp/views/modulos/ajax/API_cotizaciones.php?action=generaProforma&IDDocument='+IDDocument);
+       
+    });
+     
+
     /* Funciones */
 
     function saveData(formData){
@@ -285,6 +307,7 @@ $(document).ready(function() {
 
         //console.log(cotizacion.productos);
     }
+
 
     function deleteProductToList(codProdToDelete){
 
@@ -364,17 +387,15 @@ $(document).ready(function() {
     function printBusquedaProductos(arrayProductos){
         $('#tblResultadosBusquedaProductos').find("tr:gt(0)").remove();
         let cont = 1;
+        let precioDisplay = 'PRECIO_'+cotizacion.cliente.tipoPrecio;
+        console.log(precioDisplay);
         arrayProductos.forEach(producto => {
             let row = `
             <tr>
                 <th scope="row">${cont}</th> 
                 <td>${producto.CODIGO}</td>
                 <td>${producto.NOMBRE.trim()}</td>
-                <td>${parseFloat(producto.PRECIO_A.trim()).toFixed(2)}</td>
-                <td>${parseFloat(producto.PRECIO_B.trim()).toFixed(2)}</td>
-                <td>${parseFloat(producto.PRECIO_C.trim()).toFixed(2)}</td>
-                <td>${parseFloat(producto.PRECIO_D.trim()).toFixed(2)}</td>
-                <td>${parseFloat(producto.PRECIO_E.trim()).toFixed(2)}</td>
+                <td>${parseFloat(producto[precioDisplay].trim()).toFixed(2)}</td>
                 <td>${producto.STOCK.trim()}</td>
                 <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.CODIGO.trim()}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
                 
@@ -382,6 +403,39 @@ $(document).ready(function() {
                 `;
 
                 $('#tblResultadosBusquedaProductos > tbody:last-child').append(row);
+            cont++;
+
+        });
+    }
+
+    function printBusquedaDocumentos(arrayDocumentos){
+        $('#tblResultadosBusquedaDocumentos').find("tr:gt(0)").remove();
+        let cont = 1;
+        arrayDocumentos.forEach(documento => {
+            let row = `
+            <tr>
+                <th scope="row">${cont}</th> 
+                <td>${documento.TIPO}</td>
+                <td>${documento.FECHA.trim()}</td>
+                <td>${documento.CLIENTE.trim()}</td>
+                <td>${documento.BODEGA.trim()}</td>
+                <td>${documento.total.trim()}</td>
+                <td>${documento.id.trim()}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm btn-block dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span> Opciones <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalGeneraPDF"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Generar PDF</a></li>
+                            <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalSendEmail"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+                `;
+
+                $('#tblResultadosBusquedaDocumentos > tbody:last-child').append(row);
             cont++;
 
         });
@@ -503,6 +557,28 @@ $(document).ready(function() {
                 let productos = response.data;
                 $("#loaderProductos").css("display", "none");
                 printBusquedaProductos(productos);
+                console.log(productos);
+            }
+        });
+
+    }
+
+    function buscarDocumentos(fechaINI, fechaFIN) {
+        $("#loaderDocumentos").css("display", "block");
+       
+        $.ajax({
+            type: 'get',
+            url: 'views/modulos/ajax/API_cotizaciones.php?action=searchDocumentos',
+            dataType: "json",
+    
+            data: { fechaINI:fechaINI, fechaFIN:fechaFIN },
+            
+            success: function(response) {
+                console.log(response);
+                let arrayDocumentos = response.data;
+                $("#loaderDocumentos").css("display", "none");
+                printBusquedaDocumentos(arrayDocumentos);
+                //console.log(arrayDocumentos);
             }
         });
 

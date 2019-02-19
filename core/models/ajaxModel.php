@@ -252,6 +252,28 @@ class ajaxModel extends conexion  {
    
     }
 
+    public function getAllDocumentosModel($fechaINI, $fechaFIN) {
+
+        //Query de consulta con parametros para bindear si es necesario.
+        $query = "
+        declare @p1 int;
+        exec sp_prepexec @p1 output,N'@P1 varchar(3),@P2 varchar(2),@P3 varchar(8),@P4 varchar(8)',N'SELECT '' '',VEN.TIPO,VEN.NUMERO,RTRIM(VEN.SERIE)+''-''+RTRIM(LTRIM(VEN.SECUENCIA)) AS NFIS,CONVERT(CHAR(10),VEN.FECHA,102) AS FECHA,RTRIM(CLI.NOMBRE) AS CLIENTE,VEN.BODEGA,VEN.total,VEN.DIVISA,(CASE VEN.ANULADO WHEN 1 THEN ''AN'' ELSE '''' END) AS ANULADO,ven.id,Cancelada='''' 	FROM VEN_CAB VEN LEFT OUTER JOIN  COB_CLIENTES CLI ON (CLI.CODIGO = VEN.CLIENTE)  WHERE VEN.TIPO = @P1  AND VEN.OFI = @P2  AND Ven.fecha BETWEEN @P3  AND @P4   ORDER BY VEN.TIPO,VEN.NUMERO,VEN.FECHA','PRO','99','$fechaINI','$fechaFIN'
+
+        ";
+        $stmt = $this->instancia->prepare($query); 
+        $stmt->execute();
+
+        $arrayResultados = array();
+            if($stmt->execute()){
+                return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+            }else{
+                $resulset = false;
+            }
+        return $resulset;  
+
+   
+    }
+
     public function getArraysBodegas() {
 
         //Query de consulta con parametros para bindear si es necesario.

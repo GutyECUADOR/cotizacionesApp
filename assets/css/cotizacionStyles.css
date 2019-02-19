@@ -13,7 +13,7 @@
     margin-bottom: 20px;
 }
 
-#loaderClientes, #loaderProductos{
+#loaderClientes, #loaderProductos, #loaderDocumentos{
     display: none;
 }
 

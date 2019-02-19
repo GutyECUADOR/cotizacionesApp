@@ -25,7 +25,7 @@ class conexion {
         /*CONEXION PARA DESAROLLO*/
         $this->driver = 'sqlsrv';
         $this->host = "S1-W202";
-        $this->dbname = "MODELO";
+        $this->dbname = "AGRICOLABAQUERO_V7";
         $this->port = "1433";
         $this->user = "sfb";
         $this->pass = "Sud2017$";
