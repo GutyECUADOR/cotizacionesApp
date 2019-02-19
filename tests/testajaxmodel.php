@@ -6,6 +6,6 @@ session_start();
 
 $ajax = new \models\ajaxModel();
 
-$response = $ajax->getAllDocumentosModel();
+$response = $ajax->getVENCABByID('992018PRO00014043');
 
 var_dump(json_encode($response));

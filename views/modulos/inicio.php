@@ -576,6 +576,8 @@ $vendedores = $cotizacion->getVendedores();
             </div>
         </div>
 
+        
+
     </div>
 
 

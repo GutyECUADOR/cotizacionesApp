@@ -251,8 +251,9 @@ $(document).ready(function() {
     $("#searchDocumentModal").on("click", function(event) {
         let fechaINI = document.getElementById("fechaINIDoc").value;
         let fechaFIN = document.getElementById("fechaFINDoc").value;
+        let busqueda = document.getElementById("terminoBusquedaModalDocument").value;
         if (fechaINI.length > 0) {
-            buscarDocumentos(fechaINI, fechaFIN);
+            buscarDocumentos(fechaINI, fechaFIN, busqueda);
             
         }else{
             alert('Indique rango de fechas');
@@ -262,11 +263,17 @@ $(document).ready(function() {
     // Boton de creacion de PDF en busqueda de documentos
     $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalGeneraPDF', function(event) {
         let IDDocument = $(this).data("codigo");
-       
         window.open('http://localhost/PHPProjects/cotizacionesApp/views/modulos/ajax/API_cotizaciones.php?action=generaProforma&IDDocument='+IDDocument);
        
     });
      
+    // Boton de creacion de PDF en busqueda de documentos
+    $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalSendEmail', function(event) {
+        let IDDocument = $(this).data("codigo");
+        sendEmailByDocument(IDDocument);
+    });
+
+
 
     /* Funciones */
 
@@ -563,7 +570,7 @@ $(document).ready(function() {
 
     }
 
-    function buscarDocumentos(fechaINI, fechaFIN) {
+    function buscarDocumentos(fechaINI, fechaFIN, stringBusqueda) {
         $("#loaderDocumentos").css("display", "block");
        
         $.ajax({
@@ -571,7 +578,7 @@ $(document).ready(function() {
             url: 'views/modulos/ajax/API_cotizaciones.php?action=searchDocumentos',
             dataType: "json",
     
-            data: { fechaINI:fechaINI, fechaFIN:fechaFIN },
+            data: { fechaINI:fechaINI, fechaFIN:fechaFIN, stringBusqueda: stringBusqueda },
             
             success: function(response) {
                 console.log(response);
@@ -649,7 +656,7 @@ $(document).ready(function() {
                           })
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        console.log(thrownError);
+                        console.log(xhr);
                         Swal.fire({
                             type: 'error',
                             title: 'Oops...',
@@ -669,6 +676,54 @@ $(document).ready(function() {
               location.reload();
             }
           })
+    }
+
+    function sendEmailByDocument(IDDocument){
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            animation : true,
+            timer: 5000
+            
+          });
+
+        fetch(`http://localhost/PHPProjects/cotizacionesApp/views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(data) {
+                console.log(data.data);
+                console.log(data.data.EMAIL);
+
+                let emails = prompt("Indique los emails a los que enviar:", data.data.EMAIL);
+                    if(emails==undefined) {
+                        return;
+                    }else if(emails==""){
+                        alert("Se requiere al menos 1 email para el envio.");
+                        return;
+                    }else{
+                        fetch(`http://localhost/PHPProjects/cotizacionesApp/views/modulos/ajax/API_cotizaciones.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }`)
+                        .then(function(response) {
+                            return response.json();
+                        })
+                        .then(function(response) {
+                            console.log(response);
+                            Toast.fire({
+                                type: 'success',
+                                title: response.data.mensaje
+                              })
+
+                        })
+                        .catch(function(err) {
+                            console.error(err);
+
+                        });
+                    }
+            }).catch(function(err) {
+                console.error(err);
+            });
     }
 
     

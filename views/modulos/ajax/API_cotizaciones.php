@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set('America/Lima');
 session_start();
+require_once '../../../config/global.php';
 require_once '../../../vendor/autoload.php';
 require_once '../../../core/models/conexion.php';
 require_once '../../../core/controllers/ajaxController.php';
@@ -22,6 +23,12 @@ class ajax{
         return $this->ajaxController->getInfoClienteController($RUC);
     }
 
+    public function getInfoVENCAB($IDDocument) {
+      return $this->ajaxController->getVEN_CABController($IDDocument);
+  }
+
+    
+
     public function getAllClientes($terminoBusqueda,  $tipoBusqueda) {
       return $this->ajaxController->getAllClientesController($terminoBusqueda,  $tipoBusqueda);
     }
@@ -30,8 +37,8 @@ class ajax{
       return $this->ajaxController->getAllProductosController($terminoBusqueda,  $tipoBusqueda);
     }
 
-    public function getAllDocumentos($fechaINI, $fechaFIN) {
-      return $this->ajaxController->getAllDocumentosController($fechaINI,  $fechaFIN);
+    public function getAllDocumentos($fechaINI, $fechaFIN, $stringBusqueda) {
+      return $this->ajaxController->getAllDocumentosController($fechaINI,  $fechaFIN, $stringBusqueda);
     }
 
     public function getInfoProducto($codigoProducto, $clienteRUC) {
@@ -49,6 +56,12 @@ class ajax{
     public function sendEmail($IDDocument){
       return $this->ajaxController->sendCotizacion($IDDocument);
     }
+
+    public function sendEmailByCustomEmail($arrayEmails, $IDDocument){
+      return $this->ajaxController->sendCotizacionToEmails($arrayEmails, $IDDocument);
+    }
+
+    
 
 }
 
@@ -80,6 +93,20 @@ class ajax{
           if (isset($_GET['ruc'])) {
             $RUC = $_GET['ruc'];
             $respuesta = $ajax->getInfoCliente($RUC);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        /* Obtiene array de informacion del cliente*/ 
+        case 'getInfoVENCAB':
+          if (isset($_GET['IDDocument'])) {
+            $IDDocument = $_GET['IDDocument'];
+            $respuesta = $ajax->getInfoVENCAB($IDDocument);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
@@ -121,11 +148,12 @@ class ajax{
 
         /* Obtiene array de los documentos SP Winfenix*/ 
         case 'searchDocumentos':
-          if (isset($_GET['fechaINI']) && isset($_GET['fechaFIN'])) {
+          if (isset($_GET['fechaINI']) && isset($_GET['fechaFIN']) && isset($_GET['stringBusqueda']) ) {
             $fechaINI = date("Ymd", strtotime($_GET['fechaINI']));
             $fechaFIN = date("Ymd", strtotime($_GET['fechaFIN']));
+            $stringBusqueda = $_GET['stringBusqueda'];
 
-            $respuesta = $ajax->getAllDocumentos($fechaINI,  $fechaFIN);
+            $respuesta = $ajax->getAllDocumentos($fechaINI,  $fechaFIN, $stringBusqueda);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
@@ -137,20 +165,20 @@ class ajax{
 
           /* Obtiene array de los documentos SP Winfenix*/ 
         case 'generaProforma':
-        if (isset($_GET['IDDocument'])) {
-          $IDDocument = $_GET['IDDocument'];
-         
-          $PDFDocument = $ajax->generaProforma($IDDocument);
-          //$rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
-          echo $PDFDocument;
-        }else{
-          $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
-          echo json_encode($rawdata);
-        }
+          if (isset($_GET['IDDocument'])) {
+            $IDDocument = $_GET['IDDocument'];
+          
+            $PDFDocument = $ajax->generaProforma($IDDocument);
+            //$rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+            echo $PDFDocument;
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+            echo json_encode($rawdata);
+          }
         
         
 
-      break;
+        break;
 
 
         /* Obtiene array de informacion del producto*/ 
@@ -170,7 +198,7 @@ class ajax{
 
         break;
 
-        /* Utiliza PHPMailer para el envio de correo*/ 
+        /* Utiliza PHPMailer para el envio de correo, utiliza los correos del cliente indicados en la tabla*/ 
         case 'sendEmail':
 
           if (isset($_GET['IDDocument']) ) {
@@ -180,6 +208,22 @@ class ajax{
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.' );
           }
+
+          echo json_encode($rawdata);
+
+        break; 
+
+        /* Utiliza PHPMailer para el envio de correo, permite editar los emails que seran enviados*/ 
+        case 'sendEmailByCustomEmail':
+
+          if (isset($_GET['email']) && isset($_GET['IDDocument']) ) {
+            $arrayEmails = $_GET['email'];
+            $IDDocument = $_GET['IDDocument'];
+            $respuesta = $ajax->sendEmailByCustomEmail($arrayEmails, $IDDocument);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.' );
+          }  
           
         
           echo json_encode($rawdata);
@@ -190,12 +234,12 @@ class ajax{
             $rawdata = array('status' => 'OK', 'mensaje' => 'Respuesta correcta');
             echo json_encode($rawdata);
 
-            break;
+        break;
 
         default:
             $rawdata = array('status' => 'error', 'mensaje' =>'El API no ha podido responder la solicitud, revise el tipo de action');
             echo json_encode($rawdata);
-            break;
+        break;
     }
     
   } catch (Exception $ex) {

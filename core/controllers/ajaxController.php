@@ -59,8 +59,8 @@ class ajaxController  {
     }
 
     /* Retorna la respuesta del modelo ajax*/
-    public function getAllDocumentosController($fechaINI,  $fechaFIN){
-        $response = $this->ajaxModel->getAllDocumentosModel($fechaINI,  $fechaFIN);
+    public function getAllDocumentosController($fechaINI, $fechaFIN, $stringBusqueda){
+        $response = $this->ajaxModel->getAllDocumentosModel($fechaINI, $fechaFIN, $stringBusqueda);
         return $response;
     }
 
@@ -348,7 +348,7 @@ class ajaxController  {
                 $mail->addAddress($correo, 'Cliente');     // Add a recipient
             }
 
-           
+            $mail->AddCC(DEFAULT_EMAIL);
            
             //Content
             $mail->CharSet = "UTF-8";
@@ -365,15 +365,8 @@ class ajaxController  {
             $pcID = php_uname('n'); // Obtiene el nombre del PC
 
 
-            function getIP(){
-                if( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] )) $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                else if( isset( $_SERVER ['HTTP_VIA'] ))  $ip = $_SERVER['HTTP_VIA'];
-                else if( isset( $_SERVER ['REMOTE_ADDR'] ))  $ip = $_SERVER['REMOTE_ADDR'];
-                else $ip = null ;
-                return $ip;
-            }
 
-            $ip = getIP();
+            $ip = 'ninguna';
 
                 $log  = "User: ".$ip.' - '.date("F j, Y, g:i a").PHP_EOL.
                 "PCid: ".$pcID.PHP_EOL.
@@ -387,15 +380,8 @@ class ajaxController  {
 
         } catch (Exception $e) {
 
-            function getIP(){
-                if( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] )) $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-                else if( isset( $_SERVER ['HTTP_VIA'] ))  $ip = $_SERVER['HTTP_VIA'];
-                else if( isset( $_SERVER ['REMOTE_ADDR'] ))  $ip = $_SERVER['REMOTE_ADDR'];
-                else $ip = null ;
-                return $ip;
-            }
 
-            $ip = getIP();
+            $ip = 'ninguna';
 
                 $pcID = php_uname('n'); // Obtiene el nombre del PC
                 $log  = "User: ".$ip.' - '.date("F j, Y, g:i a").PHP_EOL.
@@ -411,4 +397,88 @@ class ajaxController  {
 
     }
     
+     /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
+     public function sendCotizacionToEmails($arrayEmails, $IDDocument){
+       
+        $arrayCorreos =  explode( ';', $arrayEmails );
+
+        //Correo de sender
+        
+        $smtpserver = 'mail.sudcompu.net';
+        $userEmail = 'soporteweb@sudcompu.net';
+        $pwdEmail = 'sw2019$sw$'; 
+
+        /* $infoSender = $this->getInfoUsuarioController($_SESSION["usuarioRUC"]);
+        $smtpserver = trim($infoSender['Smtp']);
+        $userEmail = trim($infoSender['User_Mail']);
+        $pwdEmail = trim($infoSender['Pwd_Mail']); */
+
+        $mail = new PHPMailer(true);  // Passing `true` enables exceptions
+        try {
+            //Server settings
+            $mail->SMTPDebug = false;                                 // Enable verbose debug output 0->off 2->debug
+            $mail->isSMTP();                                      // Set mailer to use SMTP
+            $mail->Host = $smtpserver;  // Specify main and backup SMTP servers
+            $mail->SMTPAuth = true;                               // Enable SMTP authentication
+            $mail->Username = $userEmail;                 // SMTP username
+            $mail->Password = $pwdEmail;                           // SMTP password
+            $mail->SMTPSecure = 'tls';                            // Enable TLS encryption, `ssl` also accepted
+            $mail->Port = 587;                                    // TCP port to connect to
+
+            //Recipients
+            $mail->setFrom($userEmail, $userEmail);
+
+            foreach ($arrayCorreos as $correo) {
+                $mail->addAddress($correo, 'Cliente');     // Add a recipient
+            }
+
+            $mail->AddCC(DEFAULT_EMAIL);
+           
+            //Content
+            $mail->CharSet = "UTF-8";
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = 'Cotizacion #'.$IDDocument;
+            $mail->Body    = 'Se adjunta documento requerido.';
+        
+            // Adjuntos
+            $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion.pdf');
+
+            $mail->send();
+            $detalleMail = 'Correo ha sido enviado a : '. $arrayEmails;
+           
+            $pcID = php_uname('n'); // Obtiene el nombre del PC
+
+
+            $ip = 'ninguna';
+
+                $log  = "User: ".$ip.' - '.date("F j, Y, g:i a").PHP_EOL.
+                "PCid: ".$pcID.PHP_EOL.
+                "Detail: ".$detalleMail.PHP_EOL.
+                "-------------------------".PHP_EOL;
+                //Save string to log, use FILE_APPEND to append.
+
+                file_put_contents('../../../logs/logMailOK.txt', $log, FILE_APPEND );
+            
+            return array('status' => 'ok', 'mensaje' => $detalleMail ); 
+
+        } catch (Exception $e) {
+
+           
+            $ip = 'ninguna';
+
+                $pcID = php_uname('n'); // Obtiene el nombre del PC
+                $log  = "User: ".$ip.' - '.date("F j, Y, g:i a").PHP_EOL.
+                "PCid: ".$pcID.PHP_EOL.
+                "Detail: ".$mail->ErrorInfo .' No se pudo enviar correo a: ' . $correoCliente . PHP_EOL.
+                "-------------------------".PHP_EOL;
+                //Save string to log, use FILE_APPEND to append.
+                file_put_contents('../../../logs/logMailError.txt', $log, FILE_APPEND);
+                $detalleMail = 'Error al enviar el correo. Mailer Error: '. $mail->ErrorInfo;
+                return array('status' => 'false', 'mensaje' => $detalleMail ); 
+            
+        }
+
+    }
+
+
 }
