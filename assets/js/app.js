@@ -263,7 +263,7 @@ $(document).ready(function() {
     // Boton de creacion de PDF en busqueda de documentos
     $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalGeneraPDF', function(event) {
         let IDDocument = $(this).data("codigo");
-        window.open('http://localhost/PHPProjects/cotizacionesApp/views/modulos/ajax/API_cotizaciones.php?action=generaProforma&IDDocument='+IDDocument);
+        window.open('./views/modulos/ajax/API_cotizaciones.php?action=generaProforma&IDDocument='+IDDocument);
        
     });
      
@@ -689,7 +689,7 @@ $(document).ready(function() {
             
           });
 
-        fetch(`http://localhost/PHPProjects/cotizacionesApp/views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
             .then(function(response) {
                 return response.json();
             })
@@ -704,7 +704,7 @@ $(document).ready(function() {
                         alert("Se requiere al menos 1 email para el envio.");
                         return;
                     }else{
-                        fetch(`http://localhost/PHPProjects/cotizacionesApp/views/modulos/ajax/API_cotizaciones.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }`)
+                        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }`)
                         .then(function(response) {
                             return response.json();
                         })
