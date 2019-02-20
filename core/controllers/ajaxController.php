@@ -10,7 +10,7 @@ class ajaxController  {
     public $ajaxModel;
 
     public function __construct() {
-        $this->defaulDataBase = (!isset($_SESSION["empresaAUTH"])) ? 'AGRICOLABAQUERO_V7' : $_SESSION["empresaAUTH"] ;
+        $this->defaulDataBase = (!isset($_SESSION["empresaAUTH"])) ? DEFAULT_DBName : $_SESSION["empresaAUTH"] ;
         $this->ajaxModel = new \models\ajaxModel();
         $this->ajaxModel->setDbname($this->defaulDataBase);
         $this->ajaxModel->conectarDB();
@@ -97,6 +97,8 @@ class ajaxController  {
                 /* NOTA SE ESTABLECE DESCUENTO EN 0 TANTO PARA CABECERA COMO DETALLE */
 
                 $VEN_CAB->setCliente($datosCliente['CODIGO']);
+                $VEN_CAB->setTipoPrecio($datosCliente['TIPOPRECIO']);
+                $VEN_CAB->setVendedor($datosCliente['VENDEDOR']);
                 $VEN_CAB->setPorcentDescuento(0);
                 $VEN_CAB->setPcID(php_uname('n'));
                 $VEN_CAB->setOficina($datosEmpresa['Oficina']);
@@ -132,6 +134,7 @@ class ajaxController  {
                         $VEN_MOV->setOficina($datosEmpresa['Oficina']);
                         $VEN_MOV->setEjercicio($datosEmpresa['Ejercicio']);
                         $VEN_MOV->setTipoDoc($tipoDOC);
+                        $VEN_MOV->setTipoPrecio($datosCliente['TIPOPRECIO']);
                         $VEN_MOV->setNumeroDoc($newCodigoWith0);
                         $VEN_MOV->setFecha(date('Ymd h:i:s'));
                         $VEN_MOV->setBodega('B01');
@@ -204,6 +207,7 @@ class ajaxController  {
                 <div class="cabecera"><b>Direccion: </b> '.$VEN_CAB["DIRECCION1"].' </div>
                 <div class="cabecera"><b>Telefono: </b> '.$VEN_CAB["TELEFONO1"].' </div>
                 <div class="cabecera"><b>Email: </b> '.$VEN_CAB["EMAIL"].' </div>
+                <div class="cabecera"><b>Vendedor: </b> '.$VEN_CAB["VendedorName"].' </div>
             </div>
         
             <table class="items" width="100%" style="font-size: 9pt; border-collapse: collapse; " cellpadding="8">

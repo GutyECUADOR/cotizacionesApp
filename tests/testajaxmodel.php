@@ -1,11 +1,12 @@
 <?php
 session_start();
- require_once '../core/models/conexion.php';
- require_once '../core/models/ajaxModel.php';
- require_once '../core/controllers/ajaxController.php';
+require_once '../config/global.php';
+require_once '../core/models/conexion.php';
+require_once '../core/models/ajaxModel.php';
+require_once '../core/controllers/ajaxController.php';
 
-$ajax = new \models\ajaxModel();
+$ajax = new \controllers\ajaxController();
 
-$response = $ajax->getVENCABByID('992018PRO00014043');
+$response = $ajax->getVEN_CABController('992018PRO00014099');
 
 var_dump(json_encode($response));

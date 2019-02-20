@@ -4,3 +4,4 @@ core/models/conexion.php
 /vendor/
 
 /logs/
+/nbproject/private/

@@ -24,8 +24,11 @@ class venCabClass {
     public $nombres_prod;
     public $cants_prod;
     public $precios_prod;
+    public $tipoPrecio;
+    public $vendedor;
     
     
+
     public function __construct() {
         
     }
@@ -235,9 +238,19 @@ class venCabClass {
         return $this->precios_prod;
     }
 
+    
+    function getTipoPrecio() {
+        return $this->tipoPrecio;
+    }
+
+    function getVendedor() {
+        return $this->vendedor;
+    }
+
     function setCodigos_prod($codigos_prod) {
         $this->codigos_prod = $codigos_prod;
     }
+    
 
     function setNombres_prod($nombres_prod) {
         $this->nombres_prod = $nombres_prod;
@@ -252,5 +265,13 @@ class venCabClass {
     }
 
 
+
+    function setTipoPrecio($tipoPrecio) {
+        $this->tipoPrecio = $tipoPrecio;
+    }
+
+    function setVendedor($vendedor) {
+        $this->vendedor = $vendedor;
+    }
     
 }

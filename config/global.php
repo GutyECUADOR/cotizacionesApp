@@ -7,4 +7,5 @@ define("APP_VERSION", "2.6.8");
 define("ROOT_PATH","");   //Root del proyecto
 define("VIEWS_PATH","/views");
 define("CONFIG_FILE","./config/configuraciones.xml");
+define("DEFAULT_DBName","AGRICOLABAQUERO_V7");
 define("DEFAULT_EMAIL","soporteweb@sudcompu.net");
