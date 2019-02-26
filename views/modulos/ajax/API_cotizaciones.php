@@ -25,10 +25,12 @@ class ajax{
 
     public function getInfoVENCAB($IDDocument) {
       return $this->ajaxController->getVEN_CABController($IDDocument);
-  }
+    }
 
+    public function getInfoVENMOV($IDDocument) {
+      return $this->ajaxController->getVEN_MOVController($IDDocument);
+    }
     
-
     public function getAllClientes($terminoBusqueda,  $tipoBusqueda) {
       return $this->ajaxController->getAllClientesController($terminoBusqueda,  $tipoBusqueda);
     }
@@ -107,6 +109,20 @@ class ajax{
           if (isset($_GET['IDDocument'])) {
             $IDDocument = $_GET['IDDocument'];
             $respuesta = $ajax->getInfoVENCAB($IDDocument);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+          
+          echo json_encode($rawdata);
+
+        break;
+
+        /* Obtiene array de informacion de movimientos del cliente*/ 
+        case 'getInfoVENMOV':
+          if (isset($_GET['IDDocument'])) {
+            $IDDocument = $_GET['IDDocument'];
+            $respuesta = $ajax->getInfoVENMOV($IDDocument);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');

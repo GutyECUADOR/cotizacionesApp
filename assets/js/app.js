@@ -273,6 +273,14 @@ $(document).ready(function() {
         sendEmailByDocument(IDDocument);
     });
 
+    // Boton de creacion de PDF en busqueda de documentos
+    $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalLoadData', function(event) {
+        let IDDocument = $(this).data("codigo");
+        loadDataByDocument(IDDocument);
+    });
+
+    
+
 
 
     /* Funciones */
@@ -436,6 +444,7 @@ $(document).ready(function() {
                         <ul class="dropdown-menu">
                             <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalGeneraPDF"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Generar PDF</a></li>
                             <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalSendEmail"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email</a></li>
+                            <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalLoadData"> <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Cargar Documento</a></li>
                         </ul>
                     </div>
                 </td>
@@ -510,7 +519,7 @@ $(document).ready(function() {
             console.log(response);
                 let producto = response.data;
                 if (producto) {
-                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA, parseFloat(producto.VALORIVA));
+                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
                     printDataProducto(newProducto);
                     console.log(newProducto);
                 } else {
@@ -726,6 +735,55 @@ $(document).ready(function() {
             });
     }
 
+    function loadDataByDocument(IDDocument) {
+        if (confirm('Está seguro que desea cargar la informacion del documento: ' +IDDocument + '?, esto borrara la informacion ingresada actualmente.')) {
+            
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                animation : true,
+                timer: 5000
+                
+              });
+    
+            fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    let VEN_CAB = data.data;
+                    $("#inputRUC").val(VEN_CAB.RUC);
+                    validaCliente();
+
+                    // Carga de VEN_MOV
+                    fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENMOV&IDDocument=${ IDDocument }`)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function (data){
+                        let VEN_MOV = data.data;
+                        console.log(VEN_MOV);
+                        cotizacion.productos = [];
+                        VEN_MOV.forEach(producto => {
+                            let loadproducto = new Producto(producto.CODIGO.trim(), producto.Nombre.trim(), parseInt(producto.CANTIDAD), parseFloat(producto.PRECIO), 0, 0, producto.tipoiva, parseInt(producto.IVA));
+                            console.log(loadproducto);
+                            cotizacion.productos.push(loadproducto);
+                            //console.log(cotizacion.productos);
+                            printProductos(cotizacion.productos);
+                            let objectResumen = resumenProdutosInList();
+                            printResumen(objectResumen);
+                        });
+
+                        console.log(cotizacion);
+                    })
+                   
+                }).catch(function(err) {
+                    console.error(err);
+                });
+
+        }
+    }
     
 
 });

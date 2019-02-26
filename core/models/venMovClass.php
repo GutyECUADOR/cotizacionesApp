@@ -17,6 +17,7 @@ class venMovClass {
     public $porcentajeIVA;
     public $precioTOTAL;
     public $observacion;
+    public $vendedor;
             
     function __construct() {
         
@@ -86,6 +87,10 @@ class venMovClass {
     
     function getTipoPrecio() {
         return $this->tipoPrecio;
+    }
+
+    function getVendedor() {
+        return $this->vendedor;
     }
 
     function setTipoPrecio($tipoPrecio) {
@@ -160,7 +165,9 @@ class venMovClass {
         $this->cantidad = $cantidad;
     }
 
-
+    function setVendedor($vendedor) {
+        $this->vendedor = $vendedor;
+    }
     
     
 }

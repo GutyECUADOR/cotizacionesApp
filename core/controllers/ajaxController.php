@@ -35,16 +35,18 @@ class ajaxController  {
     }
 
     /* Retorna la respuesta del modelo ajax*/
+    public function getVEN_MOVController($IDDocument){
+        $response = $this->ajaxModel->getVENMOVByID($IDDocument);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
     public function getInfoUsuarioController($codigoUsuario){
         $response = $this->ajaxModel->getInfoUsuarioModel($codigoUsuario);
         return $response;
     }
 
-    /* Retorna la respuesta del modelo ajax*/
-    public function getVEN_MOVController($IDDocument){
-        $response = $this->ajaxModel->getVENMOVByID($IDDocument);
-        return $response;
-    }
+    
 
     /* Retorna la respuesta del modelo ajax*/
     public function getAllClientesController($terminoBusqueda, $tipoBusqueda){
@@ -135,6 +137,7 @@ class ajaxController  {
                         $VEN_MOV->setEjercicio($datosEmpresa['Ejercicio']);
                         $VEN_MOV->setTipoDoc($tipoDOC);
                         $VEN_MOV->setTipoPrecio($datosCliente['TIPOPRECIO']);
+                        $VEN_MOV->setVendedor($datosCliente['VENDEDOR']);
                         $VEN_MOV->setNumeroDoc($newCodigoWith0);
                         $VEN_MOV->setFecha(date('Ymd h:i:s'));
                         $VEN_MOV->setBodega('B01');
@@ -143,7 +146,7 @@ class ajaxController  {
                         $VEN_MOV->setPrecioProducto($producto->precio);
                         $VEN_MOV->setPorcentajeDescuentoProd(0);
                         $VEN_MOV->setTipoIVA('T00');
-                        $VEN_MOV->setPorcentajeIVA(0);
+                        $VEN_MOV->setPorcentajeIVA($producto->valorIVA);
                         $VEN_MOV->setPrecioTOTAL($VEN_MOV->calculaPrecioTOTAL());
                         $VEN_MOV->setObservacion('');
                         
@@ -643,7 +646,7 @@ class ajaxController  {
                                         </tbody>
                                         </table>
                                     
-                                    <p>Hola, '.$VEN_CAB["NOMBRE"].'</p>
+                                    <p>Estimado, <b> '.$VEN_CAB["NOMBRE"].' </b></p>
                                     <p>
                                         Reciba un cordial saludo de quienes conformamos AGRICOLA BAQUERO, estamos atendiendo a su requerimiento por lo que encontrara el documento solicitado adjunto en este correo.
                                     </p>
@@ -750,7 +753,7 @@ class ajaxController  {
             $mail->CharSet = "UTF-8";
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = 'Cotizacion #'.$IDDocument;
-            $mail->Body    = 'Se adjunta documento requerido.';
+            $mail->Body    = $this->getBodyHTMLofEmail($IDDocument);
         
             // Adjuntos
             $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion.pdf');
