@@ -59,8 +59,8 @@ class ajax{
       return $this->ajaxController->sendCotizacion($IDDocument);
     }
 
-    public function sendEmailByCustomEmail($arrayEmails, $IDDocument){
-      return $this->ajaxController->sendCotizacionToEmails($arrayEmails, $IDDocument);
+    public function sendEmailByCustomEmail($arrayEmails, $IDDocument, $customMessage){
+      return $this->ajaxController->sendCotizacionToEmails($arrayEmails, $IDDocument, $customMessage);
     }
 
     
@@ -235,7 +235,8 @@ class ajax{
           if (isset($_GET['email']) && isset($_GET['IDDocument']) ) {
             $arrayEmails = $_GET['email'];
             $IDDocument = $_GET['IDDocument'];
-            $respuesta = $ajax->sendEmailByCustomEmail($arrayEmails, $IDDocument);
+            $customMessage = isset($_GET['message']) ? $_GET['message'] : '';
+            $respuesta = $ajax->sendEmailByCustomEmail($arrayEmails, $IDDocument, $customMessage);
             $rawdata = array('status' => 'OK', 'mensaje' => 'respuesta correcta', 'data' => $respuesta);
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.' );

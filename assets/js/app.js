@@ -175,6 +175,13 @@ $(document).ready(function() {
         
     });
 
+    // Boton de envio de datos
+    $("#btnCancel").on('click', function(event) {
+        event.preventDefault();
+        alert('No se ha registrado el documento.');
+        location.reload();
+    });
+
     // Boton remover fila de tabla productos
     $("#tablaProductos").on('click', '.btnEliminaRow', function(event) {
         let codProdToDelete = $(this).data("codigo"); // Obtenemos el campo data-value custom
@@ -267,10 +274,28 @@ $(document).ready(function() {
        
     });
      
-    // Boton de creacion de PDF en busqueda de documentos
+    // Boton de envio de email en busqueda de documentos
     $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalSendEmail', function(event) {
         let IDDocument = $(this).data("codigo");
         sendEmailByDocument(IDDocument);
+    });
+
+    // Boton de envio de email personalizado en busqueda de documentos
+    $("#tblResultadosBusquedaDocumentos").on("click", '.btnModalSendCustomEmail', function(event) {
+        let IDDocument = $(this).data("codigo");
+        $('#modalBuscarDocumento').modal('hide');
+        showModalEmail(IDDocument);
+       
+    });
+
+    // Boton de envio de email personalizado en busqueda de documentos
+    $("#btnSendCustomEmail").on("click", function(event) {
+        tinyMCE.triggerSave();
+        let IDDocument = $('#emailIDDocument').val();
+        let emails = $('#emailDestinatario').val();
+        let menssage = $('#mailContent').val();
+       
+        sendCustomEmailByDocument(IDDocument, emails, menssage);
     });
 
     // Boton de creacion de PDF en busqueda de documentos
@@ -443,7 +468,8 @@ $(document).ready(function() {
                         </button>
                         <ul class="dropdown-menu">
                             <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalGeneraPDF"> <span class="glyphicon glyphicon-save-file" aria-hidden="true"></span> Generar PDF</a></li>
-                            <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalSendEmail"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email</a></li>
+                            <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalSendEmail"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email (default)</a></li>
+                            <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalSendCustomEmail"> <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Enviar por email (personalizado)</a></li>
                             <li><a href="#" data-codigo="${documento.id.trim()}" class="btnModalLoadData"> <span class="glyphicon glyphicon-transfer" aria-hidden="true"></span> Cargar Documento</a></li>
                         </ul>
                     </div>
@@ -685,6 +711,57 @@ $(document).ready(function() {
               location.reload();
             }
           })
+    }
+
+    function showModalEmail(IDDocument){
+        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=getInfoVENCAB&IDDocument=${ IDDocument }`)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(data) {
+            let infoIDDocument = data.data;
+            $('#modalSendEmail').modal('show');
+            $('#emailDestinatario').val(infoIDDocument.EMAIL);
+            $('#emailIDDocument').val(IDDocument);
+            //console.log(data);
+                
+        }).catch(function(err) {
+            console.error(err);
+        });  
+    }
+
+    function sendCustomEmailByDocument(IDDocument, emails, message){
+
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            animation : true,
+            timer: 5000
+            
+          });
+
+        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }&message=${ message }`)
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(response) {
+                console.log(response);
+                Toast.fire({
+                    type: 'success',
+                    title: response.data.mensaje
+                    })
+
+                    if (response.data.status == 'ok') {
+                        alert('Enviado...');
+                        location.reload();
+                    }
+            })
+            .catch(function(err) {
+                console.error(err);
+
+            });
+        
     }
 
     function sendEmailByDocument(IDDocument){
