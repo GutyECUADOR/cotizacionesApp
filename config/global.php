@@ -8,12 +8,12 @@ define("ROOT_PATH","");   //Root del proyecto
 define("VIEWS_PATH","/views");
 define("CONFIG_FILE","./config/configuraciones.xml");
 define("DEFAULT_DBName","AGRICOLABAQUERO_V7");
-define("DEFAULT_EMAIL","soporteweb@sudcompu.net");
+define("DEFAULT_EMAIL","ventas@agricolabaquero.com");
 
 /*Envio de correos */
 define("DEFAULT_SMTP","smtp.gmail.com");
-define("DEFAULT_SENDER_EMAIL","testwssp@gmail.com");
-define("DEFAULT_EMAILPASS","641429guty");
+define("DEFAULT_SENDER_EMAIL","documentoselectronicos@agricolabaquero.com");
+define("DEFAULT_EMAILPASS","jorgecarlos");
 
 /*URL Body Email*/
 define("LOGO_ONLINE","http://www.agricolabaquero.com/img/resources/logo.png");
