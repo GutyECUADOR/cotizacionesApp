@@ -93,6 +93,8 @@ $(document).ready(function() {
     var cotizacion = new Cotizacion();
     var newProducto = null;
     var nuevoIDDocumentGenerated = null;
+
+    
     
     /* Eventos y Acciones */
     $("#inputRUC").on("keyup change", function(event) {
@@ -324,7 +326,7 @@ $(document).ready(function() {
                 console.log(response);
                 nuevoIDDocumentGenerated = response.data.new_cod_VENCAB;
                 console.log (nuevoIDDocumentGenerated);
-                mySwal(response.data.mensaje + 'ID de documento generado: ' + response.data.new_cod_VENCAB, "success");
+                mySwal(response.data.mensaje + 'ID de documento generado: ' + response.data.new_cod_VENCAB, "success" , response.data.new_cod_VENCAB);
             }
         });
 
@@ -651,7 +653,7 @@ $(document).ready(function() {
         $("#txt_totalPagar").val(objectResumen.sumatotalproductosWithIVA.toFixed(2));
     }
    
-    function mySwal(mensajem, tipoAlerta = 'info') {
+    function mySwal(mensajem, tipoAlerta = 'info', newcodigoVENCAB) {
         Swal.fire({
             title: 'Atención',
             text: mensajem + ', desea inviar email con la cotizacion al cliente?',
@@ -663,47 +665,10 @@ $(document).ready(function() {
           }).then((result) => {
             if (result.value) {
                 
-                Swal.fire({
-                    title: 'Procesando',
-                    html: 'Enviando correo(s), espere por favor...',
-                    onBeforeOpen: () => {
-                      Swal.showLoading();
-                      
-                    }
-                })
+                let IDDocument = newcodigoVENCAB;
+                $('#modalBuscarDocumento').modal('hide');
+                showModalEmail(IDDocument);
 
-                $.ajax({
-                    type: 'get',
-                    url: 'views/modulos/ajax/API_cotizaciones.php?action=sendEmail',
-                    dataType: "json",
-                    data: { email: '', IDDocument: nuevoIDDocumentGenerated },
-                    success: function (response) {
-                        console.log(response);
-                        Swal.fire({
-                            type: 'info',
-                            title: 'Envio de email',
-                            text: response.data.mensaje,
-                          }).then((result) => {
-
-                            if (result.value) {
-                                location.reload();
-                            }
-                          })
-                    },
-                    error: function (xhr, ajaxOptions, thrownError) {
-                        console.log(xhr);
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Oops...',
-                            text: 'Se ha producido un error al enviar el email.'
-                          }).then((result) => {
-                            if (result.value) {
-                                location.reload();
-                            }
-                          })
-                    }
-                });
-    
                
                 
             } else if (result.dismiss === Swal.DismissReason.cancel) {
