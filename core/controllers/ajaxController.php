@@ -317,10 +317,14 @@ class ajaxController  {
 
     }
 
-    protected function getBodyHTMLofEmail($IDDocument){
+    protected function getBodyHTMLofEmail($IDDocument, $customMesagge=''){
 
         $empresaData = $this->getInfoEmpresaController();
         $VEN_CAB = $this->getVEN_CABController($IDDocument);
+
+        if (empty($customMesagge)) {
+            $customMesagge = BODY_EMAIL_TEXT;
+        }
 
         return '
 
@@ -648,7 +652,7 @@ class ajaxController  {
                                     
                                     <p>Estimado, <b> '.$VEN_CAB["NOMBRE"].' </b></p>
                                     <p>
-                                        Reciba un cordial saludo de quienes conformamos AGRICOLA BAQUERO, estamos atendiendo a su requerimiento por lo que encontrara el documento solicitado adjunto en este correo.
+                                        '. $customMesagge .'
                                     </p>
                                     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                         <tbody>
@@ -798,7 +802,7 @@ class ajaxController  {
 
     
      /* ATECION LOS DATOS DE CUERPO Y LOGS DEBEN NO DEBEN SER MODIFICADOS ESTAS DIRECCIONADOS PARA AJAX */
-    public function sendCotizacionToEmails($arrayEmails, $IDDocument){
+    public function sendCotizacionToEmails($arrayEmails, $IDDocument, $customMesagge){
        
         $arrayCorreos =  explode( ';', $arrayEmails );
 
@@ -838,7 +842,7 @@ class ajaxController  {
             $mail->CharSet = "UTF-8";
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = 'Cotizacion #'.$IDDocument;
-            $mail->Body    = $this->getBodyHTMLofEmail($IDDocument);
+            $mail->Body    = $this->getBodyHTMLofEmail($IDDocument, $customMesagge);
         
             // Adjuntos
             $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion.pdf');
