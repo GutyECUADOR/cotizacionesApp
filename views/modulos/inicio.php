@@ -267,7 +267,17 @@ $vendedores = $cotizacion->getVendedores();
                                     </span>
                                     </div><!-- /input-group -->
                                 </td>
-                                <td><input type="text" id="inputNuevoProductoNombre" class="form-control text-center" data-toggle="popover" readonly></td>
+                                <td>
+                                   
+                                    <div class="input-group">
+                                    <input type="text" id="inputNuevoProductoNombre" class="form-control text-center" readonly>
+                                    <span class="input-group-btn">
+                                        <button id="btnSeachProductos" class="btn btn-default" type="button" data-toggle="modal" data-target="#modalAddExtraDetail">
+                                            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                                    </div><!-- /input-group -->    
+                                </td>
                                 <td><input type="number" id="inputNuevoProductoCantidad" class="form-control text-center" value="0"></td>
                                 <td>
                                     <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center" readonly>
@@ -619,6 +629,36 @@ $vendedores = $cotizacion->getVendedores();
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" id="btnSendCustomEmail">Enviar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal" onclick="location.reload();">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal agregar fotos y detalles extra -->
+        <div class="modal fade" id="modalAddExtraDetail" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"> Informacion extra del producto </h4>
+                </div>
+                <div class="modal-body">
+                    
+                <form method="post" id="fileinfo" name="fileinfo">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Imagenes:</span>
+                        <input type="file" class="form-control" name="file" id="file" multiple>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="comment">Detalle:</label>
+                        <textarea class="form-control tiny" rows="5" id="extraDetailContent"></textarea>
+                    </div>
+
+                </form>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
                 </div>
                 </div>
             </div>

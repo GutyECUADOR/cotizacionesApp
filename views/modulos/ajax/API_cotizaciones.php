@@ -247,6 +247,31 @@ class ajax{
 
         break;
 
+        case 'uploadFile':
+
+          $codOrden = '992018PRO00012217';
+          $contador = 0;
+          $location = "uploads/";
+          $newname = $codOrden."_$contador".".jpg"; // Asignamos nombre referencial
+          $tempName = $_FILES["file"]["tmp_name"];
+          
+          if (file_exists($newname)) {
+            echo "El archivo ya existe";
+          } else {
+              
+              if (move_uploaded_file($tempName, $location.$newname)) {
+                echo "Archivo cargado con nombre: ". $newname;
+              }else{
+                echo "No cargado";
+              }
+          }
+
+          
+          
+          
+        
+        break;
+
         case 'test':
             $rawdata = array('status' => 'OK', 'mensaje' => 'Respuesta correcta');
             echo json_encode($rawdata);
