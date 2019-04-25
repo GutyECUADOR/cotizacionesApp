@@ -14,8 +14,6 @@ $vendedores = $cotizacion->getVendedores();
  <?php include 'sis_modules/header_main.php'?>
 
     <div class="container wrap">
-
-
         <!-- Row de cabecera-->
         <div class="row">
             <div class="col">
@@ -269,7 +267,7 @@ $vendedores = $cotizacion->getVendedores();
                                     </span>
                                     </div><!-- /input-group -->
                                 </td>
-                                <td><input type="text" id="inputNuevoProductoNombre" class="form-control text-center" readonly></td>
+                                <td><input type="text" id="inputNuevoProductoNombre" class="form-control text-center" data-toggle="popover" readonly></td>
                                 <td><input type="number" id="inputNuevoProductoCantidad" class="form-control text-center" value="0"></td>
                                 <td>
                                     <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center" readonly>
@@ -403,6 +401,7 @@ $vendedores = $cotizacion->getVendedores();
                 </div>
             </div>
         </div>    
+
 
         <!-- Modal Cliente -->
         <div class="modal fade" id="modalBuscarCliente" tabindex="-1" role="dialog">

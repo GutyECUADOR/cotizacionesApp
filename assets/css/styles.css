@@ -17,6 +17,15 @@ body {
     margin-bottom: 20px;
 }
 
+.popover{
+    max-width: 100%; /* Max Width of the popover (depending on the container!) */
+}
+
+.popover-content{
+    width: 400px;
+    height: 120px;
+}
+
 .select-group input.form-control{ width: 65%}
 .select-group select.input-group-addon { width: 35%; }
 

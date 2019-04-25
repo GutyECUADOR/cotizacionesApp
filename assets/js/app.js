@@ -400,14 +400,14 @@ $(document).ready(function() {
                 </tr>
                 `;
 
-                $('#tablaProductos > tbody:last-child').append(row);
-
-
+                $("#header ul").append(row);
+        
         });
     }
 
     function printBusquedaClientes(arrayClientes){
-        $('#tblResultadosBusquedaClientes').find("tr:gt(0)").remove();
+        //$('#tblResultadosBusquedaClientes').find("tr:gt(0)").remove();
+        $('#tblResultadosBusquedaClientes').find("tr").remove();
         let cont = 1;
         arrayClientes.forEach(cliente => {
             let row = `
@@ -855,5 +855,23 @@ function startJSBoostrap() {
     PNotify.prototype.options.styling = "fontawesome";
     $('[data-toggle="tooltip"]').tooltip();
 
+    let options = {
+        title: 'Informacion Extra',
+        content: '',
+        placement: 'bottom',
+        container: 'body',
+        trigger : 'click',
+        html: true,
+        template: `
+            <div class="popover" role="tooltip">
+                <div class="arrow"></div>
+                <h3 class="popover-title"></h3>
+                <textarea class="form-control popover-content" rows="3" id="extraProdDescription"></textarea>
+            </div>`,
+
+        
+        };
+
+    $('[data-toggle="popover"]').popover(options);
     
 }
