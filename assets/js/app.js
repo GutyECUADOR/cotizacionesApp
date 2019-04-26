@@ -403,6 +403,7 @@ $(document).ready(function() {
     }
 
     function printProductos(arrayProductos){
+        
         $('#tablaProductos').find("tr:gt(0)").remove();
         
         arrayProductos.forEach(producto => {
@@ -422,7 +423,8 @@ $(document).ready(function() {
                 </tr>
                 `;
 
-                $("#header ul").append(row);
+                //$("#header ul").append(row);
+                $('#tablaProductos > tbody:last-child').append(row);
         
         });
     }
