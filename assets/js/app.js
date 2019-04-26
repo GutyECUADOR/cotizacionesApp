@@ -66,6 +66,7 @@ class Producto {
       this.stock = stock;
       this.tipoIVA = tipoIVA;
       this.valorIVA = valorIVA;
+      this.descripcion = null;
     }
 
     getIVA(){
@@ -78,6 +79,10 @@ class Producto {
 
     getSubtotal(){
         return (this.cantidad * this.precio) - this.getDescuento(this.descuento);
+    }
+
+    setDescripcion(descripcion){
+        this.descripcion = descripcion;
     }
   }
 
@@ -184,7 +189,7 @@ $(document).ready(function() {
         var archivo = input.files[0]; // Propiedad en la que se encuentran los archivos
         var archivos = input.files; // Propiedad en la que se encuentran los archivos
         
-        uploadFiles('992019SPE000005555', archivos);
+        uploadFiles('992018PRO00014114', archivos);
     
     });
 
@@ -220,6 +225,10 @@ $(document).ready(function() {
     // Caja de texto de producto nuevo
     $("#btnAgregarProdToList").on('click', function(event) {
        if (newProducto != null) {
+            /* let descripcion = $('#extraDetailContent').val();
+            newProducto.setDescripcion(descripcion);
+            $('#extraDetailContent').val(''); */
+
             addProductToList(newProducto);
             printProductos(cotizacion.productos);
             let objectResumen = resumenProdutosInList();
@@ -548,6 +557,7 @@ $(document).ready(function() {
 
         let codProducto = $('#inputNuevoCodProducto').val();
         let clienteRUC = $('#inputRUC').val();
+        
 
         $.ajax({
             type: 'get',
