@@ -183,44 +183,9 @@ $(document).ready(function() {
         var input = document.getElementById('file'); //Input que carga los archivos
         var archivo = input.files[0]; // Propiedad en la que se encuentran los archivos
         var archivos = input.files; // Propiedad en la que se encuentran los archivos
-        console.log(archivos);
-
-        let formdata = new FormData();
-        formdata.append('file', archivo);
-
-        /* for (let cont = 0; cont < archivos.length; cont++) {
-            formdata.append("file[]", archivos[cont]);
-        } */
-
-        $.ajax({
-            url:'./views/modulos/ajax/API_cotizaciones.php?action=uploadFile',
-            processData:false,
-            contentType:false,
-            type:'POST',
-            data: formdata,
-            success:function(respuesta){
-                console.log(respuesta);
-            }
-            });
-
-        /* var alpha = name.files[0];
         
-        var fd = new FormData(document.getElementById("fileinfo"));
-            fd.append("label", "WEBUPLOAD");
-            $.ajax({
-              url: "./views/modulos/ajax/API_cotizaciones.php?action=uploadFile",
-              type: "POST",
-              data: fd,
-              processData: false,  // tell jQuery not to process the data
-              contentType: false   // tell jQuery not to set contentType
-            }).done(function( data ) {
-                console.log("PHP Output:");
-                console.log( data );
-            });
- */
-
-        //console.log(imagenes);
-        //uploadFiles();
+        uploadFiles('992019SPE000005555', archivos);
+    
     });
 
 
@@ -825,25 +790,6 @@ $(document).ready(function() {
             });
     }
 
-    function uploadFiles(){
-
-        var inputFile = document.getElementById('fileImagenes');
-       
-        var formData = new FormData();
-        formData.append('file', inputFile.files[0]);
-
-        fetch(`./views/modulos/ajax/API_cotizaciones.php?action=uploadFile`) 
-            .then(function(response) {
-                return response.text()
-            })
-            .then(function(response) {
-                console.log(response);
-            })
-            .catch(function(err) {
-                console.error(err);
-            });
-    }
-
     function loadDataByDocument(IDDocument) {
         if (confirm('Está seguro que desea cargar la informacion del documento: ' +IDDocument + '?, esto borrara la informacion ingresada actualmente.')) {
             
@@ -894,6 +840,27 @@ $(document).ready(function() {
         }
     }
     
+
+    function uploadFiles(codOrden, archivos) {
+
+        let formdata = new FormData();
+        formdata.append('codOrden', codOrden);
+
+        for (let cont = 0; cont < archivos.length; cont++) {
+            formdata.append("file[]", archivos[cont]);
+        }
+        
+        $.ajax({
+            url:'./views/modulos/ajax/API_cotizaciones.php?action=uploadFile',
+            processData:false,
+            contentType:false,
+            type:'POST',
+            data: formdata,
+            success:function(respuesta){
+                console.log(JSON.parse(respuesta));
+            }
+        });
+    }
 
 });
 

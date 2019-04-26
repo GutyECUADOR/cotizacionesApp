@@ -249,26 +249,45 @@ class ajax{
 
         case 'uploadFile':
 
-          $codOrden = '992018PRO00012217';
-          $contador = 0;
-          $location = "uploads/";
-          $newname = $codOrden."_$contador".".jpg"; // Asignamos nombre referencial
-          $tempName = $_FILES["file"]["tmp_name"];
-          
-          if (file_exists($newname)) {
-            echo "El archivo ya existe";
-          } else {
-              
-              if (move_uploaded_file($tempName, $location.$newname)) {
-                echo "Archivo cargado con nombre: ". $newname;
-              }else{
-                echo "No cargado";
-              }
-          }
+          if (isset($_FILES['file']) && !empty($_FILES['file']) && isset($_POST['codOrden']) && !empty($_POST['codOrden'])) { // file es el nombre del input o clave en formData
 
-          
-          
-          
+            $codOrden = $_POST['codOrden']; //'992018PRO00012217'; // Defile el nombre unico que tedra la imagen
+            $contador = 0; // Define el numero de imagen relacionado al codigo de la orden
+            $location = $_SERVER['DOCUMENT_ROOT'].'/'."uploadsCotizaciones/"; // Root del directorio a guardar (debe estar creado)
+            
+            $total_files = count($_FILES["file"]['name']);
+            $array_files = $_FILES["file"];
+            $archivosCargados = array();
+            $errores = array();
+
+            for ($cont = 0; $cont < $total_files; $cont++) {
+              $newname = $codOrden."_$contador".".jpg"; // Asignamos nombre unico
+              $extension = pathinfo($array_files["name"][$cont], PATHINFO_EXTENSION);
+
+              if($extension=='jpg' || $extension=='jpeg' || $extension=='png') // Comprobacion del tipo
+              {
+
+                if ($array_files["error"][$cont] > 0) {
+                  array_push($errores, $array_files["error"][$cont]);
+              } else {
+                  if (file_exists($location.$newname)) { // Revision si existe el archivo en el directorio
+                      array_push($archivosCargados, 'El archivo ya existe: '.$newname);
+                  } else {
+                      move_uploaded_file($array_files["tmp_name"][$cont], $location.$newname); // Carga en si
+                      array_push($archivosCargados, 'Archivo cargado: ' . $array_files["name"][$cont] . ', nuevo nombre asignado: '.$newname);
+                  }
+              }
+              }
+              $contador++;
+            }
+
+            $rawdata = array('status' => 'OK', 'mensaje' => 'Carga completa', 'resultados' => $archivosCargados,  'errores' => $errores);
+            echo json_encode($rawdata);
+
+          }else {
+            $rawdata = array('status' => 'FAIL', 'mensaje' => 'Sin archivos seleccionados o codigo de Orden no indicada.');
+            echo json_encode($rawdata);
+          }
         
         break;
 
