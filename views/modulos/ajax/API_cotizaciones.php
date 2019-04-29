@@ -249,9 +249,11 @@ class ajax{
 
         case 'uploadFile':
 
-          if (isset($_FILES['file']) && !empty($_FILES['file']) && isset($_POST['codOrden']) && !empty($_POST['codOrden'])) { // file es el nombre del input o clave en formData
+          if (isset($_FILES['file']) && !empty($_FILES['file']) && isset($_POST['codOrden']) && !empty($_POST['codOrden']) && isset($_POST['codProducto']) && !empty($_POST['codProducto'])) { // file es el nombre del input o clave en formData
 
             $codOrden = $_POST['codOrden']; //'992018PRO00012217'; // Defile el nombre unico que tedra la imagen
+            $codProducto = $_POST['codProducto']; //'00000008'; // Defile el nombre unico que tedra la imagen
+    
             $contador = 0; // Define el numero de imagen relacionado al codigo de la orden
             $location = $_SERVER['DOCUMENT_ROOT'].'/'."uploadsCotizaciones/"; // Root del directorio a guardar (debe estar creado)
             
@@ -261,7 +263,7 @@ class ajax{
             $errores = array();
 
             for ($cont = 0; $cont < $total_files; $cont++) {
-              $newname = $codOrden."_$contador".".jpg"; // Asignamos nombre unico
+              $newname = $codOrden."_$codProducto"."_$contador".".jpg"; // Asignamos nombre unico
               $extension = pathinfo($array_files["name"][$cont], PATHINFO_EXTENSION);
 
               if($extension=='jpg' || $extension=='jpeg' || $extension=='png') // Comprobacion del tipo

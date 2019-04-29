@@ -67,6 +67,7 @@ class Producto {
       this.tipoIVA = tipoIVA;
       this.valorIVA = valorIVA;
       this.descripcion = null;
+      this.archivos = null;
     }
 
     getIVA(){
@@ -189,8 +190,16 @@ $(document).ready(function() {
         var archivo = input.files[0]; // Propiedad en la que se encuentran los archivos
         var archivos = input.files; // Propiedad en la que se encuentran los archivos
         
-        uploadFiles('992018PRO00014114', archivos);
-    
+        //uploadFiles('992018PRO00014114', archivos);
+
+        if (newProducto) {
+            newProducto.archivos = archivos;
+            
+        }else{
+            alert('No puede cargar imagen sin indicar producto.');
+        }
+
+        
     });
 
 
@@ -233,6 +242,7 @@ $(document).ready(function() {
             printProductos(cotizacion.productos);
             let objectResumen = resumenProdutosInList();
             printResumen(objectResumen);
+            console.log(cotizacion);
        }else{
            alert('No hay producto que agregar a la lista');
        }
@@ -347,6 +357,11 @@ $(document).ready(function() {
             success: function(response) {
                 console.log(response);
                 nuevoIDDocumentGenerated = response.data.new_cod_VENCAB;
+                //Carga de archivos
+                cotizacion.productos.forEach( producto=> {
+                    uploadFiles(nuevoIDDocumentGenerated,producto.codigo,producto.archivos);
+                });
+
                 console.log (nuevoIDDocumentGenerated);
                 mySwal(response.data.mensaje + 'ID de documento generado: ' + response.data.new_cod_VENCAB, "success" , response.data.new_cod_VENCAB);
             }
@@ -853,10 +868,11 @@ $(document).ready(function() {
     }
     
 
-    function uploadFiles(codOrden, archivos) {
+    function uploadFiles(codOrden, codProducto, archivos) {
 
         let formdata = new FormData();
         formdata.append('codOrden', codOrden);
+        formdata.append('codProducto', codProducto);
 
         for (let cont = 0; cont < archivos.length; cont++) {
             formdata.append("file[]", archivos[cont]);
