@@ -1,10 +1,5 @@
-
+config/global.php
 core/models/conexion.php
-
 /vendor/
-
 /logs/
 /nbproject/private/
-core/models/conexion.php
-core/models/conexion.php
-config/global.php

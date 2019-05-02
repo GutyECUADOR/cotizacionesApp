@@ -15,7 +15,7 @@ define("DEFAULT_EMAIL","soporteweb@sudcompu.net");
 
 /*Envio de correos */
 define("DEFAULT_SMTP","smtp.gmail.com");
-define("DEFAULT_SENDER_EMAIL","");
+define("DEFAULT_SENDER_EMAIL","test");
 define("DEFAULT_EMAILPASS","");
 
 /*URL Body Email*/
