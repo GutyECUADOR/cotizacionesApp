@@ -183,6 +183,8 @@ class ajaxController  {
        $empresaData = $this->getInfoEmpresaController();
        $VEN_CAB = $this->getVEN_CABController($IDDocument);
        $VEN_MOV = $this->getVEN_MOVController($IDDocument);
+       
+       
         
         $html = '
             
@@ -293,6 +295,10 @@ class ajaxController  {
                 <p id="observacion">Observacion: '.$VEN_CAB["OBSERVA"].'</p> 
             </div>
         
+            <div style="width: 100%;">
+                <p>Imagenes del documento: '.$IDDocument.' </p>
+                '. $this->getLinkImagesByDocument($IDDocument) .' 
+            </div>
         ';
 
         //==============================================================
@@ -315,6 +321,15 @@ class ajaxController  {
         //==============================================================
         //==============================================================
 
+    }
+
+    public function getLinkImagesByDocument($IDDocument){
+        $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
+        $file_list = '';
+        foreach ($files as $file) {
+            $file_list .= '<img src="'.$file.'" width="75%" alt="IMG DE PRUEBA"></br>';      
+        }
+        return $file_list;
     }
 
     protected function getBodyHTMLofEmail($IDDocument, $customMesagge=''){

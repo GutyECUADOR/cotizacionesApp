@@ -234,14 +234,19 @@ $(document).ready(function() {
     // Caja de texto de producto nuevo
     $("#btnAgregarProdToList").on('click', function(event) {
        if (newProducto != null) {
-            /* let descripcion = $('#extraDetailContent').val();
-            newProducto.setDescripcion(descripcion);
-            $('#extraDetailContent').val(''); */
+           
+            //Get content of tinimce and reset
+            let text = tinyMCE.get('extraDetailContent').getContent();
+            newProducto.descripcion = text;
+           
 
             addProductToList(newProducto);
+                
             printProductos(cotizacion.productos);
             let objectResumen = resumenProdutosInList();
             printResumen(objectResumen);
+            
+
             console.log(cotizacion);
        }else{
            alert('No hay producto que agregar a la lista');
@@ -286,7 +291,6 @@ $(document).ready(function() {
        cotizacion.comentario = $(this).val();
        //console.log(cotizacion.comentario);
     });
-
 
     // Boton de busqueda de documentos 
     $("#searchDocumentModal").on("click", function(event) {
@@ -408,6 +412,10 @@ $(document).ready(function() {
         document.getElementById("inputNuevoProductoCantidad").value = "";
         document.getElementById("inputNuevoProductoPrecioUnitario").value = "";
         document.getElementById("inputNuevoProductoSubtotal").value = "";
+       
+        tinyMCE.get('extraDetailContent').setContent('');
+        
+        
     }
 
     function printDataProducto(producto){
@@ -748,6 +756,7 @@ $(document).ready(function() {
 
         fetch(`./views/modulos/ajax/API_cotizaciones.php?action=sendEmailByCustomEmail&email=${ emails }&IDDocument=${ IDDocument }&message=${ message }`)
             .then(function(response) {
+                console.log(response);
                 return response.json();
             })
             .then(function(response) {
@@ -870,24 +879,27 @@ $(document).ready(function() {
 
     function uploadFiles(codOrden, codProducto, archivos) {
 
-        let formdata = new FormData();
-        formdata.append('codOrden', codOrden);
-        formdata.append('codProducto', codProducto);
+        if (archivos) {
+            let formdata = new FormData();
+            formdata.append('codOrden', codOrden);
+            formdata.append('codProducto', codProducto);
 
-        for (let cont = 0; cont < archivos.length; cont++) {
-            formdata.append("file[]", archivos[cont]);
+            for (let cont = 0; cont < archivos.length; cont++) {
+                formdata.append("file[]", archivos[cont]);
+            }
+            
+            $.ajax({
+                url:'./views/modulos/ajax/API_cotizaciones.php?action=uploadFile',
+                processData:false,
+                contentType:false,
+                type:'POST',
+                data: formdata,
+                success:function(respuesta){
+                    console.log(JSON.parse(respuesta));
+                }
+            });
         }
         
-        $.ajax({
-            url:'./views/modulos/ajax/API_cotizaciones.php?action=uploadFile',
-            processData:false,
-            contentType:false,
-            type:'POST',
-            data: formdata,
-            success:function(respuesta){
-                console.log(JSON.parse(respuesta));
-            }
-        });
     }
 
 });

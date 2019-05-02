@@ -481,7 +481,7 @@ $vendedores = $cotizacion->getVendedores();
                     <div class="input-group select-group">
                         <input type="text" id="terminoBusquedaModalProducto" placeholder="Termino de busqueda..." class="form-control" value="%"/>
                         <select id="tipoBusquedaModalProducto" class="form-control input-group-addon">
-                            <option value="NOMBRE">Nombre</option>
+                            <option value="NOMBRE">NOMBRE</option>
                         </select>
                         <div class="input-group-btn">
                             <button id="searchProductoModal" type="button" class="btn btn-primary" aria-label="Help">

@@ -5,15 +5,18 @@ define("EMPRESA_NAME", "Agricola Baquero");
 define("LOGO_NAME", "./assets/img/logo.png");
 define("APP_VERSION", "2.6.8");
 define("ROOT_PATH","");   //Root del proyecto
+
+define("IMAGES_UPLOAD_DIR", $_SERVER['DOCUMENT_ROOT'].'/uploadsCotizaciones');
+
 define("VIEWS_PATH","/views");
 define("CONFIG_FILE","./config/configuraciones.xml");
 define("DEFAULT_DBName","AGRICOLABAQUERO_V7");
-define("DEFAULT_EMAIL","ventas@agricolabaquero.com");
+define("DEFAULT_EMAIL","soporteweb@sudcompu.net");
 
 /*Envio de correos */
 define("DEFAULT_SMTP","smtp.gmail.com");
-define("DEFAULT_SENDER_EMAIL","documentoselectronicos@agricolabaquero.com");
-define("DEFAULT_EMAILPASS","jorgecarlos");
+define("DEFAULT_SENDER_EMAIL","gutiecuador@gmail.com");
+define("DEFAULT_EMAILPASS","641429guty");
 
 /*URL Body Email*/
 define("LOGO_ONLINE","http://www.agricolabaquero.com/img/resources/logo.png");
