@@ -6,3 +6,5 @@ core/models/conexion.php
 /logs/
 /nbproject/private/
 core/models/conexion.php
+core/models/conexion.php
+config/global.php
