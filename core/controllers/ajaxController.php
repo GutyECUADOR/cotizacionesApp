@@ -327,7 +327,7 @@ class ajaxController  {
         $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
         $file_list = '';
         foreach ($files as $file) {
-            $file_list .= '<img src="'.$file.'" width="75%" alt="IMG DE PRUEBA"></br>';      
+            $file_list .= '<img src="'.$file.'" width="75%" alt="IMG DE PRODUCTO"></br>';      
         }
         return $file_list;
     }
@@ -348,6 +348,7 @@ class ajaxController  {
                 <head>
                 <meta name="viewport" content="width=device-width" />
                 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.0/css/lightbox.min.css">
                 <title>Email</title>
                 <style>
                     /* -------------------------------------
@@ -637,6 +638,11 @@ class ajaxController  {
                         border-color: #34495e !important; 
                     } 
                     }
+
+                    .detailimg {
+                      width:100%;
+                      height:100%;
+                    }
                 </style>
                 </head>
                 <body class="">
@@ -660,7 +666,7 @@ class ajaxController  {
                                         <tbody>
                                             <tr>
                                             <td style="text-align: center">
-                                            <img src="'.LOGO_ONLINE.'" alt="Logo"> </td>
+                                            <img src="http://www.agricolabaquero.com/img/resources/logo.png" alt="Logo"> </td>
                                             </tr>
                                         </tbody>
                                         </table>
@@ -669,21 +675,20 @@ class ajaxController  {
                                     <p>
                                         '. $customMesagge .'
                                     </p>
-                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
-                                        <tbody>
+                                      <table role="presentation" border="1" cellpadding="0" cellspacing="0">
                                         <tr>
-                                            <td align="center">
-                                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                                <tbody>
-                                                    <tr>
-                                                    <td> <a href="'.SITIOWEB_ONLINE.'" target="_blank">Visitar '.$empresaData["NomCia"].'</a> </td>
-                                                    </tr>
-                                                </tbody>
-                                                </table>
-                                            </td>
+                                          <th>Producto</th>
+                                          <th>Descripcion</th> 
                                         </tr>
-                                        </tbody>
-                                    </table>
+
+                                        <tr>
+                                          <td width="30%" height="200px"><img src="cid:logo_2u" class="detailimg" alt="Logo"></td>
+                                          
+                                          <td>Disponibles en catálogo bombas manuales, bombas hidroneumáticas, bombas modulares, grupos eléctricos de válvula manual o electroválvula, grupos hidroneumáticos o con motor a gasolina, sistemas de elevación sincronizados, grupos de salidas independientes, bombas neumáticas para pruebas hidrostáticas y grupos para llaves dinamométricas</td> 
+                                        </tr>
+                                      
+                                      </table>
+
                                     <p>Recuerde mantener sus datos seguros y privados.</p>
                                     <p>Muchas gracias por su confianza!</p>
                                     </td>
@@ -721,10 +726,14 @@ class ajaxController  {
                     <td>&nbsp;</td>
                     </tr>
                 </table>
+                    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.0/js/lightbox.min.js"></script>
                 </body>
             </html>
         
-        ';
+        
+        
+            ';
 
     }
 
@@ -859,6 +868,13 @@ class ajaxController  {
             $mail->Subject = 'Cotizacion #'.$IDDocument;
             $mail->Body    = $this->getBodyHTMLofEmail($IDDocument, $customMesagge);
         
+            //Imagenes adjuntas
+           
+            $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
+            foreach ($files as $file) {
+                $mail->AddEmbeddedImage($file, 'logo_2u');
+            }
+
             // Adjuntos
             $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion.pdf');
 

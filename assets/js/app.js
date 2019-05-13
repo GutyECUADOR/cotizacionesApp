@@ -352,7 +352,7 @@ $(document).ready(function() {
        
         console.log(JSON.parse(formData));
         $.ajax({
-            type: 'get',
+            type: 'POST',
             url: 'views/modulos/ajax/API_cotizaciones.php?action=saveCotizacion',
             dataType: "json",
     

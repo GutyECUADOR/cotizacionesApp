@@ -77,8 +77,8 @@ class ajax{
 
        /* Obtiene array de informacion del cliente*/ 
         case 'saveCotizacion':
-          if (isset($_GET['formData'])) {
-            $formData = json_decode($_GET['formData']);
+          if (isset($_POST['formData'])) {
+            $formData = json_decode($_POST['formData']);
             $respuesta = $ajax->saveCotizacion($formData);
             $rawdata = array('status' => 'OK', 'mensaje' => 'Realizado', 'data' => $respuesta);
             
