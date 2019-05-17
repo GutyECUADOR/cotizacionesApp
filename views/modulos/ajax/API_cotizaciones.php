@@ -80,7 +80,7 @@ class ajax{
           if (isset($_POST['formData'])) {
             $formData = json_decode($_POST['formData']);
             $respuesta = $ajax->saveCotizacion($formData);
-            $rawdata = array('status' => 'OK', 'mensaje' => 'Realizado', 'data' => $respuesta);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'Realizado', 'data' => $respuesta, 'formDataSended' => $formData);
             
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
@@ -249,11 +249,12 @@ class ajax{
 
         case 'uploadFile':
 
-          if (isset($_FILES['file']) && !empty($_FILES['file']) && isset($_POST['codOrden']) && !empty($_POST['codOrden']) && isset($_POST['codProducto']) && !empty($_POST['codProducto'])) { // file es el nombre del input o clave en formData
+          if (isset($_FILES['file']) && !empty($_FILES['file']) && isset($_POST['codOrden']) && !empty($_POST['codOrden']) && isset($_POST['codProducto']) && !empty($_POST['codProducto']) && isset($_POST['descripcion'])) { // file es el nombre del input o clave en formData
 
             $codOrden = $_POST['codOrden']; //'992018PRO00012217'; // Defile el nombre unico que tedra la imagen
             $codProducto = $_POST['codProducto']; //'00000008'; // Defile el nombre unico que tedra la imagen
-    
+            $descripcion = $_POST['descripcion']; //'Descripcion extra del producto
+
             $contador = 0; // Define el numero de imagen relacionado al codigo de la orden
             $location = $_SERVER['DOCUMENT_ROOT'].'/'."uploadsCotizaciones/"; // Root del directorio a guardar (debe estar creado)
             
@@ -276,7 +277,15 @@ class ajax{
                       array_push($archivosCargados, 'El archivo ya existe: '.$newname);
                   } else {
                       move_uploaded_file($array_files["tmp_name"][$cont], $location.$newname); // Carga en si
-                      array_push($archivosCargados, 'Archivo cargado: ' . $array_files["name"][$cont] . ', nuevo nombre asignado: '.$newname);
+                      // Aqui posible carga a la DB
+                      $obj = new stdClass;
+                      $obj->codDocumento = $codOrden;
+                      $obj->codProducto = $codProducto;
+                      $obj->nombreImagen = $newname;
+                      $obj->descripcion = $descripcion;
+
+                      $obj->mensaje = 'Archivo cargado: ' . $array_files["name"][$cont] . ', nuevo nombre asignado: '.$newname;
+                      array_push($archivosCargados, $obj);
                   }
               }
               }
@@ -291,6 +300,20 @@ class ajax{
             echo json_encode($rawdata);
           }
         
+        break;
+
+        case 'saveExtraData':
+          if (isset($_POST['extraData'])) {
+            $extraData = json_decode($_POST['extraData']);
+            //$respuesta = $ajax->saveCotizacion($formData);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'salvar extra data');
+            
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido extra data.');
+          }
+        
+          echo json_encode($rawdata);
+
         break;
 
         case 'test':

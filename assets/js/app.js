@@ -363,7 +363,7 @@ $(document).ready(function() {
                 nuevoIDDocumentGenerated = response.data.new_cod_VENCAB;
                 //Carga de archivos
                 cotizacion.productos.forEach( producto=> {
-                    uploadFiles(nuevoIDDocumentGenerated,producto.codigo,producto.archivos);
+                    uploadFiles(nuevoIDDocumentGenerated,producto.codigo,producto.archivos, producto.descripcion);
                 });
 
                 console.log (nuevoIDDocumentGenerated);
@@ -877,12 +877,13 @@ $(document).ready(function() {
     }
     
 
-    function uploadFiles(codOrden, codProducto, archivos) {
+    function uploadFiles(codOrden, codProducto, archivos, descripcion) {
 
         if (archivos) {
             let formdata = new FormData();
             formdata.append('codOrden', codOrden);
             formdata.append('codProducto', codProducto);
+            formdata.append('descripcion', descripcion);
 
             for (let cont = 0; cont < archivos.length; cont++) {
                 formdata.append("file[]", archivos[cont]);
@@ -895,7 +896,24 @@ $(document).ready(function() {
                 type:'POST',
                 data: formdata,
                 success:function(respuesta){
-                    console.log(JSON.parse(respuesta));
+                  
+                    let resultJSON = JSON.parse(respuesta);
+                    console.log(resultJSON);
+
+                    console.log(resultJSON.resultados);
+                    let extraData = JSON.stringify(resultJSON.resultados);
+                  
+                        $.ajax({
+                            url:'./views/modulos/ajax/API_cotizaciones.php?action=saveExtraData',
+                            type:'POST',
+                            data: { extraData: extraData },
+                            success:function(respuesta){
+                                console.log(respuesta);
+                                
+                            }
+                        });
+                    
+                    
                 }
             });
         }

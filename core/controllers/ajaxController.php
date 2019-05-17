@@ -332,6 +332,25 @@ class ajaxController  {
         return $file_list;
     }
 
+    public function getNamesImagesByDocument($IDDocument){
+        $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
+        $file_list = '';
+        foreach ($files as $file) {
+
+            $row = '
+
+            <tr>
+                <td class="customrowtable" width="30%"><img src="cid:'.$file.'" class="img-thumbnail" alt="item"></td>
+                
+                <td class="customrowtable">Disponibles en catálogo bombas manuales, bombas hidroneumáticas, bombas modulares, grupos eléctricos de válvula manual o electroválvula, grupos hidroneumáticos o con motor a gasolina, sistemas de elevación sincronizados, grupos de salidas independientes, bombas neumáticas para pruebas hidrostáticas y grupos para llaves dinamométricas</td> 
+            </tr>
+            ';
+
+            $file_list .= $row;      
+        }
+        return $file_list;
+    }
+
     protected function getBodyHTMLofEmail($IDDocument, $customMesagge=''){
 
         $empresaData = $this->getInfoEmpresaController();
@@ -344,394 +363,415 @@ class ajaxController  {
         return '
 
         <!doctype html>
-            <html>
-                <head>
-                <meta name="viewport" content="width=device-width" />
-                <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.0/css/lightbox.min.css">
-                <title>Email</title>
-                <style>
-                    /* -------------------------------------
-                        GLOBAL RESETS
-                    ------------------------------------- */
+        <html>
+            <head>
+            <meta name="viewport" content="width=device-width" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <!-- 
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+             -->
+            <title>Email</title>
+            <style>
+                /* -------------------------------------
+                    GLOBAL RESETS
+                ------------------------------------- */
+                
+                /*All the styling goes here*/
+                
+                img {
+                border: none;
+                margin-bottom: 10px;
+                -ms-interpolation-mode: bicubic;
+                max-width: 100%; 
+                }
+                
+                body {
+                background-color: #f6f6f6;
+                font-family: sans-serif;
+                -webkit-font-smoothing: antialiased;
+                font-size: 14px;
+                line-height: 1.4;
+                margin: 0;
+                padding: 0;
+                -ms-text-size-adjust: 100%;
+                -webkit-text-size-adjust: 100%; 
+                }
+                table {
+                border-collapse: separate;
+                mso-table-lspace: 0pt;
+                mso-table-rspace: 0pt;
+                width: 100%; }
+    
+                table th {
+                    background-color: rgba(0,0,0,.05);
+                    border-top: 1px solid #dee2e6;
+                    text-align: center !important;
+                    padding: .50rem;
+                }
+    
+                table td {
+                    font-family: sans-serif;
+                    font-size: 12px;
+                    vertical-align: top;
+                    text-align: justify;
+                    padding: 5px;
                     
-                    /*All the styling goes here*/
-                    
-                    img {
-                    border: none;
-                    margin-bottom: 10px;
-                    -ms-interpolation-mode: bicubic;
-                    max-width: 100%; 
-                    }
-                    body {
-                    background-color: #f6f6f6;
-                    font-family: sans-serif;
-                    -webkit-font-smoothing: antialiased;
-                    font-size: 14px;
-                    line-height: 1.4;
-                    margin: 0;
-                    padding: 0;
-                    -ms-text-size-adjust: 100%;
-                    -webkit-text-size-adjust: 100%; 
-                    }
-                    table {
-                    border-collapse: separate;
-                    mso-table-lspace: 0pt;
-                    mso-table-rspace: 0pt;
-                    width: 100%; }
-                    table td {
-                        font-family: sans-serif;
-                        font-size: 14px;
-                        vertical-align: top; 
-                    }
-                    /* -------------------------------------
-                        BODY & CONTAINER
-                    ------------------------------------- */
-                    .body {
-                    background-color: #f6f6f6;
-                    width: 100%; 
-                    }
-                    /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
-                    .container {
-                    display: block;
-                    margin: 0 auto !important;
-                    /* makes it centered */
-                    max-width: 580px;
-                    padding: 10px;
-                    width: 580px; 
-                    }
-                    /* This should also be a block element, so that it will fill 100% of the .container */
-                    .content {
-                    box-sizing: border-box;
-                    display: block;
-                    margin: 0 auto;
-                    max-width: 580px;
-                    padding: 10px; 
-                    }
-                    /* -------------------------------------
-                        HEADER, FOOTER, MAIN
-                    ------------------------------------- */
-                    .main {
-                    background: #ffffff;
-                    border-radius: 3px;
-                    width: 100%; 
-                    }
-                    .wrapper {
-                    box-sizing: border-box;
-                    padding: 20px; 
-                    }
-                    .content-block {
-                    padding-bottom: 10px;
-                    padding-top: 10px;
-                    }
-                    .footer {
-                    clear: both;
-                    margin-top: 10px;
-                    text-align: center;
-                    width: 100%; 
-                    }
-                    .footer td,
-                    .footer p,
-                    .footer span,
-                    .footer a {
-                        color: #999999;
-                        font-size: 12px;
-                        text-align: center; 
-                    }
-                    /* -------------------------------------
-                        TYPOGRAPHY
-                    ------------------------------------- */
-                    h1,
-                    h2,
-                    h3,
-                    h4 {
-                    color: #000000;
-                    font-family: sans-serif;
-                    font-weight: 400;
-                    line-height: 1.4;
-                    margin: 0;
-                    margin-bottom: 30px; 
-                    }
-                    h1 {
-                    font-size: 35px;
-                    font-weight: 300;
-                    text-align: center;
-                    text-transform: capitalize; 
-                    }
-                    p,
-                    ul,
-                    ol {
-                    font-family: sans-serif;
-                    font-size: 14px;
-                    font-weight: normal;
-                    margin: 0;
-                    margin-bottom: 15px; 
-                    }
-                    p li,
-                    ul li,
-                    ol li {
-                        list-style-position: inside;
-                        margin-left: 5px; 
-                    }
-                    a {
-                    color: #3498db;
-                    text-decoration: underline; 
-                    }
-                    /* -------------------------------------
-                        BUTTONS
-                    ------------------------------------- */
-                    .btn {
-                    box-sizing: border-box;
-                    width: 100%; }
-                    .btn > tbody > tr > td {
-                        padding-bottom: 15px; }
-                    .btn table {
-                        width: auto; 
-                    }
-                    .btn table td {
-                        background-color: #ffffff;
-                        border-radius: 5px;
-                        text-align: center; 
-                    }
-                    .btn a {
-                        background-color: #ffffff;
-                        border: solid 1px #3498db;
-                        border-radius: 5px;
-                        box-sizing: border-box;
-                        color: #3498db;
-                        cursor: pointer;
-                        display: inline-block;
-                        font-size: 14px;
-                        font-weight: bold;
-                        margin: 0;
-                        padding: 12px 25px;
-                        text-decoration: none;
-                        text-transform: capitalize; 
-                    }
-                    .btn-primary table td {
-                    background-color: #3498db; 
-                    }
-                    .btn-primary a {
-                    background-color: #3498db;
-                    border-color: #3498db;
-                    color: #ffffff; 
-                    }
-                    /* -------------------------------------
-                        OTHER STYLES THAT MIGHT BE USEFUL
-                    ------------------------------------- */
-                    .last {
-                    margin-bottom: 0; 
-                    }
-                    .first {
-                    margin-top: 0; 
-                    }
-                    .align-center {
+                }
+    
+                .customrowtable {
+                    border-bottom: 1px solid #dee2e6;
+                }
+                /* -------------------------------------
+                    BODY & CONTAINER
+                ------------------------------------- */
+                .body {
+                background-color: #f6f6f6;
+                width: 100%; 
+                }
+                /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+                .container {
+                display: block;
+                margin: 0 auto !important;
+                /* makes it centered */
+                max-width: 580px;
+                padding: 10px;
+                width: 580px; 
+                }
+                /* This should also be a block element, so that it will fill 100% of the .container */
+                .content {
+                box-sizing: border-box;
+                display: block;
+                margin: 0 auto;
+                max-width: 580px;
+                padding: 10px; 
+                }
+                /* -------------------------------------
+                    HEADER, FOOTER, MAIN
+                ------------------------------------- */
+                .main {
+                background: #ffffff;
+                border-radius: 3px;
+                width: 100%; 
+                }
+                .wrapper {
+                box-sizing: border-box;
+                padding: 20px; 
+                }
+                .content-block {
+                padding-bottom: 10px;
+                padding-top: 10px;
+                }
+                .footer {
+                clear: both;
+                margin-top: 10px;
+                text-align: center;
+                width: 100%; 
+                }
+                .footer td,
+                .footer p,
+                .footer span,
+                .footer a {
+                    color: #999999;
+                    font-size: 12px;
                     text-align: center; 
-                    }
-                    .align-right {
-                    text-align: right; 
-                    }
-                    .align-left {
-                    text-align: left; 
-                    }
-                    .clear {
-                    clear: both; 
-                    }
-                    .mt0 {
-                    margin-top: 0; 
-                    }
-                    .mb0 {
-                    margin-bottom: 0; 
-                    }
-                    .preheader {
-                    color: transparent;
-                    display: none;
-                    height: 0;
-                    max-height: 0;
-                    max-width: 0;
-                    opacity: 0;
-                    overflow: hidden;
-                    mso-hide: all;
-                    visibility: hidden;
-                    width: 0; 
-                    }
-                    .powered-by a {
-                    text-decoration: none; 
-                    }
-                    hr {
-                    border: 0;
-                    border-bottom: 1px solid #f6f6f6;
-                    margin: 20px 0; 
-                    }
-                    /* -------------------------------------
-                        RESPONSIVE AND MOBILE FRIENDLY STYLES
-                    ------------------------------------- */
-                    @media only screen and (max-width: 620px) {
-                    table[class=body] h1 {
-                        font-size: 28px !important;
-                        margin-bottom: 10px !important; 
-                    }
-                    table[class=body] p,
-                    table[class=body] ul,
-                    table[class=body] ol,
-                    table[class=body] td,
-                    table[class=body] span,
-                    table[class=body] a {
-                        font-size: 16px !important; 
-                    }
-                    table[class=body] .wrapper,
-                    table[class=body] .article {
-                        padding: 10px !important; 
-                    }
-                    table[class=body] .content {
-                        padding: 0 !important; 
-                    }
-                    table[class=body] .container {
-                        padding: 0 !important;
-                        width: 100% !important; 
-                    }
-                    table[class=body] .main {
-                        border-left-width: 0 !important;
-                        border-radius: 0 !important;
-                        border-right-width: 0 !important; 
-                    }
-                    table[class=body] .btn table {
-                        width: 100% !important; 
-                    }
-                    table[class=body] .btn a {
-                        width: 100% !important; 
-                    }
-                    table[class=body] .img-responsive {
-                        height: auto !important;
-                        max-width: 100% !important;
-                        width: auto !important; 
-                    }
-                    }
-                    /* -------------------------------------
-                        PRESERVE THESE STYLES IN THE HEAD
-                    ------------------------------------- */
-                    @media all {
-                    .ExternalClass {
-                        width: 100%; 
-                    }
-                    .ExternalClass,
-                    .ExternalClass p,
-                    .ExternalClass span,
-                    .ExternalClass font,
-                    .ExternalClass td,
-                    .ExternalClass div {
-                        line-height: 100%; 
-                    }
-                    .apple-link a {
-                        color: inherit !important;
-                        font-family: inherit !important;
-                        font-size: inherit !important;
-                        font-weight: inherit !important;
-                        line-height: inherit !important;
-                        text-decoration: none !important; 
-                    }
-                    .btn-primary table td:hover {
-                        background-color: #34495e !important; 
-                    }
-                    .btn-primary a:hover {
-                        background-color: #34495e !important;
-                        border-color: #34495e !important; 
-                    } 
-                    }
-
-                    .detailimg {
-                      width:100%;
-                      height:100%;
-                    }
-                </style>
-                </head>
-                <body class="">
-                <span class="preheader">Cotizacion</span>
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
-                    <tr>
-                    <td>&nbsp;</td>
-                    <td class="container">
-                        <div class="content">
-            
-                        <!-- START CENTERED WHITE CONTAINER -->
-                        <table role="presentation" class="main">
-            
-                            <!-- START MAIN CONTENT AREA -->
-                            <tr>
-                            <td class="wrapper">
-                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                <tr>
-                                    <td>
-                                    <table role="presentation" border="0" cellpadding="0" cellspacing="0">
-                                        <tbody>
-                                            <tr>
-                                            <td style="text-align: center">
-                                            <img src="http://www.agricolabaquero.com/img/resources/logo.png" alt="Logo"> </td>
-                                            </tr>
-                                        </tbody>
-                                        </table>
-                                    
-                                    <p>Estimado, <b> '.$VEN_CAB["NOMBRE"].' </b></p>
-                                    <p>
-                                        '. $customMesagge .'
-                                    </p>
-                                      <table role="presentation" border="1" cellpadding="0" cellspacing="0">
-                                        <tr>
-                                          <th>Producto</th>
-                                          <th>Descripcion</th> 
-                                        </tr>
-
-                                        <tr>
-                                          <td width="30%" height="200px"><img src="cid:logo_2u" class="detailimg" alt="Logo"></td>
-                                          
-                                          <td>Disponibles en catálogo bombas manuales, bombas hidroneumáticas, bombas modulares, grupos eléctricos de válvula manual o electroválvula, grupos hidroneumáticos o con motor a gasolina, sistemas de elevación sincronizados, grupos de salidas independientes, bombas neumáticas para pruebas hidrostáticas y grupos para llaves dinamométricas</td> 
-                                        </tr>
-                                      
-                                      </table>
-
-                                    <p>Recuerde mantener sus datos seguros y privados.</p>
-                                    <p>Muchas gracias por su confianza!</p>
-                                    </td>
-                                </tr>
-                                </table>
-                            </td>
-                            </tr>
-            
-                        <!-- END MAIN CONTENT AREA -->
-                        </table>
-            
-                        <!-- START FOOTER -->
-                        <div class="footer">
+                }
+                /* -------------------------------------
+                    TYPOGRAPHY
+                ------------------------------------- */
+                h1,
+                h2,
+                h3,
+                h4 {
+                color: #000000;
+                font-family: sans-serif;
+                font-weight: 400;
+                line-height: 1.4;
+                margin: 0;
+                margin-bottom: 30px; 
+                }
+                h1 {
+                font-size: 35px;
+                font-weight: 300;
+                text-align: center;
+                text-transform: capitalize; 
+                }
+                p,
+                ul,
+                ol {
+                font-family: sans-serif;
+                font-size: 14px;
+                font-weight: normal;
+                margin: 0;
+                margin-bottom: 15px; 
+                }
+                p li,
+                ul li,
+                ol li {
+                    list-style-position: inside;
+                    margin-left: 5px; 
+                }
+                a {
+                color: #3498db;
+                text-decoration: underline; 
+                }
+                /* -------------------------------------
+                    BUTTONS
+                ------------------------------------- */
+                .btn {
+                box-sizing: border-box;
+                width: 100%; }
+                .btn > tbody > tr > td {
+                    padding-bottom: 15px; }
+                .btn table {
+                    width: auto; 
+                }
+                .btn table td {
+                    background-color: #ffffff;
+                    border-radius: 5px;
+                    text-align: center; 
+                }
+                .btn a {
+                    background-color: #ffffff;
+                    border: solid 1px #3498db;
+                    border-radius: 5px;
+                    box-sizing: border-box;
+                    color: #3498db;
+                    cursor: pointer;
+                    display: inline-block;
+                    font-size: 14px;
+                    font-weight: bold;
+                    margin: 0;
+                    padding: 12px 25px;
+                    text-decoration: none;
+                    text-transform: capitalize; 
+                }
+                .btn-primary table td {
+                background-color: #3498db; 
+                }
+                .btn-primary a {
+                background-color: #3498db;
+                border-color: #3498db;
+                color: #ffffff; 
+                }
+                /* -------------------------------------
+                    OTHER STYLES THAT MIGHT BE USEFUL
+                ------------------------------------- */
+                .last {
+                margin-bottom: 0; 
+                }
+                .first {
+                margin-top: 0; 
+                }
+                .align-center {
+                text-align: center; 
+                }
+                .align-right {
+                text-align: right; 
+                }
+                .align-left {
+                text-align: left; 
+                }
+                .clear {
+                clear: both; 
+                }
+                .mt0 {
+                margin-top: 0; 
+                }
+                .mb0 {
+                margin-bottom: 0; 
+                }
+                .preheader {
+                color: transparent;
+                display: none;
+                height: 0;
+                max-height: 0;
+                max-width: 0;
+                opacity: 0;
+                overflow: hidden;
+                mso-hide: all;
+                visibility: hidden;
+                width: 0; 
+                }
+                .powered-by a {
+                text-decoration: none; 
+                }
+                hr {
+                border: 0;
+                border-bottom: 1px solid #f6f6f6;
+                margin: 20px 0; 
+                }
+                /* -------------------------------------
+                    RESPONSIVE AND MOBILE FRIENDLY STYLES
+                ------------------------------------- */
+                @media only screen and (max-width: 620px) {
+                table[class=body] h1 {
+                    font-size: 28px !important;
+                    margin-bottom: 10px !important; 
+                }
+                table[class=body] p,
+                table[class=body] ul,
+                table[class=body] ol,
+                table[class=body] td,
+                table[class=body] span,
+                table[class=body] a {
+                    font-size: 16px !important; 
+                }
+                table[class=body] .wrapper,
+                table[class=body] .article {
+                    padding: 10px !important; 
+                }
+                table[class=body] .content {
+                    padding: 0 !important; 
+                }
+                table[class=body] .container {
+                    padding: 0 !important;
+                    width: 100% !important; 
+                }
+                table[class=body] .main {
+                    border-left-width: 0 !important;
+                    border-radius: 0 !important;
+                    border-right-width: 0 !important; 
+                }
+                table[class=body] .btn table {
+                    width: 100% !important; 
+                }
+                table[class=body] .btn a {
+                    width: 100% !important; 
+                }
+                table[class=body] .img-responsive {
+                    height: auto !important;
+                    max-width: 100% !important;
+                    width: auto !important; 
+                }
+                }
+                /* -------------------------------------
+                    PRESERVE THESE STYLES IN THE HEAD
+                ------------------------------------- */
+                @media all {
+                .ExternalClass {
+                    width: 100%; 
+                }
+                .ExternalClass,
+                .ExternalClass p,
+                .ExternalClass span,
+                .ExternalClass font,
+                .ExternalClass td,
+                .ExternalClass div {
+                    line-height: 100%; 
+                }
+                .apple-link a {
+                    color: inherit !important;
+                    font-family: inherit !important;
+                    font-size: inherit !important;
+                    font-weight: inherit !important;
+                    line-height: inherit !important;
+                    text-decoration: none !important; 
+                }
+                .btn-primary table td:hover {
+                    background-color: #34495e !important; 
+                }
+                .btn-primary a:hover {
+                    background-color: #34495e !important;
+                    border-color: #34495e !important; 
+                } 
+                }
+    
+                .detailimg {
+                    width:100%;
+                    height:100%;
+                }
+            </style>
+            </head>
+            <body class="">
+            <span class="preheader">Cotizacion</span>
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+                <tr>
+                <td>&nbsp;</td>
+                <td class="container">
+                    <div class="content">
+        
+                    <!-- START CENTERED WHITE CONTAINER -->
+                    <table role="presentation" class="main">
+        
+                        <!-- START MAIN CONTENT AREA -->
+                        <tr>
+                        <td class="wrapper">
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td class="content-block">
-                                <span class="apple-link">
-                                    Direccion: '.$empresaData["DirCia"].'
-                                </span>
-                                <br> Necesitas otro requerimiento? Conctacta con nuestro equipo de asesores. '.$empresaData["TelCia"].'</a>.
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="content-block powered-by">
-                                No responda a este mensaje, ha sido generado automaticamente.
+                                <td>
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                    <tbody>
+                                        <tr>
+                                        <td style="text-align: center">
+                                        <img src="http://www.agricolabaquero.com/img/resources/logo.png" alt="Logo"> </td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                
+                                <p>Estimado, <b> '.$VEN_CAB["NOMBRE"].' </b></p>
+                                <p>
+                                    '. $customMesagge .'
+                                </p>
+                                    <table class="table table-striped" role="presentation" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <th class="text-center">Producto</th>
+                                        <th class="text-center">Descripcion</th> 
+                                    </tr>
+    
+                                   
+                                    <tr>
+                                        <td class="customrowtable" width="30%"><img src="cid:logo_2u" class="img-thumbnail" alt="item"></td>
+                                        
+                                        <td class="customrowtable">Disponibles en catálogo bombas manuales, bombas hidroneumáticas, bombas modulares, grupos eléctricos de válvula manual o electroválvula, grupos hidroneumáticos o con motor a gasolina, sistemas de elevación sincronizados, grupos de salidas independientes, bombas neumáticas para pruebas hidrostáticas y grupos para llaves dinamométricas</td> 
+                                    </tr>
+    
+                                    
+                                    </table>
+                                
+                                </br>
+                                
+                                <p>Muchas gracias por su confianza!</p>
                                 </td>
                             </tr>
                             </table>
-                        </div>
-                        <!-- END FOOTER -->
+                        </td>
+                        </tr>
+        
+                    <!-- END MAIN CONTENT AREA -->
+                    </table>
+        
+                    <!-- START FOOTER -->
+                    <div class="footer">
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td class="content-block">
+                            <span class="apple-link">
+                                Direccion: '.$empresaData["DirCia"].'
+                            </span>
+                            <br> Necesitas otro requerimiento? Conctacta con nuestro equipo de asesores. '.$empresaData["TelCia"].'</a>.
+                            </td>
+
+                           
+                        </tr>
+                        <tr>
+                            <td class="content-block powered-by">
+                            No responda a este mensaje, ha sido generado automaticamente.
+                            </td>
+                        </tr>
+                        </table>
+                    </div>
+                    <!-- END FOOTER -->
+        
+                    <!-- END CENTERED WHITE CONTAINER -->
+                    </div>
+                </td>
+                <td>&nbsp;</td>
+                </tr>
+            </table>
             
-                        <!-- END CENTERED WHITE CONTAINER -->
-                        </div>
-                    </td>
-                    <td>&nbsp;</td>
-                    </tr>
-                </table>
-                    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.0/js/lightbox.min.js"></script>
-                </body>
-            </html>
-        
-        
+            </body>
+        </html>
+    
         
             ';
 
@@ -872,7 +912,7 @@ class ajaxController  {
            
             $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
             foreach ($files as $file) {
-                $mail->AddEmbeddedImage($file, 'logo_2u');
+                $mail->AddEmbeddedImage($file, $file);
             }
 
             // Adjuntos
@@ -909,7 +949,7 @@ class ajaxController  {
                 //Save string to log, use FILE_APPEND to append.
                 file_put_contents('../../../logs/logMailError.txt', $log, FILE_APPEND);
                 $detalleMail = 'Error al enviar el correo. Mailer Error: '. $mail->ErrorInfo;
-                return array('status' => 'false', 'mensaje' => $detalleMail ); 
+            return array('status' => 'false', 'mensaje' => $detalleMail ); 
             
         }
 
