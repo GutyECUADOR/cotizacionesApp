@@ -72,6 +72,18 @@ class ajaxController  {
         $response = $this->ajaxModel->getInfoProductoModel($codigoProducto, $tipoPrecio);
         return $response;
     }
+
+
+    /* Retorna la respuesta del modelo ajax*/
+    public function insertExtraDataController($extraDataArray){
+        $respuestas = array();
+        foreach ($extraDataArray as $extraDataRow) {
+            $response = $this->ajaxModel->insertExtraDataModel($extraDataRow);
+            array_push($respuestas, $response);
+        }
+        
+        return $respuestas;
+    }
     
     /*Envia informacion al modelo para actualizar, ejecuta insert en WINFENIX, VEN_CAB y VEN_MOV */
     public function insertCotizacion($formData){

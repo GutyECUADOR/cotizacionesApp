@@ -49,10 +49,14 @@ class ajax{
 
     public function generaProforma($IDDocument) {
       return $this->ajaxController->generaReporte($IDDocument, 'I');
-  }
+    }
 
     public function saveCotizacion($formCotizacion){
       return $this->ajaxController->insertCotizacion($formCotizacion);
+    }
+
+    public function saveExtraData($extraData){
+      return $this->ajaxController->insertExtraDataController($extraData);
     }
 
     public function sendEmail($IDDocument){
@@ -305,8 +309,8 @@ class ajax{
         case 'saveExtraData':
           if (isset($_POST['extraData'])) {
             $extraData = json_decode($_POST['extraData']);
-            //$respuesta = $ajax->saveCotizacion($formData);
-            $rawdata = array('status' => 'OK', 'mensaje' => 'salvar extra data');
+            $respuesta = $ajax->saveExtraData($extraData);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'salvar extra data', 'respuesta' => $respuesta);
             
           }else{
             $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha recibido extra data.');

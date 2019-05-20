@@ -417,6 +417,26 @@ class ajaxModel extends conexion  {
         return $codigoConFormato;
     }
 
+    public function insertExtraDataModel($extraDataRow, $dataBaseName='KAO_wssp'){
+
+        $query = "
+        
+        INSERT INTO KAO_wssp.dbo.extraData_cotizaciones 
+        VALUES ('$extraDataRow->codDocumento','$extraDataRow->nombreImagen','$extraDataRow->codProducto','$extraDataRow->descripcion')
+        
+        ";
+        
+        try{
+            $rowsAfected = $this->instancia->exec($query);
+           return array('status' => 'ok', 'mensaje' => $rowsAfected. ' fila afectada(s)' ); //true;
+           
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+
+        
+    }
+
     public function insertVEN_CAB($VEN_CAB_obj, $dataBaseName='KAO_wssp'){
        
         //$queryExample = "exec dbo.SP_VENGRACAB 'I','ADMINWSSP','TESTOK','99', '2014', 'C02', '00001721','','20181126','00054818','FAL','DOL','1.00','0.00','10','0.00','0.00','0.00','0.00','0.00','10','0.00','2','0.00','12','CON','0','1','0','S','0','1','0','0','','','999',' ',' ','PRUEBAS','001005','00002050','','','','','0.00','0.00','0.00','','','','','','','','','','0','P','','','','','','0','','','','','0','2','0.00','0.00','0.00','0','999999999 ','0','','','','','','EFE','','','','','20181126','',''";
