@@ -328,6 +328,8 @@ $(document).ready(function() {
 
     // Boton de envio de email personalizado en busqueda de documentos
     $("#btnSendCustomEmail").on("click", function(event) {
+        alert('Enviando, espere...');
+        $(this).attr("disabled", true);
         tinyMCE.triggerSave();
         let IDDocument = $('#emailIDDocument').val();
         let emails = $('#emailDestinatario').val();
