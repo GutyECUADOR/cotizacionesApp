@@ -32,6 +32,39 @@ class ajaxModel extends conexion  {
    
     }
 
+    public function getAllProductosWithExtraDescModel($IDDocument) {
+
+        $query = " 
+        SELECT 
+            INVART.Codigo,
+            INVART.Nombre,
+            INVART.PrecA,
+            extraData.*
+        
+        FROM INV_ARTICULOS as INVART
+        INNER JOIN KAO_wssp.dbo.extraData_cotizaciones as extraData
+        ON INVART.Codigo COLLATE Modern_Spanish_CI_AS = extraData.codigoProducto
+        
+        WHERE extraData.IDDocument = '$IDDocument'
+        ";  // Final del Query SQL 
+
+        try{
+            $stmt = $this->instancia->prepare($query); 
+    
+                if($stmt->execute()){
+                    $resulset = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+                    
+                }else{
+                    $resulset = false;
+                }
+            return $resulset;  
+
+        }catch(PDOException $exception){
+            return array('status' => 'error', 'mensaje' => $exception->getMessage() );
+        }
+   
+    }
+
     public function getInfoClienteModel($RUC) {
 
         //Query de consulta con parametros para bindear si es necesario.

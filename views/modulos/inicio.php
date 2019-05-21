@@ -646,7 +646,7 @@ $vendedores = $cotizacion->getVendedores();
                 <form method="post" id="fileinfo" name="fileinfo">
                     <div class="input-group">
                         <span class="input-group-addon" id="basic-addon1">Imagenes:</span>
-                        <input type="file" class="form-control" name="file" id="file" accept=".jpg,.png" multiple>
+                        <input type="file" class="form-control" name="file" id="file" accept=".jpg,.png">
                     </div>
                     
                     <div class="form-group">

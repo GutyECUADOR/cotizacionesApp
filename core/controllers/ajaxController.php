@@ -29,6 +29,12 @@ class ajaxController  {
     }
 
     /* Retorna la respuesta del modelo ajax*/
+    public function getAllProductosWithExtraDesc($IDDocument){
+        $response = $this->ajaxModel->getAllProductosWithExtraDescModel($IDDocument);
+        return $response;
+    }
+
+    /* Retorna la respuesta del modelo ajax*/
     public function getVEN_CABController($IDDocument){
         $response = $this->ajaxModel->getVENCABByID($IDDocument);
         return $response;
@@ -344,6 +350,25 @@ class ajaxController  {
         return $file_list;
     }
 
+    public function printRowsProductosHTML($arrayProductos){
+        $rowsHTML = '';
+        
+        foreach ($arrayProductos as $producto) {
+            
+            $rowsHTML .= '
+            <tr>
+                <td class="customrowtable" width="30%">
+                    <img src="'.trim($producto['imagen']).'" class="img-thumbnail" alt="'.trim($producto['imagen']).'">
+                    <span class="text-center">'.trim($producto['Codigo']).'</span>
+                </td>
+                
+                <td class="customrowtable text-center"><strong>'.trim($producto['Nombre']).'</strong>'.trim($producto['comentario']).'</td> 
+            </tr>';
+
+        }
+        return $rowsHTML;
+    }
+
     public function getNamesImagesByDocument($IDDocument){
         $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
         $file_list = '';
@@ -367,6 +392,8 @@ class ajaxController  {
 
         $empresaData = $this->getInfoEmpresaController();
         $VEN_CAB = $this->getVEN_CABController($IDDocument);
+        $arrayProductos = $this->getAllProductosWithExtraDesc($IDDocument);
+        $rowsHTML = $this->printRowsProductosHTML($arrayProductos);
 
         if (empty($customMesagge)) {
             $customMesagge = BODY_EMAIL_TEXT;
@@ -379,9 +406,6 @@ class ajaxController  {
             <head>
             <meta name="viewport" content="width=device-width" />
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <!-- 
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-             -->
             <title>Email</title>
             <style>
                 /* -------------------------------------
@@ -724,6 +748,7 @@ class ajaxController  {
                                 <p>
                                     '. $customMesagge .'
                                 </p>
+
                                     <table class="table table-striped" role="presentation" cellpadding="0" cellspacing="0">
                                     <tr>
                                         <th class="text-center">Producto</th>
@@ -731,11 +756,7 @@ class ajaxController  {
                                     </tr>
     
                                    
-                                    <tr>
-                                        <td class="customrowtable" width="30%"><img src="cid:logo_2u" class="img-thumbnail" alt="item"></td>
-                                        
-                                        <td class="customrowtable">Disponibles en catálogo bombas manuales, bombas hidroneumáticas, bombas modulares, grupos eléctricos de válvula manual o electroválvula, grupos hidroneumáticos o con motor a gasolina, sistemas de elevación sincronizados, grupos de salidas independientes, bombas neumáticas para pruebas hidrostáticas y grupos para llaves dinamométricas</td> 
-                                    </tr>
+                                    '.$rowsHTML.'
     
                                     
                                     </table>
@@ -923,10 +944,13 @@ class ajaxController  {
             //Imagenes adjuntas
            
             $files = glob(IMAGES_UPLOAD_DIR.'/'.$IDDocument.'_*');
+         
             foreach ($files as $file) {
-                $mail->AddEmbeddedImage($file, $file);
+                $mail->AddEmbeddedImage($file, substr($file,36));
+                
             }
-
+           
+            
             // Adjuntos
             $mail->addStringAttachment($this->generaReporte($IDDocument), 'cotizacion.pdf');
 
