@@ -441,8 +441,8 @@ $(document).ready(function() {
                         <input type="text" class="form-control text-center precio_linea" value="${producto.precio}" readonly>
                     </td>
                     <td><input type="text" class="form-control text-center" placeholder="%" data-codigo="${producto.codigo}" value="${producto.stock}" disabled></td>
-                    <td><input type="text" class="form-control text-center" value="${producto.getSubtotal().toFixed(2)}" readonly></td>
-                    <td><input type="text" class="form-control text-center" value="${producto.getIVA().toFixed(2)}" readonly></td>
+                    <td><input type="text" class="form-control text-center" value="${producto.getSubtotal().toFixed(4)}" readonly></td>
+                    <td><input type="text" class="form-control text-center" value="${producto.getIVA().toFixed(4)}" readonly></td>
                     <td><button type="button" class="btn btn-danger btn-sm btn-block btnEliminaRow" data-codigo="${producto.codigo}"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Eliminar</button>
                     </td>
                 </tr>
@@ -486,7 +486,7 @@ $(document).ready(function() {
                 <th scope="row">${cont}</th> 
                 <td>${producto.CODIGO}</td>
                 <td>${producto.NOMBRE.trim()}</td>
-                <td>${parseFloat(producto[precioDisplay].trim()).toFixed(2)}</td>
+                <td>${parseFloat(producto[precioDisplay].trim()).toFixed(4)}</td>
                 <td>${producto.STOCK.trim()}</td>
                 <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.CODIGO.trim()}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>
                 
@@ -679,7 +679,7 @@ $(document).ready(function() {
     }
 
     function printSubtotalNewProd (){
-        $("#inputNuevoProductoSubtotal").val(newProducto.getSubtotal().toFixed(2));
+        $("#inputNuevoProductoSubtotal").val(newProducto.getSubtotal().toFixed(4));
     }
    
     function resumenProdutosInList() {
@@ -695,12 +695,12 @@ $(document).ready(function() {
 
     function printResumen(objectResumen){
         $("#txt_unidadesProd").val(objectResumen.sumaTotalItems);
-        $("#welltotal").html('$ '+ objectResumen.sumatotalproductosWithIVA.toFixed(2));
-        $("#txt_subtotal").val(objectResumen.sumaSubtotalproductos.toFixed(2));
-        $("#txt_ivaBienes").val(objectResumen.sumaIVABienes.toFixed(2));
-        $("#txt_impuesto").val(objectResumen.sumaIVABienes.toFixed(2));
-        $("#txt_descuentoResumen").val(objectResumen.sumaDescuento.toFixed(2));
-        $("#txt_totalPagar").val(objectResumen.sumatotalproductosWithIVA.toFixed(2));
+        $("#welltotal").html('$ '+ objectResumen.sumatotalproductosWithIVA.toFixed(4));
+        $("#txt_subtotal").val(objectResumen.sumaSubtotalproductos.toFixed(4));
+        $("#txt_ivaBienes").val(objectResumen.sumaIVABienes.toFixed(4));
+        $("#txt_impuesto").val(objectResumen.sumaIVABienes.toFixed(4));
+        $("#txt_descuentoResumen").val(objectResumen.sumaDescuento.toFixed(4));
+        $("#txt_totalPagar").val(objectResumen.sumatotalproductosWithIVA.toFixed(4));
     }
    
     function mySwal(mensajem, tipoAlerta = 'info', newcodigoVENCAB) {
