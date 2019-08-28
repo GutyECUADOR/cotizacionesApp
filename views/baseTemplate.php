@@ -63,6 +63,7 @@
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\tinymce.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\datepicker.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\app.js"></script>
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
     
   </body>
 </html>

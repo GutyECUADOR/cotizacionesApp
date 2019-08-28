@@ -239,6 +239,8 @@ $vendedores = $cotizacion->getVendedores();
                 <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Nuevo Item</h4>
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary btn-sm" id="btnAgregarProdToList"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Agregar item</button>
+                    <button type="button" class="btn btn-success btn-sm" id="btnShowUploadExcel" data-toggle="modal" data-target="#modalLoadExcel"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Cargar EXCEL</button>
+                    
                 </div>
                 </div>
 
@@ -654,6 +656,32 @@ $vendedores = $cotizacion->getVendedores();
                         <textarea class="form-control tiny" rows="5" id="extraDetailContent"></textarea>
                     </div>
 
+                </form>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Modal agregar fotos y detalles extra -->
+        <div class="modal fade" id="modalLoadExcel" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"> Carga de archivos </h4>
+                </div>
+                <div class="modal-body">
+                    
+                <form method="post" id="fileinfo" name="fileinfo">
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1">Archivo de excel:</span>
+                        <input type="file" class="form-control" name="xlfile" id="xlfile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"/>
+                    </div>
+                    
                 </form>
                     
                 </div>
