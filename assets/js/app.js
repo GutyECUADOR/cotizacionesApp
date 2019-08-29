@@ -170,6 +170,16 @@ $(document).ready(function() {
     
 
     $('#xlfile').change(function(e){
+
+        if (cotizacion.cliente == null) {
+            Swal.fire({
+                type: 'error',
+                title: 'Oops...',
+                text: 'Indique un cliente antes de agregar productos.',
+              })
+            return;
+        }
+
         if (this.value) { //Comprobar que existen archivo seleccionado
             var reader = new FileReader();
             let archivo = this.files[0];
@@ -178,7 +188,7 @@ $(document).ready(function() {
                     var data = new Uint8Array(reader.result);
                     var workbook = XLSX.read(data,{type:'array'});
                 
-                /* DO SOMETHING WITH workbook HERE */
+                    /* DO SOMETHING WITH workbook HERE */
                     var first_sheet_name = workbook.SheetNames[0];
                     /* Get worksheet */
                     var worksheet = workbook.Sheets[first_sheet_name];
@@ -188,11 +198,16 @@ $(document).ready(function() {
 
                     results.forEach(function(element) {
                         if (element.codigo) {
-                            console.log('Consultar');
+                            console.log(element.codigo);
+                            validaProductoExcel(element.codigo, cotizacion.cliente.RUC, element.cantidad);
                         }
                     });
+
+                    alert('Productos cargados.')
             }
         }
+
+       
         
     });
 
@@ -418,7 +433,7 @@ $(document).ready(function() {
             cotizacion.productos.push(newProducto);
             resetnewProducto();
         }else{
-            alert('El item ya existe en la lista');
+            alert('El item '+ newProducto.codigo +' ya existe en la lista');
         }
 
         //console.log(cotizacion.productos);
@@ -641,6 +656,44 @@ $(document).ready(function() {
 
             }
         });
+    }
+
+    function validaProductoExcel(codProducto, clienteRUC, cantidad){
+        console.log('Validando', codProducto, clienteRUC, cantidad)
+        $.ajax({
+            type: 'get',
+            url: 'views/modulos/ajax/API_cotizaciones.php?action=getInfoProducto', // API retorna objeto JSON de producto, false caso contrario.
+            dataType: "json",
+
+            data: { codigo: codProducto, clienteRUC: clienteRUC },
+
+            success: function(response) {
+            console.log(response);
+                let producto = response.data;
+                if (producto) {
+                    newProducto = new Producto(producto.CODIGO, producto.NOMBRE, cantidad, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
+                    console.log(newProducto);
+                    addProductToList(newProducto);
+                    printProductos(cotizacion.productos);
+                    let objectResumen = resumenProdutosInList();
+                    printResumen(objectResumen);
+                    console.log(cotizacion);
+                } else {
+                    new PNotify({
+                        title: 'Item no disponible',
+                        text: 'No se ha encontrado el producto con el codigo: ' + codProducto,
+                        delay: 3000,
+                        type: 'warn',
+                        styling: 'bootstrap3'
+                    });
+
+
+                }
+
+            }
+        });
+
+
     }
 
     function buscarClientes(terminoBusqueda, tipoBusqueda) {

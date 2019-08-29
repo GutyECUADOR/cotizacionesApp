@@ -42,7 +42,7 @@ class ajaxModel extends conexion  {
             extraData.*
         
         FROM INV_ARTICULOS as INVART
-        INNER JOIN KAO_wssp.dbo.extraData_cotizaciones as extraData
+        INNER JOIN wssp.dbo.extraData_cotizaciones as extraData
         ON INVART.Codigo COLLATE Modern_Spanish_CI_AS = extraData.codigoProducto
         
         WHERE extraData.IDDocument = '$IDDocument'
@@ -369,7 +369,7 @@ class ajaxModel extends conexion  {
     
 
     /*Retorna array con informacion de la empresa que se indique*/
-    public function getDatosEmpresaFromWINFENIX ($dataBaseName='KAO_wssp'){
+    public function getDatosEmpresaFromWINFENIX ($dataBaseName='wssp'){
        
         $query = "SELECT NomCia, Oficina, Ejercicio FROM dbo.DatosEmpresa";
         $stmt = $this->instancia->prepare($query); 
@@ -384,7 +384,7 @@ class ajaxModel extends conexion  {
     }
     
     /*Retorna array asociativo con informacion del cliente que se indique*/
-    public function getDatosClienteWINFENIXByRUC ($clienteRUC, $dataBaseName='KAO_wssp'){
+    public function getDatosClienteWINFENIXByRUC ($clienteRUC, $dataBaseName='wssp'){
         
         $query = "SELECT * FROM COB_CLIENTES WHERE RUC = '$clienteRUC'";
         $stmt = $this->instancia->prepare($query); 
@@ -442,7 +442,7 @@ class ajaxModel extends conexion  {
     }
 
     /*Retorna el secuencial de WinFenix en formato 0000XXXX - Winfenix*/
-    public function formatoNextNumDocWINFENIX ($dataBaseName='KAO_wssp', $secuencialWinfenix){
+    public function formatoNextNumDocWINFENIX ($dataBaseName='wssp', $secuencialWinfenix){
         
         $newCod = $this->instancia->query("select RIGHT('00000000' + Ltrim(Rtrim('$secuencialWinfenix')),8) as newcod");
         $codigoConFormato = $newCod->fetch(\PDO::FETCH_ASSOC);
@@ -450,11 +450,11 @@ class ajaxModel extends conexion  {
         return $codigoConFormato;
     }
 
-    public function insertExtraDataModel($extraDataRow, $dataBaseName='KAO_wssp'){
+    public function insertExtraDataModel($extraDataRow, $dataBaseName='wssp'){
 
         $query = "
         
-        INSERT INTO KAO_wssp.dbo.extraData_cotizaciones 
+        INSERT INTO wssp.dbo.extraData_cotizaciones 
         VALUES ('$extraDataRow->codDocumento','$extraDataRow->nombreImagen','$extraDataRow->codProducto','$extraDataRow->descripcion')
         
         ";
@@ -470,7 +470,7 @@ class ajaxModel extends conexion  {
         
     }
 
-    public function insertVEN_CAB($VEN_CAB_obj, $dataBaseName='KAO_wssp'){
+    public function insertVEN_CAB($VEN_CAB_obj, $dataBaseName='wssp'){
        
         //$queryExample = "exec dbo.SP_VENGRACAB 'I','ADMINWSSP','TESTOK','99', '2014', 'C02', '00001721','','20181126','00054818','FAL','DOL','1.00','0.00','10','0.00','0.00','0.00','0.00','0.00','10','0.00','2','0.00','12','CON','0','1','0','S','0','1','0','0','','','999',' ',' ','PRUEBAS','001005','00002050','','','','','0.00','0.00','0.00','','','','','','','','','','0','P','','','','','','0','','','','','0','2','0.00','0.00','0.00','0','999999999 ','0','','','','','','EFE','','','','','20181126','',''";
         $VEN_CAB = new \models\venCabClass();
@@ -493,7 +493,7 @@ class ajaxModel extends conexion  {
         
     }
 
-    public function insertVEN_MOV($VEN_MOV_obj, $dataBaseName='KAO_wssp'){
+    public function insertVEN_MOV($VEN_MOV_obj, $dataBaseName='wssp'){
         
         $VEN_MOV = new \models\venMovClass();
         $VEN_MOV = $VEN_MOV_obj;
