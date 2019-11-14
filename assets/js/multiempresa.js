@@ -2,6 +2,7 @@ class Cotizacion {
     constructor() {
         this.cliente = null,
             this.productos = [],
+            this.productosDistribuidor = [],
             this.comentario = 'proforma'
     }
 
@@ -98,6 +99,7 @@ $(document).ready(function() {
     var limite_productos = 0;
     var cotizacion = new Cotizacion();
     var newProducto = null;
+    var newProductoDistribuidor = null;
     var nuevoIDDocumentGenerated = null;
 
 
@@ -284,9 +286,9 @@ $(document).ready(function() {
             //Get content of tinimce and reset
             let text = tinyMCE.get('extraDetailContent').getContent();
             newProducto.descripcion = text;
+            newProductoDistribuidor.descripcion = text;
 
-
-            addProductToList(newProducto);
+            addProductToList(newProducto, newProductoDistribuidor);
 
             printProductos(cotizacion.productos);
             let objectResumen = resumenProdutosInList();
@@ -423,7 +425,7 @@ $(document).ready(function() {
 
     }
 
-    function addProductToList(newProducto) {
+    function addProductToList(newProducto, newProductoDistribuidor) {
 
         let existeInArray = cotizacion.productos.findIndex(function(productoEnArray) {
             return productoEnArray.codigo === newProducto.codigo;
@@ -431,6 +433,7 @@ $(document).ready(function() {
 
         if (existeInArray === -1) { // No existe el producto en el array
             cotizacion.productos.push(newProducto);
+            cotizacion.productosDistribuidor.push(newProductoDistribuidor);
             resetnewProducto();
         } else {
             alert('El item ' + newProducto.codigo + ' ya existe en la lista');
@@ -448,6 +451,7 @@ $(document).ready(function() {
 
         //console.log('elimina el: '+ index);
         cotizacion.productos.splice(index, 1);
+        cotizacion.productosDistribuidor.splice(index, 1);
 
         //console.log(cotizacion.productos);
         printProductos(cotizacion.productos);
@@ -455,10 +459,13 @@ $(document).ready(function() {
 
     function resetnewProducto() {
         newProducto = null;
+        newProductoDistribuidor = null;
         document.getElementById("inputNuevoCodProducto").value = "";
         document.getElementById("inputNuevoProductoNombre").value = "";
         document.getElementById("inputNuevoProductoCantidad").value = "";
         document.getElementById("inputNuevoProductoPrecioUnitario").value = "";
+        document.getElementById("inputNuevoProductoPrecioClienteFinal").value = "";
+        document.getElementById("inputMargen").value = "";
         document.getElementById("inputNuevoProductoSubtotal").value = "";
 
         tinyMCE.get('extraDetailContent').setContent('');
@@ -469,8 +476,8 @@ $(document).ready(function() {
     function printDataProducto(producto) {
         document.getElementById("inputNuevoProductoNombre").value = producto.nombre;
         document.getElementById("inputNuevoProductoCantidad").value = producto.cantidad;
-        document.getElementById("inputNuevoProductoPrecioUnitario").value = producto.precio;
-        document.getElementById("inputNuevoProductoPrecioClienteFinal").value = producto.PRECIOCLIFINAL;
+        document.getElementById("inputNuevoProductoPrecioUnitario").value = producto.PRECIODISTRIBUIDOR;
+        document.getElementById("inputNuevoProductoPrecioClienteFinal").value = producto.precio;
         document.getElementById("inputMargen").value = producto.margen.toFixed(2) + '%';
         document.getElementById("inputNuevoProductoSubtotal").value = producto.getSubtotal();
     }
@@ -642,10 +649,13 @@ $(document).ready(function() {
                 let producto = response.data;
                 if (producto) {
                     newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
-                    newProducto.PRECIOCLIFINAL = producto.PRECIOCLIFINAL;
-                    newProducto.margen = ((newProducto.PRECIOCLIFINAL - newProducto.precio) / newProducto.PRECIOCLIFINAL) * 100;
+                    newProducto.PRECIODISTRIBUIDOR = producto.PRECIODISTRIBUIDOR;
+                    newProducto.margen = ((newProducto.precio - newProducto.PRECIODISTRIBUIDOR) / newProducto.PRECIODISTRIBUIDOR) * 100;
+
+                    newProductoDistribuidor = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIODISTRIBUIDOR, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
+
                     printDataProducto(newProducto);
-                    console.log(newProducto);
+                    console.log(newProducto, newProductoDistribuidor);
                 } else {
                     new PNotify({
                         title: 'Item no disponible',
