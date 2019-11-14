@@ -211,14 +211,19 @@ class ajaxModel extends conexion  {
                 RTRIM(INV_ARTICULOS.CODIGO) as CODIGO, 
                 RTRIM(INV_ARTICULOS.NOMBRE) as NOMBRE, 
                 INV_ARTICULOS.$tipoPrec as PRECIO,
+                RIEGO.$tipoPrec as PRECIOCLIFINAL,
                 RTRIM(INV_ARTICULOS.TipoIva) as TIPOIVA,
                 RTRIM(IVA.VALOR) as VALORIVA,
-                (select dbo.DIMESTOCKFIS('99','$codigoProducto','','B01')) AS STOCK
+                (SELECT dbo.DIMESTOCKFIS('99','$codigoProducto','','B01')) AS STOCK
             FROM 
                 dbo.INV_ARTICULOS
                 INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
+                INNER JOIN [S1-W202\SUDCOMPU].RIEGO.dbo.INV_ARTICULOS as RIEGO ON RIEGO.Codigo = INV_ARTICULOS.Codigo
+                    
+            WHERE INV_ARTICULOS.Codigo='$codigoProducto'  
             
-            WHERE INV_ARTICULOS.Codigo='$codigoProducto'";  // Final del Query SQL 
+            ";  // Final del Query SQL 
+
 
         try{
             $stmt = $this->instancia->prepare($query); 
