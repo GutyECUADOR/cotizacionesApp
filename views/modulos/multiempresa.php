@@ -239,8 +239,9 @@ $vendedores = $cotizacion->getVendedores();
                 <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Nuevo Item</h4>
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary btn-sm" id="btnAgregarProdToList"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Agregar item</button>
-                    <button type="button" class="btn btn-success btn-sm" id="btnShowUploadExcel" data-toggle="modal" data-target="#modalLoadExcel"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Cargar EXCEL</button>
-                    
+                    <!-- 
+                        <button type="button" class="btn btn-success btn-sm" id="btnShowUploadExcel" data-toggle="modal" data-target="#modalLoadExcel"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Cargar EXCEL</button>
+                     -->
                 </div>
                 </div>
 
@@ -254,7 +255,7 @@ $vendedores = $cotizacion->getVendedores();
                             <th style="width: 10%"  class="text-center headerTablaProducto">Cantidad</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Precio Proveedor</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Precio C. Final</th>
-                            <th style="width: 10%" class="text-center headerTablaProducto">% margen</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">% Margen</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
                         </tr>
                         </thead>
