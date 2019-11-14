@@ -393,9 +393,6 @@ $(document).ready(function() {
     });
 
 
-
-
-
     /* Funciones */
 
     function saveData(formData) {
@@ -403,21 +400,22 @@ $(document).ready(function() {
         console.log(JSON.parse(formData));
         $.ajax({
             type: 'POST',
-            url: 'views/modulos/ajax/API_cotizaciones.php?action=saveCotizacion',
+            url: 'views/modulos/ajax/API_cotizaciones.php?action=saveCotizacionMultiple',
             dataType: "json",
 
             data: { formData: formData },
 
             success: function(response) {
                 console.log(response);
-                nuevoIDDocumentGenerated = response.data.new_cod_VENCAB;
+                nuevoIDDocumentGenerated = response.data.vendedor.new_cod_VENCAB;
                 //Carga de archivos
                 cotizacion.productos.forEach(producto => {
                     uploadFiles(nuevoIDDocumentGenerated, producto.codigo, producto.archivos, producto.descripcion);
                 });
 
                 console.log(nuevoIDDocumentGenerated);
-                mySwal(response.data.mensaje + 'ID de documento generado: ' + response.data.new_cod_VENCAB, "success", response.data.new_cod_VENCAB);
+                mySwal(response.data.vendedor.mensaje + 'ID de documento generado (Cliente): ' + response.data.vendedor.new_cod_VENCAB +
+                    response.data.distribuidor.mensaje + 'ID de documento generado (Proveedor): ' + response.data.distribuidor.new_cod_VENCAB, "success", response.data.new_cod_VENCAB);
             }
         });
 

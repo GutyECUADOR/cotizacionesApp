@@ -16,6 +16,13 @@ class ajaxController  {
         $this->ajaxModel->setDbname($this->defaulDataBase);
         $this->ajaxModel->conectarDB();
 
+        $this->ajaxModelDist = new \models\ajaxModel();
+        $this->ajaxModelDist->setHost('S1-W202');
+        $this->ajaxModelDist->setUser('sfb');
+        $this->ajaxModelDist->setPass('Sud2017$');
+        $this->ajaxModelDist->setDbname('AGRICOLABAQUERO_V7');
+        $this->ajaxModelDist->conectarDB();
+
     }
   
     /* Retorna la respuesta del modelo ajax*/
@@ -142,7 +149,7 @@ class ajaxController  {
                 $VEN_CAB->setObservacion('WebForms, ' . $formData->comentario);
                 
                 //Registro en VEN_CAB y MOV mantenimientosEQ
-                $response_VEN_CAB =  $this->ajaxModel->insertVEN_CAB($VEN_CAB, $this->defaulDataBase);
+                $response_VEN_CAB =  $this->ajaxModel->insertVEN_CAB($VEN_CAB);
 
                 $arrayVEN_MOVinsets = array();
 
@@ -170,7 +177,7 @@ class ajaxController  {
                         $VEN_MOV->setPrecioTOTAL($VEN_MOV->calculaPrecioTOTAL());
                         $VEN_MOV->setObservacion('');
                         
-                        $response_VEN_MOV =  $this->ajaxModel->insertVEN_MOV($VEN_MOV, $this->defaulDataBase);
+                        $response_VEN_MOV =  $this->ajaxModel->insertVEN_MOV($VEN_MOV);
                         
                         array_push($arrayVEN_MOVinsets, $response_VEN_MOV);
 
@@ -208,15 +215,15 @@ class ajaxController  {
 
             try {
                //Obtenemos informacion de la empresa
-                $datosEmpresa =  $this->ajaxModel->getDatosEmpresaFromWINFENIX($this->defaulDataBase);
-                $serieDocs =  $this->ajaxModel->getDatosDocumentsWINFENIXByTypo($tipoDOC, $this->defaulDataBase)['Serie'];
+                $datosEmpresa =  $this->ajaxModelDist->getDatosEmpresaFromWINFENIX($this->ajaxModelDist->getDbname());
+                $serieDocs =  $this->ajaxModelDist->getDatosDocumentsWINFENIXByTypo($tipoDOC, $this->ajaxModelDist->getDbname())['Serie'];
             
                 // Informacion extra del cliente
-                $datosCliente = $this->getInfoClienteController($formData->cliente->RUC);
+                $datosCliente = $this->getInfoClienteController('1792630436001');
 
                 //Creamos nuevo codigo de VEN_CAB (secuencial)
-                $newCodigo =  $this->ajaxModel->getNextNumDocWINFENIX($tipoDOC, $this->defaulDataBase); // Recuperamos secuencial de SP de Winfenix
-                $newCodigoWith0 =  $this->ajaxModel->formatoNextNumDocWINFENIX($this->defaulDataBase, $newCodigo); // Asignamos formato con 0000X
+                $newCodigo =  $this->ajaxModelDist->getNextNumDocWINFENIX($tipoDOC, $this->ajaxModelDist->getDbname()); // Recuperamos secuencial de SP de Winfenix
+                $newCodigoWith0 =  $this->ajaxModelDist->formatoNextNumDocWINFENIX($this->ajaxModelDist->getDbname(), $newCodigo); // Asignamos formato con 0000X
 
                 $new_cod_VENCAB = $datosEmpresa['Oficina'].$datosEmpresa['Ejercicio'].$tipoDOC.$newCodigoWith0;
                 
@@ -235,7 +242,7 @@ class ajaxController  {
                 
                 $VEN_CAB->setBodega('B01');
                 $VEN_CAB->setDivisa('DOL');
-                $VEN_CAB->setProductos($formData->productos);
+                $VEN_CAB->setProductos($formData->productosDistribuidor);
                 $VEN_CAB->setSubtotal($VEN_CAB->calculaSubtotal());
                 $VEN_CAB->setsubtotalBase0($VEN_CAB->calculaSubtotalOfItemsWithIVA0());
                 $VEN_CAB->setImpuesto($VEN_CAB->calculaIVA());
@@ -246,7 +253,7 @@ class ajaxController  {
                 $VEN_CAB->setObservacion('WebForms, ' . $formData->comentario);
                 
                 //Registro en VEN_CAB y MOV mantenimientosEQ
-                $response_VEN_CAB =  $this->ajaxModel->insertVEN_CAB($VEN_CAB, $this->defaulDataBase);
+                $response_VEN_CAB =  $this->ajaxModelDist->insertVEN_CAB($VEN_CAB);
 
                 $arrayVEN_MOVinsets = array();
 
@@ -274,7 +281,7 @@ class ajaxController  {
                         $VEN_MOV->setPrecioTOTAL($VEN_MOV->calculaPrecioTOTAL());
                         $VEN_MOV->setObservacion('');
                         
-                        $response_VEN_MOV =  $this->ajaxModel->insertVEN_MOV($VEN_MOV, $this->defaulDataBase);
+                        $response_VEN_MOV =  $this->ajaxModelDist->insertVEN_MOV($VEN_MOV);
                         
                         array_push($arrayVEN_MOVinsets, $response_VEN_MOV);
 

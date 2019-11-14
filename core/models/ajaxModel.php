@@ -210,15 +210,15 @@ class ajaxModel extends conexion  {
             SELECT 
                 RTRIM(INV_ARTICULOS.CODIGO) as CODIGO, 
                 RTRIM(INV_ARTICULOS.NOMBRE) as NOMBRE, 
-                INV_ARTICULOS.$tipoPrec as PRECIODISTRIBUIDOR,
-                RIEGO.$tipoPrec as PRECIO,
+                INV_ARTICULOS.$tipoPrec as PRECIO,
+                DISTRIBUIDOR.$tipoPrec as PRECIODISTRIBUIDOR,
                 RTRIM(INV_ARTICULOS.TipoIva) as TIPOIVA,
                 RTRIM(IVA.VALOR) as VALORIVA,
                 (SELECT dbo.DIMESTOCKFIS('99','$codigoProducto','','B01')) AS STOCK
             FROM 
                 dbo.INV_ARTICULOS
                 INNER JOIN dbo.INV_IVA AS IVA on IVA.CODIGO = INV_ARTICULOS.TipoIva
-                INNER JOIN [S1-W202\SUDCOMPU].RIEGO.dbo.INV_ARTICULOS as RIEGO ON RIEGO.Codigo = INV_ARTICULOS.Codigo
+                INNER JOIN [S1-W202].AGRICOLABAQUERO_V7.dbo.INV_ARTICULOS as DISTRIBUIDOR ON DISTRIBUIDOR.Codigo = INV_ARTICULOS.Codigo
                     
             WHERE INV_ARTICULOS.Codigo='$codigoProducto'  
             
