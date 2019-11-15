@@ -308,6 +308,7 @@ $(document).ready(function() {
         //console.log(nuevacantidad);
         if (newProducto != null) {
             newProducto.cantidad = nuevacantidad;
+            newProductoDistribuidor.cantidad = nuevacantidad;
             printSubtotalNewProd();
         }
 
