@@ -255,6 +255,8 @@ $vendedores = $cotizacion->getVendedores();
                             <th style="width: 10%"  class="text-center headerTablaProducto">Cantidad</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Precio Proveedor</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Precio C. Final</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Stock Proveedor</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Marca</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">% Margen</th>
                             <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
                         </tr>
@@ -289,6 +291,14 @@ $vendedores = $cotizacion->getVendedores();
                                 </td>
                                 <td>
                                     <input type="text" id="inputNuevoProductoPrecioClienteFinal" class="form-control text-center" readonly>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="inputStock" class="form-control text-center" readonly>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="inputMarca" class="form-control text-center" readonly>
                                 </td>
 
                                 <td>

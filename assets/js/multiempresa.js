@@ -464,7 +464,9 @@ $(document).ready(function() {
         document.getElementById("inputNuevoProductoCantidad").value = "";
         document.getElementById("inputNuevoProductoPrecioUnitario").value = "";
         document.getElementById("inputNuevoProductoPrecioClienteFinal").value = "";
+        document.getElementById("inputStock").value = "";
         document.getElementById("inputMargen").value = "";
+        document.getElementById("inputMarca").value = "";
         document.getElementById("inputNuevoProductoSubtotal").value = "";
 
         tinyMCE.get('extraDetailContent').setContent('');
@@ -477,6 +479,8 @@ $(document).ready(function() {
         document.getElementById("inputNuevoProductoCantidad").value = producto.cantidad;
         document.getElementById("inputNuevoProductoPrecioUnitario").value = producto.PRECIODISTRIBUIDOR;
         document.getElementById("inputNuevoProductoPrecioClienteFinal").value = producto.precio;
+        document.getElementById("inputStock").value = producto.stock;
+        document.getElementById("inputMarca").value = producto.marca;
         document.getElementById("inputMargen").value = producto.margen.toFixed(2) + '%';
         document.getElementById("inputNuevoProductoSubtotal").value = producto.getSubtotal();
     }
@@ -650,6 +654,7 @@ $(document).ready(function() {
                     newProducto = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIO, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
                     newProducto.PRECIODISTRIBUIDOR = producto.PRECIODISTRIBUIDOR;
                     newProducto.margen = ((newProducto.precio - newProducto.PRECIODISTRIBUIDOR) / newProducto.PRECIODISTRIBUIDOR) * 100;
+                    newProducto.marca = producto.MARCA;
 
                     newProductoDistribuidor = new Producto(producto.CODIGO, producto.NOMBRE, 1, producto.PRECIODISTRIBUIDOR, 0, producto.STOCK, producto.TIPOIVA || 0, parseFloat(producto.VALORIVA));
 

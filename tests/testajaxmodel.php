@@ -5,8 +5,8 @@ require_once '../core/models/conexion.php';
 require_once '../core/models/ajaxModel.php';
 require_once '../core/controllers/ajaxController.php';
 
-$ajax = new \controllers\ajaxController();
+$ajax = new \models\ajaxModel();
 
-$response = $ajax->getVEN_CABController('992018PRO00014099');
+$response = $ajax->getInfoClienteModel('1792630436001');
 
 var_dump(json_encode($response));

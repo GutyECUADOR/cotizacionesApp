@@ -17,9 +17,9 @@ class ajaxController  {
         $this->ajaxModel->conectarDB();
 
         $this->ajaxModelDist = new \models\ajaxModel();
-        $this->ajaxModelDist->setHost('S1-W202');
+        $this->ajaxModelDist->setHost('SRV-AGRIBAQUERO');
         $this->ajaxModelDist->setUser('sfb');
-        $this->ajaxModelDist->setPass('Sud2017$');
+        $this->ajaxModelDist->setPass('sfb123');
         $this->ajaxModelDist->setDbname('AGRICOLABAQUERO_V7');
         $this->ajaxModelDist->conectarDB();
 
@@ -219,7 +219,7 @@ class ajaxController  {
                 $serieDocs =  $this->ajaxModelDist->getDatosDocumentsWINFENIXByTypo($tipoDOC, $this->ajaxModelDist->getDbname())['Serie'];
             
                 // Informacion extra del cliente
-                $datosCliente = $this->getInfoClienteController('1792630436001');
+                $datosCliente = $this->ajaxModelDist->getInfoClienteModel('1792630436001');
 
                 //Creamos nuevo codigo de VEN_CAB (secuencial)
                 $newCodigo =  $this->ajaxModelDist->getNextNumDocWINFENIX($tipoDOC, $this->ajaxModelDist->getDbname()); // Recuperamos secuencial de SP de Winfenix
@@ -229,7 +229,7 @@ class ajaxController  {
                 
                 /* NOTA SE ESTABLECE DESCUENTO EN 0 TANTO PARA CABECERA COMO DETALLE */
 
-                $VEN_CAB->setCliente($datosCliente['CODIGO']);
+                $VEN_CAB->setCliente(trim($datosCliente['CODIGO']));
                 $VEN_CAB->setTipoPrecio($datosCliente['TIPOPRECIO']);
                 $VEN_CAB->setVendedor($datosCliente['VENDEDOR']);
                 $VEN_CAB->setPorcentDescuento(0);
