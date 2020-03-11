@@ -239,8 +239,9 @@ $vendedores = $cotizacion->getVendedores();
                 <h4 class="panel-title pull-left" style="padding-top: 7.5px;">Nuevo Item</h4>
                 <div class="btn-group pull-right">
                     <button type="button" class="btn btn-primary btn-sm" id="btnAgregarProdToList"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Agregar item</button>
-                    <button type="button" class="btn btn-success btn-sm" id="btnShowUploadExcel" data-toggle="modal" data-target="#modalLoadExcel"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Cargar EXCEL</button>
-                    
+                    <!-- 
+                        <button type="button" class="btn btn-success btn-sm" id="btnShowUploadExcel" data-toggle="modal" data-target="#modalLoadExcel"><span class="glyphicon glyphicon-upload" aria-hidden="true"></span> Cargar EXCEL</button>
+                     -->
                 </div>
                 </div>
 
@@ -249,12 +250,15 @@ $vendedores = $cotizacion->getVendedores();
                     <table id="tablaAgregaNuevo" class="table table-bordered tableExtras">
                         <thead>
                         <tr>
-                            <th style="width: 5%" class="text-center headerTablaProducto">Codigo</th>
-                            <th style="width: 10%" class="text-center headerTablaProducto">Nombre del Articulo</th>
-                            <th style="width: 2%"  class="text-center headerTablaProducto">Cantidad</th>
-                            <th style="width: 5%" class="text-center headerTablaProducto">Precio</th>
-
-                            <th style="width: 5%" class="text-center headerTablaProducto">Subtotal</th>
+                            <th style="width: 15%" class="text-center headerTablaProducto">Codigo</th>
+                            <th style="width: 25%" class="text-center headerTablaProducto">Nombre del Articulo</th>
+                            <th style="width: 10%"  class="text-center headerTablaProducto">Cantidad</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Precio Proveedor</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Precio C. Final</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Stock Proveedor</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Marca</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">% Margen</th>
+                            <th style="width: 10%" class="text-center headerTablaProducto">Subtotal</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -283,10 +287,25 @@ $vendedores = $cotizacion->getVendedores();
                                 <td><input type="number" id="inputNuevoProductoCantidad" class="form-control text-center" value="0"></td>
                                 <td>
                                     <input type="text" id="inputNuevoProductoPrecioUnitario" class="form-control text-center" readonly>
-                                    <input type="hidden">
+                                   
+                                </td>
+                                <td>
+                                    <input type="text" id="inputNuevoProductoPrecioClienteFinal" class="form-control text-center" readonly>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="inputStock" class="form-control text-center" readonly>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="inputMarca" class="form-control text-center" readonly>
+                                </td>
+
+                                <td>
+                                    <input type="text" id="inputMargen" class="form-control text-center" readonly>
                                 </td>
                                 
-                                <td><input type="text"  id="inputNuevoProductoSubtotal" class="form-control text-center importe_linea" readonly></td>
+                                <td><input type="text"  id="inputNuevoProductoSubtotal" class="form-control text-center" readonly></td>
                                
                                 </td>
                             </tr>
@@ -692,7 +711,8 @@ $vendedores = $cotizacion->getVendedores();
             </div>
         </div>
 
-    
+        
+
     </div>
 
     <!-- USO JQUERY, y Bootstrap CDN-->
@@ -711,5 +731,4 @@ $vendedores = $cotizacion->getVendedores();
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\tinymce.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\datepicker.js"></script>
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\xlsx.full.min.js"></script>
-    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\app.js"></script>
-    
+    <script type="text/javascript" src="<?php echo ROOT_PATH; ?>assets\js\multiempresa.js"></script>

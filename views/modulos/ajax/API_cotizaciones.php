@@ -55,6 +55,12 @@ class ajax{
       return $this->ajaxController->insertCotizacion($formCotizacion);
     }
 
+    public function saveCotizacionMultiple($formCotizacion){
+      $cotizacion1 = $this->ajaxController->insertCotizacion($formCotizacion);
+      $cotizacion2 = $this->ajaxController->insertCotizacionDistribuidor($formCotizacion);
+      return array('vendedor' => $cotizacion1, 'distribuidor' => $cotizacion2);
+    }
+
     public function saveExtraData($extraData){
       return $this->ajaxController->insertExtraDataController($extraData);
     }
@@ -79,11 +85,25 @@ class ajax{
 
     switch ($HTTPaction) {
 
-       /* Obtiene array de informacion del cliente*/ 
+       /* Ejecuta procesos de VEN_CAB y MOV*/ 
         case 'saveCotizacion':
           if (isset($_POST['formData'])) {
             $formData = json_decode($_POST['formData']);
             $respuesta = $ajax->saveCotizacion($formData);
+            $rawdata = array('status' => 'OK', 'mensaje' => 'Realizado', 'data' => $respuesta, 'formDataSended' => $formData);
+            
+          }else{
+            $rawdata = array('status' => 'ERROR', 'mensaje' => 'No se ha indicado parámetros.');
+          }
+        
+          echo json_encode($rawdata);
+
+        break;
+
+        case 'saveCotizacionMultiple':
+          if (isset($_POST['formData'])) {
+            $formData = json_decode($_POST['formData']);
+            $respuesta = $ajax->saveCotizacionMultiple($formData);
             $rawdata = array('status' => 'OK', 'mensaje' => 'Realizado', 'data' => $respuesta, 'formDataSended' => $formData);
             
           }else{

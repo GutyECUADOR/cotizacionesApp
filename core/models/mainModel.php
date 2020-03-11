@@ -8,6 +8,10 @@ class mainModel {
                 $contenido = "views/modulos/inicio.php";
                 break;
 
+            case 'multiempresa':
+                $contenido = "views/modulos/multiempresa.php";
+                break;    
+
             case 'login':
             $contenido = "views/modulos/loginView.php";
                 break;    
