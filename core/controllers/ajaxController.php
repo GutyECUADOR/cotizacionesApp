@@ -332,7 +332,7 @@ class ajaxController  {
                 </div>
         
                 <div id="logo" style="float: left; width: 20%;">
-                    <img src="../../../assets/img/logo.png" alt="Logo">
+                    <img src="../../../assets/img/logo.jpg" alt="Logo">
                 </div>
         
             </div>
@@ -852,7 +852,7 @@ class ajaxController  {
                                     <tbody>
                                         <tr>
                                         <td style="text-align: center">
-                                        <img src="http://www.agricolabaquero.com/img/resources/logo.png" alt="Logo"> </td>
+                                        <img src="https://www.riegoecuador.com/assets/logo_portada_riego_mini.jpg" alt="Logo"> </td>
                                         </tr>
                                     </tbody>
                                     </table>
