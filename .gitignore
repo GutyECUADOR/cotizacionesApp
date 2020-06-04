@@ -1,5 +1,4 @@
 config/global.php
-core/models/conexion.php
 /vendor/
 /logs/
 /nbproject/private/
