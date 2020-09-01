@@ -531,7 +531,7 @@ $(document).ready(function() {
             <tr>
                 <th scope="row">${cont}</th> 
                 <td>${producto.CODIGO}</td>
-                <td>${producto.NOMBRE.trim()}</td>
+                <td>${producto.NOMBRE}</td>
                 <td>${parseFloat(producto[precioDisplay].trim()).toFixed(4)}</td>
                 <td>${producto.STOCK.trim()}</td>
                 <td><button type="button" class="btn btn-primary btn-sm btn-block btnSeleccionaProducto" data-codigo="${producto.CODIGO.trim()}"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span></button></td>

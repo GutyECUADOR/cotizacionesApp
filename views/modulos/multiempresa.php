@@ -158,7 +158,7 @@ $vendedores = $cotizacion->getVendedores();
             </div>
 
 
-            <div class="col-lg-3 col-md-6 hidden-sm hidden-xs">
+            <div class="col-lg-3 col-md-6  hidden-md hidden-sm hidden-xs">
                 <div class="panel panel-default">
                     <div class="panel-heading">Datos de Cotizaciones</div>
                         <div class="panel-body">
@@ -191,7 +191,7 @@ $vendedores = $cotizacion->getVendedores();
                     </div>
             </div>
             
-            <div class="col-lg-2 col-md-6 hidden-sm hidden-xs">
+            <div class="col-lg-2 col-md-6  hidden-md hidden-sm hidden-xs">
                 <div class="panel panel-default">
                     <div class="panel-heading">Datos de Tributarios</div>
                         <div class="panel-body">
